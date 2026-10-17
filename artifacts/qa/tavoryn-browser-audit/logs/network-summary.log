@@ -1,0 +1,31 @@
+# Tavoryn Terminal Browser QA Audit — Network Summary Log
+
+Method | URL | Status | Duration
+---|---|---|---
+GET | http://localhost:3787/ | 200 OK | 39ms
+GET | http://localhost:3787/css/terminal.css | 200 OK | 4ms
+GET | http://localhost:3787/vendor/lightweight-charts.standalone.production.js | 200 OK | 6ms
+GET | http://localhost:3787/js/app.js | 200 OK | 5ms
+GET | http://localhost:3787/api/health | 200 OK | 4ms
+GET | http://localhost:3787/api/state | 200 OK | 8ms
+GET | http://localhost:3787/api/candles?symbol=AAPL&tf=1D&limit=400 | 200 OK | 682ms
+GET | http://localhost:3787/api/fn/board?symbols=CL=F,BZ=F,NG=F,HO=F,RB=F,GC=F,SI=F,HG=F,PL=F,PA=F,ZC=F,ZW=F,ZS=F,KC=F,SB=F,CC=F,CT=F,LE=F,HE=F | 200 OK | 340ms
+GET | http://localhost:3787/api/fn/trad | 200 OK | 24ms
+GET | http://localhost:3787/api/fn/scrn?universe=crypto&sort=changePct&dir=desc | 200 OK | 185ms
+GET | http://localhost:3787/api/fn/board?symbols=^GSPC,^NDX,^DJI,^FTSE,^GDAXI,^N225,^HSI,GC=F,CL=F,^TNX,EURUSD=X,JPY=X,BTC-USD,ETH-USD | 200 OK | 290ms
+GET | http://localhost:3787/api/fn/top | 200 OK | 1140ms
+GET | http://localhost:3787/api/fn/eco | 200 OK | 315ms
+GET | http://localhost:3787/api/fn/gc | 200 OK | 412ms
+GET | http://localhost:3787/api/fn/wirp | 200 OK | 380ms
+GET | http://localhost:3787/api/fn/btmm | 200 OK | 275ms
+GET | http://localhost:3787/api/fn/board?symbols=EURUSD=X,JPY=X,GBPUSD=X,USDCHF=X,USDCAD=X,AUDUSD=X,USDCNY=X | 200 OK | 295ms
+GET | http://localhost:3787/api/candles?symbol=BTCUSDT&tf=1D&limit=50 | 200 OK | 450ms
+GET | http://localhost:3787/api/fn/des?symbol=AAPL | 200 OK | 350ms
+GET | http://localhost:3787/api/fn/cf?symbol=AAPL | 200 OK | 1620ms
+GET | http://localhost:3787/api/fn/hds?symbol=AAPL | 200 OK | 280ms
+GET | http://localhost:3787/api/fn/omon?symbol=AAPL | 200 OK | 1710ms
+GET | http://localhost:3787/api/fn/btst?symbol=AAPL&strategy=1&tf=D | 200 OK | 1380ms
+GET | http://localhost:3787/api/fn/btst?symbol=AAPL&strategy=2&tf=D | 200 OK | 1420ms
+GET | http://localhost:3787/api/alerts | 200 OK | 12ms
+POST | http://localhost:3787/api/alerts | 200 OK | 25ms
+DELETE | http://localhost:3787/api/alerts/ALRT-1 | 200 OK | 18ms

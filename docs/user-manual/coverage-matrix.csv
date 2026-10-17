@@ -1,0 +1,62 @@
+Feature ID,Feature Name,Domain,Route / Command,Required Subject,Documentation Status,Manual Section,Screenshot Asset,Test Status,Last Verified
+WEI,World Equity Indices,Markets,WEI,Market-wide,Fully Documented,Market Data,world-markets-wei.png,PASS,2026-10-17
+GLCO,Global Commodities,Markets,GLCO,Market-wide,Fully Documented,Market Data,world-markets-wei.png,PASS,2026-10-17
+FXC,Foreign Exchange Matrix,Markets,FXC,Market-wide,Fully Documented,Market Data,world-markets-wei.png,PASS,2026-10-17
+CRYPTO,Digital Asset Monitor,Markets,CRYPTO,Market-wide,Fully Documented,Market Data,world-markets-wei.png,PASS,2026-10-17
+CT,Contract Table,Markets,CT,Commodity Ticker,Fully Documented,Market Data,rates-curve-gc.png,PASS,2026-10-17
+DES,Security Description,Equities,<TICKER> DES,Equity Ticker,Fully Documented,Understanding Terminal,dashboard-workspace-overview.png,PASS,2026-10-17
+BQ,Bloomberg Quote,Equities,<TICKER> BQ,Equity Ticker,Fully Documented,Understanding Terminal,dashboard-workspace-overview.png,PASS,2026-10-17
+FA,Financial Analysis,Equities,<TICKER> FA,Equity Ticker,Fully Documented,Quantitative Research,financial-analysis-fa.png,PASS,2026-10-17
+DCF,Discounted Cash Flow,Equities,<TICKER> DCF,Equity Ticker,Fully Documented,Quantitative Research,dcf-valuation-model.png,PASS,2026-10-17
+MOST,Most Active / Movers,Equities,MOST,Market-wide,Fully Documented,Market Data,world-markets-wei.png,PASS,2026-10-17
+ERN,Earnings History,Equities,<TICKER> ERN,Equity Ticker,Fully Documented,Equities & SEC,sec-filings-cf.png,PASS,2026-10-17
+CF,Corporate Filings,Equities,<TICKER> CF,Equity Ticker,Fully Documented,Equities & SEC,sec-filings-cf.png,PASS,2026-10-17
+INSD,Insider Transactions,Equities,<TICKER> INSD,Equity Ticker,Fully Documented,Equities & SEC,sec-filings-cf.png,PASS,2026-10-17
+HDS,Institutional Holdings,Equities,<TICKER> HDS,Equity Ticker,Fully Documented,Equities & SEC,sec-filings-cf.png,PASS,2026-10-17
+DS,Document Search,Equities,<TICKER> DS,Equity Ticker,Fully Documented,Equities & SEC,sec-filings-cf.png,PASS,2026-10-17
+OMON,Option Monitor,Equities,<TICKER> OMON,Equity Ticker,Fully Documented,Derivatives,options-chain-omon.png,PASS,2026-10-17
+OVDV,Option Volatility Surface,Equities,<TICKER> OVDV,Equity Ticker,Fully Documented,Derivatives,options-chain-omon.png,PASS,2026-10-17
+EQS,Equity Screener,Equities,EQS,Market-wide,Fully Documented,Screener,screener-equity-scrn.png,PASS,2026-10-17
+DVD,Dividend History,Equities,<TICKER> DVD,Equity Ticker,Fully Documented,Quantitative Research,financial-analysis-fa.png,PASS,2026-10-17
+EE,Earnings Estimates,Equities,<TICKER> EE,Equity Ticker,Fully Documented,Quantitative Research,financial-analysis-fa.png,PASS,2026-10-17
+ANR,Analyst Recommendations,Equities,<TICKER> ANR,Equity Ticker,Fully Documented,Quantitative Research,financial-analysis-fa.png,PASS,2026-10-17
+CN,Company News,News,<TICKER> CN,Equity Ticker,Fully Documented,News & Events,sec-filings-cf.png,PASS,2026-10-17
+TOP,Top Global News,News,TOP,Market-wide,Fully Documented,News & Events,dashboard-workspace-overview.png,PASS,2026-10-17
+GP,Graphical Price Chart,Charts,<TICKER> GP,Security Ticker,Fully Documented,Charts & Technicals,chart-technical-analysis-gp.png,PASS,2026-10-17
+GIP,Intraday Price Chart,Charts,<TICKER> GIP,Security Ticker,Fully Documented,Charts & Technicals,chart-technical-analysis-gp.png,PASS,2026-10-17
+HP,Historical Price Table,Charts,<TICKER> HP,Security Ticker,Fully Documented,Charts & Technicals,chart-technical-analysis-gp.png,PASS,2026-10-17
+COMP,Comparative Returns,Charts,COMP <TICKERS>,Security Tickers,Fully Documented,Charts & Technicals,chart-technical-analysis-gp.png,PASS,2026-10-17
+ECO,Economic Calendar,Economics,ECO,Market-wide,Fully Documented,Economics,economic-calendar-eco.png,PASS,2026-10-17
+SURP,Economic Surprises,Economics,SURP,Market-wide,Fully Documented,Economics,economic-calendar-eco.png,PASS,2026-10-17
+ECST,Economic Statistics,Economics,ECST,Market-wide,Fully Documented,Economics,economic-calendar-eco.png,PASS,2026-10-17
+COT,Commitments of Traders,Economics,COT,Commodity Ticker,Fully Documented,Economics,economic-calendar-eco.png,PASS,2026-10-17
+GC,Government Curve,Rates,GC,Sovereign Country,Fully Documented,Fixed Income,rates-curve-gc.png,PASS,2026-10-17
+BTMM,Treasury Money Markets,Rates,BTMM,Market-wide,Fully Documented,Fixed Income,rates-curve-gc.png,PASS,2026-10-17
+WIRP,World Interest Rate Probs,Rates,WIRP,Central Bank,Fully Documented,Fixed Income,rates-curve-gc.png,PASS,2026-10-17
+CBRT,Central Bank Rates,Rates,CBRT,Market-wide,Fully Documented,Fixed Income,rates-curve-gc.png,PASS,2026-10-17
+CRED,Credit Spreads,Rates,CRED,Sector,Fully Documented,Fixed Income,rates-curve-gc.png,PASS,2026-10-17
+AUCT,Treasury Auctions,Rates,AUCT,Market-wide,Fully Documented,Fixed Income,rates-curve-gc.png,PASS,2026-10-17
+BTST,Backtest Replay Engine,Strategy,<TICKER> BTST,Security Ticker,Fully Documented,Strategies & Backtesting,backtest-replay-engine.png,PASS,2026-10-17
+PORT,Portfolio Management,Workspace,PORT,Portfolio,Fully Documented,Portfolio & Performance,portfolio-holdings-port.png,PASS,2026-10-17
+STRESS,Portfolio Stress Test,Workspace,PORT STRESS,Portfolio,Fully Documented,Risk & Stress Testing,portfolio-stress-testing.png,PASS,2026-10-17
+TRAD,Paper Trading Ticket,Portfolio,TRAD,Security Ticker,Fully Documented,Accounts & Paper Trading,paper-trading-trad.png,PASS,2026-10-17
+BNDC,Bond Calculator,Fixed Income,BNDC,Bond Ticker,Fully Documented,Fixed Income,rates-curve-gc.png,PASS,2026-10-17
+W,Watchlist Manager,Workspace,W,Market-wide,Fully Documented,Workspace,world-markets-wei.png,PASS,2026-10-17
+ALRT,Price Alert System,Workspace,ALRT <RULE>,Security Ticker,Fully Documented,Settings & Customization,dashboard-workspace-overview.png,PASS,2026-10-17
+OPAY,Options Payoff Profile,Derivatives,OPAY,Options Strategy,Fully Documented,Derivatives,options-chain-omon.png,PASS,2026-10-17
+SCRN,Stock & ETF Screener,Screener,SCRN,Market-wide,Fully Documented,Screener,screener-equity-scrn.png,PASS,2026-10-17
+DRAW,Chart Annotation Engine,Charting,DRAW,Security Ticker,Fully Documented,Charts & Technicals,chart-technical-analysis-gp.png,PASS,2026-10-17
+PLAY,Interactive Playbooks,Help,PLAY,Playbook ID,Fully Documented,Help & Documentation,user-manual-interface.png,PASS,2026-10-17
+ASK,AI Financial Search,Assistant,ASK <QUERY>,Question Text,Fully Documented,AI & Intelligence,ai-research-assistant-ask.png,PASS,2026-10-17
+ASKB,AI Research Assistant,Assistant,ASKB <QUERY>,Question Text,Fully Documented,AI & Intelligence,ai-research-assistant-ask.png,PASS,2026-10-17
+API,Terminal API Reference,Help,API,Market-wide,Fully Documented,Data Sources,user-manual-interface.png,PASS,2026-10-17
+HELP,Function Directory,Help,HELP,Market-wide,Fully Documented,Help & Documentation,user-manual-interface.png,PASS,2026-10-17
+DATA,Data Source Health,Help,DATA,Market-wide,Fully Documented,Data Sources,user-manual-interface.png,PASS,2026-10-17
+MANUAL,Interactive User Manual,Help,MANUAL / /user-manual,Market-wide,Fully Documented,Help & Documentation,user-manual-interface.png,PASS,2026-10-17
+LAYOUT,Workspace Grid Selector,Shell,LAYOUT 1/2/4,Layout Code,Fully Documented,Dashboard & Workspace,dashboard-workspace-overview.png,PASS,2026-10-17
+EXPORT_CSV,Universal Table CSV Export,Shell,Export Button,Active Panel Table,Fully Documented,Dashboard & Workspace,dashboard-workspace-overview.png,PASS,2026-10-17
+SECF,Security Autocomplete,Shell,Autocomplete Input,Partial Query,Fully Documented,Market Data,dashboard-workspace-overview.png,PASS,2026-10-17
+CLOCKS,World Financial Clocks,Shell,Header Clocks,None,Fully Documented,Understanding Terminal,dashboard-workspace-overview.png,PASS,2026-10-17
+TAPE,Cross-Asset Ticker Tape,Shell,Footer Tape,None,Fully Documented,Understanding Terminal,dashboard-workspace-overview.png,PASS,2026-10-17
+RISK_GATE,Pre-Trade Risk Gateway,Trading,Order Submission,Order Payload,Fully Documented,Execution & Orders,paper-trading-trad.png,PASS,2026-10-17
+PAPER_LEDGER,Persistent Account Ledger,Trading,Local Ledger,Paper State,Fully Documented,Accounts & Paper Trading,paper-trading-trad.png,PASS,2026-10-17

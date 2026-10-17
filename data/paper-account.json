@@ -1,0 +1,102 @@
+{
+  "cash": 99993.25,
+  "initialCash": 100000,
+  "positions": {},
+  "orders": [
+    {
+      "id": "ORD-MVB61U3T-947",
+      "symbol": "US:AAPL",
+      "name": "AAPL",
+      "side": "SELL",
+      "type": "MARKET",
+      "qty": 5,
+      "limitPrice": null,
+      "execPrice": 343.94,
+      "status": "FILLED",
+      "fee": 0,
+      "filledAt": "2026-10-16T16:12:33.833Z",
+      "createdAt": "2026-10-16T16:12:33.833Z"
+    },
+    {
+      "id": "ORD-MVB4VFHR-896",
+      "symbol": "US:AAPL",
+      "name": "AAPL",
+      "side": "BUY",
+      "type": "LIMIT",
+      "qty": 5,
+      "limitPrice": 1,
+      "execPrice": null,
+      "status": "CANCELLED",
+      "createdAt": "2026-10-16T15:39:35.344Z",
+      "cancelledAt": "2026-10-16T15:39:35.347Z"
+    },
+    {
+      "id": "ORD-MVB4VFHD-292",
+      "symbol": "US:AAPL",
+      "name": "AAPL",
+      "side": "SELL",
+      "type": "MARKET",
+      "qty": 5,
+      "limitPrice": null,
+      "execPrice": 345.29,
+      "status": "FILLED",
+      "filledAt": "2026-10-16T15:39:35.330Z",
+      "createdAt": "2026-10-16T15:39:35.330Z"
+    },
+    {
+      "id": "ORD-MVB4VFGW-487",
+      "symbol": "US:AAPL",
+      "name": "AAPL",
+      "side": "BUY",
+      "type": "MARKET",
+      "qty": 10,
+      "limitPrice": null,
+      "execPrice": 345.29,
+      "status": "FILLED",
+      "filledAt": "2026-10-16T15:39:35.312Z",
+      "createdAt": "2026-10-16T15:39:35.312Z"
+    }
+  ],
+  "journal": [
+    {
+      "id": "TX-ORD-MVB61U3T-947",
+      "orderId": "ORD-MVB61U3T-947",
+      "symbol": "US:AAPL",
+      "side": "SELL",
+      "qty": 5,
+      "price": 343.94,
+      "value": 1719.7,
+      "fee": 0,
+      "timestamp": "2026-10-16T16:12:33.833Z"
+    },
+    {
+      "id": "TX-ORD-MVB4VFHD-292",
+      "orderId": "ORD-MVB4VFHD-292",
+      "symbol": "US:AAPL",
+      "side": "SELL",
+      "qty": 5,
+      "price": 345.29,
+      "value": 1726.45,
+      "timestamp": "2026-10-16T15:39:35.330Z"
+    },
+    {
+      "id": "TX-ORD-MVB4VFGW-487",
+      "orderId": "ORD-MVB4VFGW-487",
+      "symbol": "US:AAPL",
+      "side": "BUY",
+      "qty": 10,
+      "price": 345.29,
+      "value": 3452.9,
+      "timestamp": "2026-10-16T15:39:35.312Z"
+    }
+  ],
+  "updatedAt": "2026-10-16T18:04:32.141Z",
+  "reservedCash": 0,
+  "realizedPnl": -6.75,
+  "totalFees": 0,
+  "riskLimits": {
+    "maxOrderNotional": null,
+    "maxPositionNotional": null,
+    "maxDailyLoss": null
+  }
+}

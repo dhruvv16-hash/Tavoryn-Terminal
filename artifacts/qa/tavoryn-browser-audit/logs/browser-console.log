@@ -1,0 +1,22 @@
+[2026-10-17T17:34:39Z] [INFO] Navigation to http://localhost:3787/ completed. Document ready state: complete.
+[2026-10-17T17:34:40Z] [INFO] Brand elements verified: <title>Tavoryn Terminal</title>, .logo="TAVORYN", .sub="TERMINAL".
+[2026-10-17T17:34:42Z] [ISSUE] [a11y] A form field element should have an id or name attribute (count: 26).
+[2026-10-17T17:35:00Z] [INFO] Lightweight Charts canvas engine initialized successfully. No WebGL or Canvas2D errors.
+[2026-10-17T17:41:52Z] [INFO] Panel 0 navigated to WEI. World equity indices rendered.
+[2026-10-17T17:42:47Z] [INFO] Panel 1 navigated to TOP. Top news rendered.
+[2026-10-17T17:43:12Z] [INFO] Panel 2 navigated to ECO. Economic calendar rendered.
+[2026-10-17T17:43:12Z] [INFO] Panel 3 navigated to GC. US Treasury par yield curve rendered.
+[2026-10-17T17:45:25Z] [INFO] Panels navigated to WIRP, BTMM, FXC, CRYPTO. Rates, currency matrix, and crypto boards rendered.
+[2026-10-17T17:46:59Z] [INFO] Panels navigated to AAPL DES, CF, HDS, OMON. SEC filings and options chains rendered.
+[2026-10-17T17:48:23Z] [INFO] Panels navigated to AAPL BTST, PORT, TRAD, ASKB.
+[2026-10-17T17:49:58Z] [INFO] BTST strategy changed to RSI Mean Reversion. Quant checks evaluated: 2 of 5 passed.
+[2026-10-17T17:50:45Z] [INFO] ASKB prompt playbook executed for Tech Momentum. Synthesis rendered.
+[2026-10-17T17:51:38Z] [INFO] Layout switched to 1-panel fullscreen mode.
+[2026-10-17T17:53:35Z] [INFO] Layout switched to 2-panel split mode.
+[2026-10-17T17:54:10Z] [INFO] Layout restored to 4-panel quadrant mode.
+[2026-10-17T17:55:48Z] [INFO] ALRT alert created: AAPL above 360. Active alert count: 1.
+[2026-10-17T17:57:38Z] [INFO] ALRT alert deleted: AAPL above 360. Active alert count: 0.
+[2026-10-17T17:58:58Z] [INFO] Responsive emulation: 768x1024 tablet viewport verified.
+[2026-10-17T18:01:02Z] [INFO] Responsive emulation: 375x812 mobile viewport verified.
+[2026-10-17T18:03:23Z] [INFO] Restored desktop viewport (1440x900).
+[2026-10-17T18:04:00Z] [SUMMARY] Total JavaScript Exceptions: 0. Unhandled Promise Rejections: 0. Total Network Failures: 0.
