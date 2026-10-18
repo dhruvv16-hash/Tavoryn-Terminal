@@ -22,12 +22,37 @@ import { conditionFn } from "./public/lib/backtest.js";
 import { relaunchForProxy, proxyNote } from "./lib/proxy.js";
 import { getGlobalMarketDataPipeline } from "./lib/market-data-service.js";
 
-const ROOT = path.dirname(fileURLToPath(import.meta.url));
+function findRoot() {
+  if (process.env.LAMBDA_TASK_ROOT) return process.env.LAMBDA_TASK_ROOT;
+  let curr = path.dirname(fileURLToPath(import.meta.url));
+  for (let i = 0; i < 5; i++) {
+    if (fs.existsSync(path.join(curr, "package.json"))) return curr;
+    const parent = path.dirname(curr);
+    if (parent === curr) break;
+    curr = parent;
+  }
+  if (fs.existsSync(path.join(process.cwd(), "package.json"))) return process.cwd();
+  return path.dirname(fileURLToPath(import.meta.url));
+}
+
+const ROOT = findRoot();
 const PUBLIC = path.join(ROOT, "public");
-const CUSTOM = path.join(ROOT, "custom");
-const VERSION = JSON.parse(
-  fs.readFileSync(path.join(ROOT, "package.json"), "utf8"),
-).version;
+const CUSTOM =
+  process.env.NETLIFY || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.LAMBDA_TASK_ROOT
+    ? path.join(os.tmpdir(), "tavoryn-custom")
+    : path.join(ROOT, "custom");
+let VERSION = "1.0.0";
+try {
+  VERSION = JSON.parse(
+    fs.readFileSync(path.join(ROOT, "package.json"), "utf8"),
+  ).version;
+} catch {
+  try {
+    VERSION = JSON.parse(
+      fs.readFileSync(path.join(process.cwd(), "package.json"), "utf8"),
+    ).version;
+  } catch {}
+}
 const HOST = process.env.HOST || "127.0.0.1";
 const START_PORT = Number(process.env.PORT) || 3787;
 
@@ -141,7 +166,10 @@ const slug = (s) =>
 const customErrors = {};
 
 function listCustom() {
-  fs.mkdirSync(CUSTOM, { recursive: true });
+  try {
+    fs.mkdirSync(CUSTOM, { recursive: true });
+  } catch {}
+  if (!fs.existsSync(CUSTOM)) return [];
   return fs
     .readdirSync(CUSTOM)
     .filter((f) => f.endsWith(".js"))
