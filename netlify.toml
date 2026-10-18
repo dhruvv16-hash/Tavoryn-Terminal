@@ -1,0 +1,43 @@
+# Tavoryn Terminal — Netlify Deployment Configuration
+
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["data/**", "lib/**", "docs/**"]
+
+# API requests route to the serverless function adapter
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+# Documentation screenshot assets served statically
+[[redirects]]
+  from = "/manual/assets/*"
+  to = "/manual/assets/:splat"
+  status = 200
+
+# Client-side SPA routing for User Manual and in-app documentation
+[[redirects]]
+  from = "/user-manual"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/help"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/manual"
+  to = "/index.html"
+  status = 200
+
+# Catch-all fallback to index.html for SPA client navigation
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

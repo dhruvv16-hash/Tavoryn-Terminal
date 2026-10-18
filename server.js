@@ -83,11 +83,17 @@ async function readBody(req, limit = 2e6) {
 // The server only answers to this machine's browser. Writes need a custom header, which a random
 // website can't add to a cross-site request, so other pages can't drive your terminal.
 function allowed(req) {
-  const host = (req.headers.host || "")
-    .replace(/:\d+$/, "")
-    .replace(/^\[|\]$/g, "");
-  const okHosts = new Set(["localhost", "127.0.0.1", "::1", ...lanAddresses()]);
-  if (!okHosts.has(host)) return false;
+  const isRemoteAllowed =
+    process.env.NETLIFY ||
+    process.env.ALLOW_REMOTE === "1" ||
+    req.headers?.["x-netlify-function"];
+  if (!isRemoteAllowed) {
+    const host = (req.headers.host || "")
+      .replace(/:\d+$/, "")
+      .replace(/^\[|\]$/g, "");
+    const okHosts = new Set(["localhost", "127.0.0.1", "::1", ...lanAddresses()]);
+    if (!okHosts.has(host)) return false;
+  }
   if (req.method !== "GET" && req.method !== "HEAD") {
     if (req.headers["x-qt"] !== "1") return false;
     const origin = req.headers.origin;
@@ -189,7 +195,7 @@ async function mapLimit(items, n, fn) {
 }
 
 // ---------- routes ----------
-async function handle(req, res) {
+export async function handle(req, res) {
   if (!allowed(req))
     return send(
       res,
@@ -482,11 +488,61 @@ async function handle(req, res) {
   }
 }
 
+const STATIC_FNS = {
+  anr: () => import("./lib/fn/anr.js"),
+  askb: () => import("./lib/fn/askb.js"),
+  auct: () => import("./lib/fn/auct.js"),
+  bndc: () => import("./lib/fn/bndc.js"),
+  board: () => import("./lib/fn/board.js"),
+  bq: () => import("./lib/fn/bq.js"),
+  btmm: () => import("./lib/fn/btmm.js"),
+  btst: () => import("./lib/fn/btst.js"),
+  cbrt: () => import("./lib/fn/cbrt.js"),
+  cf: () => import("./lib/fn/cf.js"),
+  cot: () => import("./lib/fn/cot.js"),
+  cred: () => import("./lib/fn/cred.js"),
+  ct: () => import("./lib/fn/ct.js"),
+  dcf: () => import("./lib/fn/dcf.js"),
+  des: () => import("./lib/fn/des.js"),
+  ds: () => import("./lib/fn/ds.js"),
+  dvd: () => import("./lib/fn/dvd.js"),
+  eco: () => import("./lib/fn/eco.js"),
+  ecst: () => import("./lib/fn/ecst.js"),
+  ee: () => import("./lib/fn/ee.js"),
+  "eq-comp": () => import("./lib/fn/eq-comp.js"),
+  "eq-math": () => import("./lib/fn/eq-math.js"),
+  "eq-port": () => import("./lib/fn/eq-port.js"),
+  eqs: () => import("./lib/fn/eqs.js"),
+  gc: () => import("./lib/fn/gc.js"),
+  hds: () => import("./lib/fn/hds.js"),
+  insd: () => import("./lib/fn/insd.js"),
+  most: () => import("./lib/fn/most.js"),
+  omon: () => import("./lib/fn/omon.js"),
+  opay: () => import("./lib/fn/opay.js"),
+  ovdv: () => import("./lib/fn/ovdv.js"),
+  scrn: () => import("./lib/fn/scrn.js"),
+  stress: () => import("./lib/fn/stress.js"),
+  surp: () => import("./lib/fn/surp.js"),
+  top: () => import("./lib/fn/top.js"),
+  trad: () => import("./lib/fn/trad.js"),
+  wirp: () => import("./lib/fn/wirp.js"),
+};
+
 const fnCache = new Map();
 async function loadFn(name) {
   if (!fnCache.has(name)) {
+    if (STATIC_FNS[name]) {
+      try {
+        const mod = await STATIC_FNS[name]();
+        fnCache.set(name, mod);
+        return mod;
+      } catch {}
+    }
     const file = path.join(ROOT, "lib", "fn", `${name}.js`);
-    fnCache.set(name, fs.existsSync(file) ? await import(pathToFileURL(file).href) : null);
+    fnCache.set(
+      name,
+      fs.existsSync(file) ? await import(pathToFileURL(file).href) : null,
+    );
   }
   return fnCache.get(name);
 }
