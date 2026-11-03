@@ -11,6 +11,19 @@ const groups = () => {
 
 export default [
   {
+    id: "TOUR",
+    name: "Interactive Onboarding Tour",
+    group: "Help",
+    source: "This app",
+    render(ctx) {
+      if (window.tavoryn?.startTour) {
+        window.tavoryn.startTour(true);
+      }
+      ctx.el.innerHTML = `<div class="para">Starting Tavoryn Terminal Interactive Walkthrough...</div>`;
+      ctx.setSource("Tavoryn Onboarding Engine");
+    },
+  },
+  {
     id: "MANUAL",
     name: "Interactive User Manual",
     group: "Help",

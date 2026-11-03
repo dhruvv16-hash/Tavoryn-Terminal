@@ -1,0 +1,256 @@
+/* ==========================================================================
+   Tavoryn Terminal — Interactive Onboarding Tour Styles
+   CRT Amber Phosphor Palette, Dark Backdrop, High-Density Terminal Typography
+   ========================================================================== */
+
+.tour-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.2s;
+}
+
+.tour-overlay.active {
+  pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Dynamic Spotlight Cutout with Amber Glow */
+.tour-spotlight {
+  position: absolute;
+  border-radius: 4px;
+  border: 2px solid var(--amber, #ffa028);
+  box-shadow: 
+    0 0 0 9999px rgba(0, 0, 0, 0.82),
+    0 0 16px rgba(255, 160, 40, 0.65),
+    inset 0 0 8px rgba(255, 160, 40, 0.25);
+  pointer-events: none;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Tour Popover Card */
+.tour-card {
+  position: absolute;
+  background: #0c0d0e;
+  border: 1px solid var(--amber-dim, #a8661a);
+  border-radius: 4px;
+  box-shadow: 
+    0 12px 36px rgba(0, 0, 0, 0.95),
+    0 0 16px rgba(255, 160, 40, 0.35);
+  color: var(--white, #f5f5f5);
+  font-family: var(--mono, "Cascadia Code", Menlo, monospace);
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 10000;
+  transition: top 0.2s cubic-bezier(0.16, 1, 0.3, 1), left 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: tourCardIn 0.18s ease-out;
+}
+
+@keyframes tourCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Card Header */
+.tour-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line, #222222);
+  padding-bottom: 8px;
+}
+
+.tour-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tour-badge {
+  background: rgba(255, 160, 40, 0.15);
+  color: var(--amber, #ffa028);
+  border: 1px solid var(--amber-dim, #a8661a);
+  padding: 2px 7px;
+  border-radius: 2px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.tour-chapter {
+  color: var(--muted, #888888);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.tour-skip {
+  background: transparent;
+  border: none;
+  color: var(--muted, #888888);
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 2px 4px;
+  transition: color 0.12s;
+}
+
+.tour-skip:hover {
+  color: var(--amber, #ffa028);
+}
+
+/* Card Body */
+.tour-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tour-title {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--amber-2, #ffbf66);
+  letter-spacing: 0.03em;
+  line-height: 1.3;
+}
+
+.tour-desc {
+  margin: 0;
+  font-size: 11.5px;
+  color: #d8d8d8;
+  line-height: 1.45;
+}
+
+/* Try Action Button */
+.tour-try {
+  align-self: flex-start;
+  margin-top: 4px;
+  background: rgba(35, 164, 71, 0.15);
+  color: var(--up, #2fd36b);
+  border: 1px solid rgba(47, 211, 107, 0.4);
+  border-radius: 2px;
+  font-family: inherit;
+  font-size: 11px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.tour-try:hover:not(:disabled) {
+  background: var(--up, #2fd36b);
+  color: #000000;
+}
+
+.tour-try:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Progress Bar */
+.tour-progress-bar {
+  width: 100%;
+  height: 3px;
+  background: #1a1a1a;
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.tour-progress-fill {
+  height: 100%;
+  background: var(--amber, #ffa028);
+  box-shadow: 0 0 6px var(--amber, #ffa028);
+  transition: width 0.2s ease;
+}
+
+/* Card Footer */
+.tour-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 4px;
+}
+
+.tour-keys-hint {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tour-keys-hint kbd {
+  background: #18191c;
+  border: 1px solid #333333;
+  color: var(--muted, #888888);
+  padding: 1px 5px;
+  font-size: 10px;
+  border-radius: 2px;
+  font-family: inherit;
+}
+
+.tour-nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tour-btn {
+  background: #151619;
+  color: var(--white, #f5f5f5);
+  border: 1px solid var(--line-light, #2e2e2e);
+  border-radius: 2px;
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.tour-btn:hover:not(:disabled) {
+  border-color: var(--amber, #ffa028);
+  color: var(--amber, #ffa028);
+}
+
+.tour-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.tour-btn-primary {
+  background: var(--amber, #ffa028);
+  color: #000000;
+  border-color: var(--amber, #ffa028);
+  font-weight: 700;
+}
+
+.tour-btn-primary:hover:not(:disabled) {
+  background: var(--amber-2, #ffbf66);
+  border-color: var(--amber-2, #ffbf66);
+  color: #000000;
+}
+
+/* Mobile & Small Screen Adaptations */
+@media (max-width: 640px) {
+  .tour-card {
+    width: calc(100vw - 24px) !important;
+    left: 12px !important;
+    padding: 12px;
+  }
+  .tour-keys-hint {
+    display: none;
+  }
+}

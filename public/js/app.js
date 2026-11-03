@@ -12,6 +12,7 @@ import {
   linkSources,
 } from "./ui.js";
 import { UserManual } from "./manual.js";
+import { startTour } from "./tour.js";
 
 const $ = (s, el = document) => el.querySelector(s);
 const grid = $("#grid");
@@ -546,10 +547,26 @@ if (isManualRoute()) {
   showTerminal(false);
 }
 gInput.focus();
+
+const tourBtn = $("#tourBtn");
+if (tourBtn) {
+  tourBtn.onclick = () => {
+    showTerminal(true);
+    startTour(true);
+  };
+}
+
+if (!isManualRoute() && !localStorage.getItem("tavoryn:tour_completed")) {
+  setTimeout(() => {
+    if (!isManualRoute()) startTour(false);
+  }, 600);
+}
+
 window.tavoryn = window.amber = {
   panels,
   run: (c, i = state.active) => panels[i].run(c),
   showManual,
   showTerminal,
   isManualRoute,
+  startTour,
 };
