@@ -10,6 +10,7 @@ test('Tour Module: Defines comprehensive steps covering all workspace tabs and e
   assert.ok(TOUR_STEPS.length >= 20, `Expected at least 20 tour steps, got ${TOUR_STEPS.length}`);
   assert.equal(typeof startTour, 'function', 'startTour must be an exported function');
   assert.ok(tour && typeof tour.start === 'function', 'tour instance must be exported');
+  assert.equal(typeof tour.goToStep, 'function', 'tour.goToStep must be an exported method');
 
   // Verify each step has required structural properties
   const stepIds = new Set();
@@ -80,6 +81,19 @@ test('Tour Styles: tour.css defines CRT amber spotlight, card and transitions', 
   assert.ok(css.includes('.tour-spotlight'), 'Must define .tour-spotlight');
   assert.ok(css.includes('.tour-card'), 'Must define .tour-card');
   assert.ok(css.includes('--amber'), 'Must incorporate --amber color tokens');
+  assert.ok(css.includes('.tour-key-btn'), 'Must define .tour-key-btn for clickable navigation buttons');
+  assert.ok(css.includes('.tour-progress-bar'), 'Must define .tour-progress-bar');
+  assert.ok(css.includes('cursor: pointer'), 'Progress bar and key buttons must have cursor: pointer');
+});
+
+test('Tour Interactivity: Progress bar and arrow buttons are interactive in tour.js', () => {
+  const jsPath = path.join(process.cwd(), 'public', 'js', 'tour.js');
+  const js = fs.readFileSync(jsPath, 'utf8');
+  assert.ok(js.includes('tour-progress-bar'), 'tour.js must render .tour-progress-bar');
+  assert.ok(js.includes('tour-key-btn tour-prev'), 'tour.js must render clickable ← button');
+  assert.ok(js.includes('tour-key-btn tour-next'), 'tour.js must render clickable → button');
+  assert.ok(js.includes('tour-key-btn tour-skip'), 'tour.js must render clickable Esc button');
+  assert.ok(js.includes('goToStep'), 'tour.js must implement goToStep scrub navigation');
 });
 
 test('Safety: Zero npm dependencies and paper trading ledger remains byte-for-byte identical', () => {

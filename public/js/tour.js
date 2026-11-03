@@ -232,6 +232,16 @@ class OnboardingTour {
 
     // Event delegation on tour card
     this.card.addEventListener("click", (e) => {
+      const bar = e.target.closest(".tour-progress-bar");
+      if (bar) {
+        const rect = bar.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const pct = Math.max(0, Math.min(1, clickX / rect.width));
+        const step = Math.min(TOUR_STEPS.length - 1, Math.floor(pct * TOUR_STEPS.length));
+        this.goToStep(step);
+        return;
+      }
+
       const btn = e.target.closest("button");
       if (!btn) return;
       if (btn.classList.contains("tour-skip")) {
@@ -303,6 +313,13 @@ class OnboardingTour {
     }
   }
 
+  goToStep(index) {
+    if (index >= 0 && index < TOUR_STEPS.length) {
+      this.currentStep = index;
+      this.renderStep();
+    }
+  }
+
   handleKeydown(e) {
     if (!this.active) return;
     if (e.key === "Escape") {
@@ -368,13 +385,15 @@ class OnboardingTour {
         ${tryBtnHtml}
       </div>
 
-      <div class="tour-progress-bar">
+      <div class="tour-progress-bar" title="Click anywhere along the bar to jump to that step">
         <div class="tour-progress-fill" style="width: ${progressPct}%"></div>
       </div>
 
       <div class="tour-card-footer">
-        <div class="tour-keys-hint">
-          <kbd>←</kbd> <kbd>→</kbd> <kbd>Esc</kbd>
+        <div class="tour-key-nav">
+          <button class="tour-key-btn tour-prev" ${isFirst ? "disabled" : ""} title="Previous Step (Left Arrow / ←)">←</button>
+          <button class="tour-key-btn tour-next" title="${isLast ? 'Finish Tour (Enter / →)' : 'Next Step (Right Arrow / →)'}">→</button>
+          <button class="tour-key-btn tour-skip" title="Exit Tour (Escape / Esc)">Esc</button>
         </div>
         <div class="tour-nav-buttons">
           <button class="tour-btn tour-prev" ${isFirst ? "disabled" : ""}>◂ Back</button>

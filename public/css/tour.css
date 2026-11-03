@@ -164,17 +164,26 @@
 /* Progress Bar */
 .tour-progress-bar {
   width: 100%;
-  height: 3px;
+  height: 4px;
   background: #1a1a1a;
-  border-radius: 1px;
+  border-radius: 2px;
   overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  transition: height 0.15s ease, background 0.15s ease;
+}
+
+.tour-progress-bar:hover {
+  height: 6px;
+  background: #25262a;
 }
 
 .tour-progress-fill {
   height: 100%;
   background: var(--amber, #ffa028);
-  box-shadow: 0 0 6px var(--amber, #ffa028);
+  box-shadow: 0 0 8px var(--amber, #ffa028);
   transition: width 0.2s ease;
+  pointer-events: none;
 }
 
 /* Card Footer */
@@ -185,20 +194,52 @@
   padding-top: 4px;
 }
 
-.tour-keys-hint {
+/* Key Buttons Navigation (←, →, Esc) */
+.tour-key-nav {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
 }
 
-.tour-keys-hint kbd {
+.tour-key-btn {
   background: #18191c;
-  border: 1px solid #333333;
-  color: var(--muted, #888888);
-  padding: 1px 5px;
-  font-size: 10px;
-  border-radius: 2px;
+  border: 1px solid #3a3b40;
+  color: var(--white, #f5f5f5);
+  min-width: 26px;
+  height: 24px;
+  padding: 0 6px;
+  font-size: 11px;
   font-family: inherit;
+  font-weight: 600;
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s ease;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.tour-key-btn:hover:not(:disabled) {
+  border-color: var(--amber, #ffa028);
+  color: var(--amber, #ffa028);
+  background: rgba(255, 160, 40, 0.12);
+  box-shadow: 0 0 6px rgba(255, 160, 40, 0.35);
+  transform: translateY(-1px);
+}
+
+.tour-key-btn:active:not(:disabled) {
+  transform: translateY(0);
+  background: var(--amber, #ffa028);
+  color: #000000;
+}
+
+.tour-key-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  border-color: #262626;
+  color: #555555;
 }
 
 .tour-nav-buttons {
