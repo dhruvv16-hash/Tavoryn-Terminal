@@ -34,7 +34,7 @@ test('Auth Shell Integration: index.html links auth.css and includes authGate co
 test('Firebase Config: Verified credentials for tavoryn-terminal are linked', async () => {
   const { FIREBASE_CONFIG } = await import('../public/js/firebase-config.js');
   assert.equal(FIREBASE_CONFIG.projectId, 'tavoryn-terminal');
-  assert.equal(FIREBASE_CONFIG.apiKey, 'AIzaSyC6rqfOcE8t9cQ1QFWcGccQLNbEWbXhZc8');
+  assert.equal(FIREBASE_CONFIG.apiKey, 'AIzaSyC6rqfOcE8t9cQ1QFWcGcCQLNbEWbXhZc8');
   assert.ok(FIREBASE_CONFIG.appId.includes('874751098568'));
 });
 

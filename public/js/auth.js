@@ -58,8 +58,7 @@ export function saveStoredUser(user) {
 export async function initFirebase(config = null) {
   if (fbAuth) return fbAuth;
 
-  const stored = getStoredFirebaseConfig();
-  const cfg = config || stored || window.FIREBASE_CONFIG || DEFAULT_CONFIG;
+  const cfg = config || (DEFAULT_CONFIG?.apiKey ? DEFAULT_CONFIG : getStoredFirebaseConfig() || DEFAULT_CONFIG);
   if (!cfg.apiKey || !cfg.projectId) {
     // Config not yet populated: use local authenticated mock session for offline/testing
     return null;
