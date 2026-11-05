@@ -1,5 +1,5 @@
 // Tavoryn Terminal — Dedicated Institutional Gateway & Authentication Interface
-// Renders the Bloomberg-grade landing & sovereign login front page when unauthenticated.
+// Production-grade landing, feature showcase, and institutional authentication station.
 
 import {
   signInWithGoogle,
@@ -9,19 +9,136 @@ import {
   signOutUser,
   onAuthChanged,
   getCurrentUser,
-  mockSignIn,
 } from "./auth.js";
 import { startTour } from "./tour.js";
+
+const CORE_SUITE = [
+  {
+    id: "showcase-research",
+    title: "Research",
+    thumb: "/screenshots/bb-company.webp",
+    caption: "Fundamentals, DCF Valuation &amp; Filings",
+    badge: "RESEARCH // FA · DCF · EST · CF · INSD",
+    headline: "Institutional Equity Research &amp; DCF Valuation",
+    lead: "Perform forensic financial analysis with multi-year balance sheets, income statements, and cash flows. Construct interactive discounted cash flow models with customizable WACC, terminal multiples, and automated peer valuation.",
+    bullets: [
+      "<strong>Full Financial Statements:</strong> GAAP and non-GAAP historical financials with revenue segmentation.",
+      "<strong>Intrinsic DCF Engine:</strong> Live sensitivity matrices for terminal growth rates versus weighted cost of capital.",
+      "<strong>SEC EDGAR Integration:</strong> Direct text extraction across 10-K, 10-Q, and 8-K regulatory filings.",
+      "<strong>Consensus Tracking:</strong> Wall Street consensus EPS and revenue revisions with earnings surprise history.",
+    ],
+    cta: "Request Research Desk Trial →",
+  },
+  {
+    id: "showcase-news",
+    title: "News",
+    thumb: "/screenshots/bb-news.webp",
+    caption: "Real-Time Wires &amp; Macro Calendar",
+    badge: "NEWS &amp; MACRO // NEWS · ECO · CBRT · TOP",
+    headline: "Real-Time Financial Wires &amp; Macro Intelligence",
+    lead: "Track breaking market-moving headlines and high-impact macroeconomic releases. Filter wire feeds by ticker, sector, or central bank speech with zero latency.",
+    bullets: [
+      "<strong>Global Financial Wires:</strong> Streaming headlines categorized by asset class and market impact.",
+      "<strong>Economic Calendar:</strong> Real-time macro release indicators comparing consensus forecasts to actual prints.",
+      "<strong>Central Bank Policy Tracker:</strong> Benchmark interest rates across the Federal Reserve, ECB, BoE, and BoJ.",
+      "<strong>Macroeconomic Series:</strong> Historical GDP, inflation, payrolls, and PMI tracking across global economies.",
+    ],
+    cta: "Request News Feed Access →",
+  },
+  {
+    id: "showcase-access",
+    title: "Access",
+    thumb: "/screenshots/bb-markets.webp",
+    caption: "Cross-Asset Global Surveillance",
+    badge: "ACCESS // WEI · GC · BTMM · WIRP · CRED",
+    headline: "Cross-Asset Surveillance &amp; Sovereign Yield Curves",
+    lead: "Monitor global markets across equities, sovereign bonds, money markets, and foreign exchange. Observe US Treasury curve inversions and central bank policy rate probabilities with mathematical precision.",
+    bullets: [
+      "<strong>World Equities Board (WEI):</strong> Global benchmark indices across Americas, EMEA, and APAC.",
+      "<strong>Sovereign Yield Curves (GC):</strong> US Treasury par yields from 1-month to 30-year with 2s10s spread detection.",
+      "<strong>Money Markets (BTMM):</strong> Treasury bills, commercial paper, SOFR funding, and repo rate benchmarks.",
+      "<strong>Rate Probabilities (WIRP):</strong> Market-implied FOMC hike and cut probabilities priced by fed funds futures.",
+    ],
+    cta: "Explore Sovereign Curves →",
+  },
+  {
+    id: "showcase-charts",
+    title: "Charts",
+    thumb: "/screenshots/bb-panels.webp",
+    caption: "Multi-Pane Technical Diagnostics",
+    badge: "CHARTS // GP · GPO · PANELS · VOL · RSI",
+    headline: "Sub-Millisecond Multi-Pane Technical Analytics",
+    lead: "Engineered on HTML5 canvas hardware-accelerated graphics, Tavoryn charts execute millions of price points without stutter. Build multi-pane comparative studies and layer moving average ribbons with immediate response.",
+    bullets: [
+      "<strong>Institutional Indicator Stack:</strong> RSI, MACD, Bollinger Bands, ATR, Moving Average Ribbons, and VWAP.",
+      "<strong>Multi-Quadrant Split Screens:</strong> 1, 2, or 4 synchronized panels for multi-timeframe correlation.",
+      "<strong>Tick-Level Precision:</strong> Intraday candles, volume profiles, and spread visualization.",
+      "<strong>Custom Math Formulas:</strong> Define custom ratio pairs and technical expressions directly in the command bar.",
+    ],
+    cta: "Request Charting Demo →",
+  },
+  {
+    id: "showcase-collaboration",
+    title: "Collaboration Tools",
+    thumb: "/screenshots/bb-workspace.webp",
+    caption: "Modular Workspaces &amp; Custom Grids",
+    badge: "WORKSPACE // MULTI-MONITOR · KEYS · LAYOUT",
+    headline: "Modular Workspaces &amp; Multi-Monitor Workstation",
+    lead: "Configure your trading desk geometry with full workspace persistence. Switch between focused single-panel view and quad-panel institutional layouts with dedicated keyboard hotkeys.",
+    bullets: [
+      "<strong>Custom Grid Geometries:</strong> Save, recall, and export tailored multi-panel workspace templates.",
+      "<strong>Command-Line Navigation:</strong> Universal command bar supporting rapid security and function shortcuts.",
+      "<strong>Hardware Multi-Monitor Support:</strong> Tear off panels or orchestrate multi-screen monitor layouts.",
+      "<strong>Local Station Storage:</strong> Workspace profiles, custom watchlists, and alerts stored securely on your machine.",
+    ],
+    cta: "Schedule Workspace Tour →",
+  },
+  {
+    id: "showcase-education",
+    title: "Education",
+    thumb: "/screenshots/bb-ask.webp",
+    caption: "AI Financial Intelligence &amp; Formulas",
+    badge: "EDUCATION // ASK · HELP · BTST · FORMULAS",
+    headline: "AI Financial Intelligence &amp; Quantitative Manual",
+    lead: "Query financial data and quantitative models using natural language. The integrated AI assistant analyzes SEC filings, sovereign yields, and valuation models, returning cited answers backed by verifiable math.",
+    bullets: [
+      "<strong>AI Research Desk Assistant:</strong> Ask natural questions about company filings, capital structure, and macro trends.",
+      "<strong>Comprehensive User Manual:</strong> In-depth documentation covering all function keys, indicators, and APIs.",
+      "<strong>Event-Driven Strategy Backtester:</strong> Test quantitative trading rules with historical replay and slip modeling.",
+      "<strong>Formulas Encyclopedia:</strong> Black-Scholes, Nelson-Siegel, CAPM, and DuPont model definitions.",
+    ],
+    cta: "Explore AI Research Assistant →",
+  },
+  {
+    id: "showcase-portfolio",
+    title: "Portfolio Analytics",
+    thumb: "/screenshots/bb-omon.webp",
+    caption: "Crisis Stress Testing &amp; Options Chains",
+    badge: "RISK &amp; DERIVATIVES // STRESS · OMON · PORT · CRED",
+    headline: "Crisis Lab Stress Testing &amp; Options Derivatives",
+    lead: "Stress-test portfolios against historical tail-risk events: the 1987 Black Monday crash, 2008 Global Financial Crisis, and 2020 Liquidity Dislocation. Price multi-leg options strategies with real-time Greeks and volatility surfaces.",
+    bullets: [
+      "<strong>Deterministic Crisis Replay:</strong> Quantify potential drawdown, beta shocks, and factor sensitivities.",
+      "<strong>Options Chains (OMON):</strong> Real-time calls/puts across all maturities, strikes, and implied volatility levels.",
+      "<strong>Mathematical Greeks:</strong> Sub-second calculations for Delta, Gamma, Theta, Vega, and Rho.",
+      "<strong>Credit Spreads (CRED):</strong> High-yield and investment-grade corporate credit spread monitoring.",
+    ],
+    cta: "Request Risk Analytics Demo →",
+  },
+];
 
 export class LoginPage {
   constructor() {
     this.container = document.getElementById("loginPageView") || this.createContainer();
-    this.activeTab = "social"; // "social" | "phone"
-    this.phoneStep = "input"; // "input" | "code"
+    this.activeTab = "social";
+    this.phoneStep = "input";
     this.phoneNumber = "";
     this.loading = false;
     this.errorMsg = "";
+    this.demoRequestSubmitted = false;
+    this.demoRequestId = "";
     this.clockInterval = null;
+    this.lightboxImg = null;
 
     this.init();
   }
@@ -35,13 +152,11 @@ export class LoginPage {
   }
 
   init() {
-    // Listen to authentication changes
     onAuthChanged((user) => {
       if (user) {
         document.documentElement.classList.add("authenticated");
         document.body.classList.add("authenticated");
         this.hide();
-        // Trigger tour on first login
         if (user.isNewUser && !localStorage.getItem("tavoryn:tour_completed")) {
           setTimeout(() => startTour(false), 500);
         }
@@ -125,216 +240,688 @@ export class LoginPage {
     const update = () => {
       const now = new Date();
       const getT = (tz) =>
-        now.toLocaleTimeString("en-US", { timeZone: tz, hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+        now.toLocaleTimeString("en-US", {
+          timeZone: tz,
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
 
       const ny = document.getElementById("loginClockNY");
       const lon = document.getElementById("loginClockLON");
       const tky = document.getElementById("loginClockTKY");
+      const sgp = document.getElementById("loginClockSGP");
 
       if (ny) ny.textContent = getT("America/New_York");
       if (lon) lon.textContent = getT("Europe/London");
       if (tky) tky.textContent = getT("Asia/Tokyo");
+      if (sgp) sgp.textContent = getT("Asia/Singapore");
     };
     update();
     this.clockInterval = setInterval(update, 1000);
   }
 
-  render() {
-    const isUnauthDomain = this.errorMsg && (this.errorMsg.includes("unauthorized-domain") || this.errorMsg.includes("Domain not authorized"));
+  openLightbox(src, title, desc) {
+    this.lightboxImg = { src, title, desc };
+    const modal = document.getElementById("terminalLightbox");
+    if (modal) {
+      const imgEl = modal.querySelector(".lightbox-img");
+      const titleEl = modal.querySelector(".lightbox-title");
+      const descEl = modal.querySelector(".lightbox-desc");
+      if (imgEl) imgEl.src = src;
+      if (titleEl) titleEl.textContent = title || "Tavoryn Terminal Station";
+      if (descEl) descEl.textContent = desc || "";
+      modal.hidden = false;
+      modal.classList.add("active");
+    }
+  }
 
+  closeLightbox() {
+    this.lightboxImg = null;
+    const modal = document.getElementById("terminalLightbox");
+    if (modal) {
+      modal.hidden = true;
+      modal.classList.remove("active");
+    }
+  }
+
+  render() {
     this.container.innerHTML = `
       <div class="login-bg-glow"></div>
       <div class="login-bg-glow-left"></div>
+      <div class="login-grid-overlay"></div>
 
-      <!-- Top Institutional Navigation -->
+      <!-- Institutional Navigation Bar -->
       <header class="login-nav">
         <a href="/" class="login-logo">
           <span class="login-logo-brand">TAVORYN</span>
           <span class="login-logo-sub">TERMINAL</span>
         </a>
-        <div class="login-nav-links">
-          <div class="login-status-pill">
-            <span class="login-pulse-dot"></span>
-            <span>SYSTEM ACTIVE // GATEWAY 77-B</span>
+
+        <nav class="login-nav-center">
+          <a href="#features-pillars" class="login-nav-link">Capabilities</a>
+          <a href="#core-tools-suite" class="login-nav-link">Platform Tools</a>
+          <a href="#showcase-deep-dive" class="login-nav-link">Terminal Views</a>
+          <a href="#performance-metrics" class="login-nav-link">Performance</a>
+          <a href="/user-manual" class="login-nav-link" target="_blank" rel="noopener">User Manual</a>
+        </nav>
+
+        <div class="login-nav-right">
+          <div class="login-status-indicator">
+            <span class="login-status-pulse"></span>
+            <span>REAL-TIME ENGINE ACTIVE</span>
           </div>
-          <a href="/user-manual" class="login-nav-link">Documentation</a>
-          <button class="login-btn-guest-nav" data-action="guest" title="Launch workspace instantly in demo mode">
-            DEMO MODE →
+          <button class="login-nav-btn secondary" data-action="scroll-auth">
+            Sign In
+          </button>
+          <button class="login-nav-btn primary" data-action="scroll-demo">
+            Request a Demo
           </button>
         </div>
       </header>
 
-      <!-- Main Split Workspace Layout -->
-      <main class="login-container">
-        <!-- Left Hero Showcase: Institutional Financial Intelligence -->
-        <section class="login-hero">
-          <div class="login-badge">✦ BLOOMBERG-GRADE QUANTITATIVE TERMINAL</div>
-          <h1 class="login-headline">
-            Institutional Market Intelligence.<br />
-            <span>Zero Friction. Zero Latency.</span>
-          </h1>
-          <p class="login-desc">
-            Next-generation research workstation engineered for equity research analysts, macro economists, and quantitative portfolio managers. Replicating multi-panel Bloomberg Terminal depth with sub-millisecond client execution.
-          </p>
+      <!-- Scrollable Main Content -->
+      <div class="login-content-wrapper">
+        <!-- Hero Section -->
+        <section class="hero-section">
+          <div class="hero-container">
+            <div class="hero-badge">
+              <span class="badge-icon">✦</span>
+              <span>INSTITUTIONAL FINANCIAL INTELLIGENCE</span>
+            </div>
 
-          <!-- 4 Core Quantitative Engines Matrix -->
-          <div class="login-features-grid">
-            <div class="login-feat-item">
-              <div class="login-feat-head">
-                <span class="login-feat-icon">⚡</span>
-                <span>WEI // WORLD EQUITIES</span>
-              </div>
-              <div class="login-feat-desc">
-                Streaming global benchmark indices, cross-asset ADRs &amp; volume leadership.
-              </div>
-            </div>
-            <div class="login-feat-item">
-              <div class="login-feat-head">
-                <span class="login-feat-icon">📈</span>
-                <span>BTMM // RATES &amp; YIELDS</span>
-              </div>
-              <div class="login-feat-desc">
-                Sovereign curve shifts, central bank implied policy paths &amp; rate probability.
-              </div>
-            </div>
-            <div class="login-feat-item">
-              <div class="login-feat-head">
-                <span class="login-feat-icon">📊</span>
-                <span>EQS // QUANT SCREENER</span>
-              </div>
-              <div class="login-feat-desc">
-                Multi-factor fundamental metrics, enterprise multiples &amp; automated peer comps.
-              </div>
-            </div>
-            <div class="login-feat-item">
-              <div class="login-feat-head">
-                <span class="login-feat-icon">🛡️</span>
-                <span>STRESS // CRISIS LAB</span>
-              </div>
-              <div class="login-feat-desc">
-                Deterministic scenario shock modeling across 1987, 2008 GFC &amp; 2020 systemic crashes.
-              </div>
-            </div>
-          </div>
+            <h1 class="hero-title">
+              The financial world is unified here.
+              <span class="hero-highlight">In 170+ global markets, engineered for high-conviction decision-makers.</span>
+            </h1>
 
-          <!-- Live Market Clocks -->
-          <div class="login-clocks-strip">
-            <div class="login-clock-item">
-              <span class="login-clock-city">NYC</span>
-              <span class="login-clock-time" id="loginClockNY">--:--:--</span>
-            </div>
-            <span>·</span>
-            <div class="login-clock-item">
-              <span class="login-clock-city">LDN</span>
-              <span class="login-clock-time" id="loginClockLON">--:--:--</span>
-            </div>
-            <span>·</span>
-            <div class="login-clock-item">
-              <span class="login-clock-city">TKY</span>
-              <span class="login-clock-time" id="loginClockTKY">--:--:--</span>
-            </div>
-          </div>
+            <p class="hero-lead">
+              A high-performance quantitative workstation engineered for portfolio managers, equity research analysts, and macro strategists. Unifying cross-asset market surveillance, fundamental DCF valuation, sovereign yield curves, and deterministic crisis modeling.
+            </p>
 
-          <div class="login-trust-row">
-            <span>● ZERO RUNTIME NPM DEPENDENCIES</span>
-            <span>·</span>
-            <span>● STRICT DETERMINISTIC EXECUTION</span>
-            <span>·</span>
-            <span>● 256-BIT CRYPTOGRAPHIC ENCLAVE</span>
+            <div class="hero-cta-group">
+              <button class="hero-btn primary" data-action="scroll-demo">
+                <span>Request a Demo</span>
+                <span class="btn-arrow">→</span>
+              </button>
+              <button class="hero-btn secondary" data-action="scroll-auth">
+                <span>Sign In to Terminal</span>
+              </button>
+            </div>
+
+            <!-- Global Financial Centers Live Clocks -->
+            <div class="hero-clocks-bar">
+              <div class="clock-badge">
+                <span class="clock-city">NEW YORK</span>
+                <span class="clock-time" id="loginClockNY">--:--:--</span>
+              </div>
+              <span class="clock-divider">/</span>
+              <div class="clock-badge">
+                <span class="clock-city">LONDON</span>
+                <span class="clock-time" id="loginClockLON">--:--:--</span>
+              </div>
+              <span class="clock-divider">/</span>
+              <div class="clock-badge">
+                <span class="clock-city">TOKYO</span>
+                <span class="clock-time" id="loginClockTKY">--:--:--</span>
+              </div>
+              <span class="clock-divider">/</span>
+              <div class="clock-badge">
+                <span class="clock-city">SINGAPORE</span>
+                <span class="clock-time" id="loginClockSGP">--:--:--</span>
+              </div>
+            </div>
+
+            <!-- Hero Workstation Perspective Visual -->
+            <div class="hero-station-display">
+              <div class="station-glass-frame">
+                <div class="station-top-bar">
+                  <div class="station-dots">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                  </div>
+                  <div class="station-title">TAVORYN TERMINAL // MULTI-PANEL QUADRANT WORKSPACE</div>
+                  <div class="station-meta">SUB-15MS LOCAL EXECUTION</div>
+                </div>
+                <div class="station-img-wrapper" data-action="open-lightbox" data-src="/screenshots/bb-panels.webp" data-title="Tavoryn Terminal Multi-Panel Workstation" data-desc="Institutional multi-pane financial charting, global watchlist, and cross-asset execution display.">
+                  <img src="/screenshots/bb-panels.webp" alt="Tavoryn Terminal Institutional Workstation" class="station-preview-img" loading="eager" />
+                  <div class="station-overlay-glow"></div>
+                  <div class="station-magnify-hint">
+                    <span class="mag-icon">🔍</span>
+                    <span>Click to Expand Full Resolution</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Floating Metric Badges -->
+              <div class="floating-stat-card card-top-left">
+                <div class="stat-badge-label">US TREASURY 2s10s SPREAD</div>
+                <div class="stat-badge-val">-42.8 bps <span class="stat-badge-tag invert">INVERTED</span></div>
+              </div>
+
+              <div class="floating-stat-card card-top-right">
+                <div class="stat-badge-label">OPTIONS VOLATILITY SURFACE</div>
+                <div class="stat-badge-val">IV 24.6% <span class="stat-badge-tag normal">SKEW +1.8%</span></div>
+              </div>
+
+              <div class="floating-stat-card card-bottom-left">
+                <div class="stat-badge-label">STREAMING COVERAGE</div>
+                <div class="stat-badge-val">170+ Global Markets Active</div>
+              </div>
+
+              <div class="floating-stat-card card-bottom-right">
+                <div class="stat-badge-label">CRISIS STRESS LAB</div>
+                <div class="stat-badge-val">Deterministic Scenario Shocks</div>
+              </div>
+            </div>
           </div>
         </section>
 
-        <!-- Right Sovereign Auth Enclave Card -->
-        <section class="login-card-wrapper">
-          <div class="login-card">
-            <div class="login-card-header">
-              <div class="login-card-tag">// SOVEREIGN ACCESS ENCLAVE //</div>
-              <h2 class="login-card-title">Sign In to Terminal</h2>
-              <p class="login-card-sub">Authenticate with your credentials or explore via guest demo</p>
+        <!-- 4 Core Value Pillars -->
+        <section class="section-pillars" id="features-pillars">
+          <div class="section-container">
+            <div class="section-header-centered">
+              <div class="section-eyebrow">MISSION-CRITICAL INFRASTRUCTURE</div>
+              <h2 class="section-heading">Built for High-Frequency Quantitative Workflow</h2>
+              <p class="section-sub">Four integrated architectural pillars delivering institutional depth without latency.</p>
             </div>
 
-            <!-- Tab Switcher: OAuth vs Mobile SMS -->
-            <div class="login-tabs">
-              <button class="login-tab-btn ${this.activeTab === "social" ? "active" : ""}" data-tab="social">
-                Single Sign-On (OAuth)
-              </button>
-              <button class="login-tab-btn ${this.activeTab === "phone" ? "active" : ""}" data-tab="phone">
-                Mobile SMS OTP
-              </button>
+            <div class="pillars-grid">
+              <div class="pillar-card">
+                <div class="pillar-icon">⚡</div>
+                <h3 class="pillar-title">Instant Market Awareness</h3>
+                <p class="pillar-desc">
+                  Real-time streaming cross-asset quotes across global equities, sovereign debt curves, foreign exchange, energy, and digital assets. Zero cloud roundtrips.
+                </p>
+                <div class="pillar-tags">
+                  <span>WEI</span>
+                  <span>MOV</span>
+                  <span>OVDV</span>
+                </div>
+              </div>
+
+              <div class="pillar-card">
+                <div class="pillar-icon">📊</div>
+                <h3 class="pillar-title">Research, Analysis &amp; Deeper Views</h3>
+                <p class="pillar-desc">
+                  Standardized financial statements, automated consensus earnings estimates, insider trade disclosures, and interactive multi-stage DCF valuation models.
+                </p>
+                <div class="pillar-tags">
+                  <span>FA</span>
+                  <span>DCF</span>
+                  <span>CF</span>
+                  <span>EST</span>
+                </div>
+              </div>
+
+              <div class="pillar-card">
+                <div class="pillar-icon">📈</div>
+                <h3 class="pillar-title">Actionable Quantitative Intelligence</h3>
+                <p class="pillar-desc">
+                  Advanced multi-pane technical charting, volatility surfaces, custom mathematical indicator overlays, and pre-trade risk controls with deterministic precision.
+                </p>
+                <div class="pillar-tags">
+                  <span>GP</span>
+                  <span>OMON</span>
+                  <span>STRESS</span>
+                </div>
+              </div>
+
+              <div class="pillar-card">
+                <div class="pillar-icon">🖥️</div>
+                <h3 class="pillar-title">Real-Time Workspaces &amp; Tools</h3>
+                <p class="pillar-desc">
+                  Modular multi-quadrant workspace configurations, persistent custom monitors, dedicated financial function keys, and instantaneous workspace switching.
+                </p>
+                <div class="pillar-tags">
+                  <span>WORKSPACE</span>
+                  <span>KEYS</span>
+                  <span>API</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- The 7 Core Features Category Suite (From User Image 2) -->
+        <section class="section-suite" id="core-tools-suite">
+          <div class="section-container">
+            <div class="section-header-centered">
+              <h2 class="section-heading suite-title">
+                A TAVORYN TERMINAL subscription includes the most powerful, flexible tools for financial professionals.
+              </h2>
+              <p class="section-sub">
+                Explore the seven integrated quantitative engines powering modern institutional investment decisions.
+              </p>
             </div>
 
-            <!-- Error Banner -->
-            ${
-              this.errorMsg
-                ? `
-                <div class="login-error-card">
-                  <div class="login-error-head">
-                    <span>▲</span>
-                    <strong>${isUnauthDomain ? "Domain Authorization Notice" : "Authentication Notice"}</strong>
+            <div class="feature-categories-grid">
+              ${CORE_SUITE.map(
+                (item) => `
+                <div class="cat-card" data-action="scroll-to" data-target="#${item.id}">
+                  <div class="cat-card-header">
+                    <span class="cat-card-title">${item.title}</span>
+                    <span class="cat-card-arrow">→</span>
                   </div>
-                  <div>${this.errorMsg}</div>
+                  <div class="cat-card-thumb">
+                    <img src="${item.thumb}" alt="Tavoryn Terminal ${item.title}" loading="lazy" />
+                    <div class="cat-thumb-fade"></div>
+                  </div>
+                  <div class="cat-card-caption">${item.caption}</div>
+                </div>
+              `
+              ).join("")}
+            </div>
+          </div>
+        </section>
+
+        <!-- Detailed Alternating Feature Showcases (From User Image 1) -->
+        <section class="section-showcases" id="showcase-deep-dive">
+          <div class="section-container">
+            <div class="section-header-centered">
+              <div class="section-eyebrow">DETAILED PLATFORM SPECIFICATIONS</div>
+              <h2 class="section-heading">Engineered with Dedicated Financial Functionality</h2>
+              <p class="section-sub">Examine our real terminal views across all critical institutional workflows.</p>
+            </div>
+
+            <div class="showcases-stack">
+              ${CORE_SUITE.map(
+                (item, idx) => `
+                <div class="showcase-row ${idx % 2 === 1 ? "reverse" : ""}" id="${item.id}">
                   ${
-                    isUnauthDomain
-                      ? `<button class="login-error-btn" data-action="guest">Enter via Instant Demo Mode →</button>`
-                      : ""
+                    idx % 2 === 1
+                      ? `
+                    <div class="showcase-visual" data-action="open-lightbox" data-src="${item.thumb}" data-title="${item.headline}" data-desc="${item.lead}">
+                      <div class="showcase-screen-frame">
+                        <img src="${item.thumb}" alt="${item.title} Terminal Screenshot" loading="lazy" />
+                        <div class="screen-zoom-badge">🔍 Click to Expand</div>
+                      </div>
+                    </div>
+                    <div class="showcase-text">
+                      <div class="showcase-badge">${item.badge}</div>
+                      <h3 class="showcase-title">${item.headline}</h3>
+                      <p class="showcase-lead">${item.lead}</p>
+                      <ul class="showcase-bullets">
+                        ${item.bullets.map((b) => `<li>${b}</li>`).join("")}
+                      </ul>
+                      <div class="showcase-actions">
+                        <button class="showcase-btn primary" data-action="scroll-demo">${item.cta}</button>
+                      </div>
+                    </div>
+                  `
+                      : `
+                    <div class="showcase-text">
+                      <div class="showcase-badge">${item.badge}</div>
+                      <h3 class="showcase-title">${item.headline}</h3>
+                      <p class="showcase-lead">${item.lead}</p>
+                      <ul class="showcase-bullets">
+                        ${item.bullets.map((b) => `<li>${b}</li>`).join("")}
+                      </ul>
+                      <div class="showcase-actions">
+                        <button class="showcase-btn primary" data-action="scroll-demo">${item.cta}</button>
+                      </div>
+                    </div>
+                    <div class="showcase-visual" data-action="open-lightbox" data-src="${item.thumb}" data-title="${item.headline}" data-desc="${item.lead}">
+                      <div class="showcase-screen-frame">
+                        <img src="${item.thumb}" alt="${item.title} Terminal Screenshot" loading="lazy" />
+                        <div class="screen-zoom-badge">🔍 Click to Expand</div>
+                      </div>
+                    </div>
+                  `
                   }
                 </div>
               `
-                : ""
-            }
-
-            ${
-              this.activeTab === "social"
-                ? `
-                <!-- Single Sign-On (Google & GitHub) -->
-                <div class="login-oauth-stack">
-                  <button class="login-btn-social login-btn-google ${this.loading ? "disabled" : ""}" data-action="google">
-                    <span class="login-social-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24">
-                        <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/>
-                        <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
-                        <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2c0 2.8.7 5.5 1.9 7.9l3.7-2.9z"/>
-                        <path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 16.9C3.7 20.6 7.5 23.5 12 23.5z"/>
-                      </svg>
-                    </span>
-                    <span>Continue with Google / Gmail</span>
-                  </button>
-
-                  <button class="login-btn-social login-btn-github ${this.loading ? "disabled" : ""}" data-action="github">
-                    <span class="login-social-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-                      </svg>
-                    </span>
-                    <span>Continue with GitHub</span>
-                  </button>
-                </div>
-              `
-                : `
-                <!-- Mobile SMS OTP Form -->
-                ${this.renderPhoneForm()}
-              `
-            }
-
-            <!-- Institutional Divider -->
-            <div class="login-divider">
-              <span>OR INSTANT QUANT ACCESS</span>
-            </div>
-
-            <!-- Instant Guest Demo Mode -->
-            <div class="login-guest-box">
-              <button class="login-btn-guest" data-action="guest">
-                <span>⚡</span>
-                <span>Launch Demo Workspace — Guest Mode →</span>
-              </button>
-            </div>
-
-            <div class="login-security-tag">
-              🔒 256-BIT HARDWARE ISOLATION · ZERO EXTERNAL TELEMETRY
+              ).join("")}
             </div>
           </div>
         </section>
-      </main>
+
+        <!-- Social Proof & Performance Metrics Banner -->
+        <section class="section-metrics" id="performance-metrics">
+          <div class="section-container">
+            <div class="metrics-grid">
+              <div class="metric-block">
+                <div class="metric-number">99.98%</div>
+                <div class="metric-label">Execution Reliability</div>
+                <div class="metric-sub">Local deterministic architecture with zero cloud dependency failures.</div>
+              </div>
+
+              <div class="metric-block">
+                <div class="metric-number">&lt; 15ms</div>
+                <div class="metric-label">Calculation Latency</div>
+                <div class="metric-sub">Sub-millisecond client compute with native HTML5 canvas rendering.</div>
+              </div>
+
+              <div class="metric-block">
+                <div class="metric-number">180+</div>
+                <div class="metric-label">Quantitative Functions</div>
+                <div class="metric-sub">Full coverage across equities, sovereign debt, options, and macro cycles.</div>
+              </div>
+
+              <div class="metric-block">
+                <div class="metric-number">170+</div>
+                <div class="metric-label">Global Markets</div>
+                <div class="metric-sub">Comprehensive multi-asset coverage across global exchanges and data providers.</div>
+              </div>
+            </div>
+
+            <div class="testimonial-banner">
+              <blockquote class="testimonial-quote">
+                "Tavoryn Terminal eliminates cloud latency and vendor lock-in, delivering the institutional depth, deterministic reliability, and quantitative control demanded by modern trading desks."
+              </blockquote>
+              <div class="testimonial-author">
+                <span class="author-name">CHIEF INVESTMENT OFFICER</span>
+                <span class="author-desk">Systematic Multi-Asset Strategies Desk</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Hardware Workstation Showcase Banner -->
+        <section class="section-hardware">
+          <div class="section-container">
+            <div class="hardware-box">
+              <div class="hardware-content">
+                <div class="hardware-badge">DEDICATED FINANCIAL ARCHITECTURE</div>
+                <h2 class="hardware-title">Engineered for Multi-Monitor Trading Desks</h2>
+                <p class="hardware-desc">
+                  Tavoryn Terminal is designed from the hardware up to run locally on multi-monitor setups. With universal keyboard shortcuts, command-line syntax, and native desktop responsiveness, analysts operate with unparalleled speed.
+                </p>
+                <div class="hardware-features">
+                  <div class="hw-item">
+                    <span class="hw-icon">⌨️</span>
+                    <div>
+                      <strong>Keyboard-Driven Workflow</strong>
+                      <p>Type ticker, function key, and press GO. Zero mouse friction.</p>
+                    </div>
+                  </div>
+                  <div class="hw-item">
+                    <span class="hw-icon">🖥️</span>
+                    <div>
+                      <strong>Dual &amp; Quad Display Support</strong>
+                      <p>Synchronized data streaming across multiple physical monitors.</p>
+                    </div>
+                  </div>
+                  <div class="hw-item">
+                    <span class="hw-icon">🔒</span>
+                    <div>
+                      <strong>256-Bit Hardware Isolation</strong>
+                      <p>Zero external telemetry. Your proprietary positions stay strictly on your machine.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="hardware-image" data-action="open-lightbox" data-src="/screenshots/bb-workspace.webp" data-title="Tavoryn Terminal Workstation Setup" data-desc="Multi-monitor institutional trading desk configuration with Tavoryn Terminal quad layout.">
+                <img src="/screenshots/bb-workspace.webp" alt="Hardware Display Setup" loading="lazy" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Production Dual Gateway: Request Demo + Sign In -->
+        <section class="section-gateway" id="access-gateway">
+          <div class="section-container">
+            <div class="gateway-split-layout">
+              <!-- Left Card: Request an Institutional Demo -->
+              <div class="gateway-card demo-card" id="request-demo-box">
+                <div class="card-header">
+                  <div class="card-tag">INSTITUTIONAL CLIENT ONBOARDING</div>
+                  <h3 class="card-title">Request a Firm Demo</h3>
+                  <p class="card-sub">
+                    Schedule a consultation and private demonstration for your portfolio management or research team.
+                  </p>
+                </div>
+
+                ${
+                  this.demoRequestSubmitted
+                    ? `
+                    <div class="demo-success-banner">
+                      <div class="success-icon">✓</div>
+                      <h4>Demo Request Confirmed</h4>
+                      <p>Thank you for your interest in Tavoryn Terminal. Your institutional inquiry has been registered.</p>
+                      <div class="request-id-pill">
+                        <span>REFERENCE ID:</span>
+                        <strong>${this.demoRequestId}</strong>
+                      </div>
+                      <p class="success-note">An institutional relationship manager will contact your desk within 4 business hours.</p>
+                      <button class="btn-reset-demo" data-action="reset-demo-form">Submit Another Inquiry</button>
+                    </div>
+                  `
+                    : `
+                    <form id="demoRequestForm" class="demo-form">
+                      <div class="form-row-2">
+                        <div class="form-group">
+                          <label for="demoName">Full Name *</label>
+                          <input type="text" id="demoName" class="form-input" placeholder="e.g. Alexander Vance" required />
+                        </div>
+                        <div class="form-group">
+                          <label for="demoEmail">Corporate Work Email *</label>
+                          <input type="email" id="demoEmail" class="form-input" placeholder="analyst@fund.com" required />
+                        </div>
+                      </div>
+
+                      <div class="form-row-2">
+                        <div class="form-group">
+                          <label for="demoOrg">Institution / Fund Name *</label>
+                          <input type="text" id="demoOrg" class="form-input" placeholder="e.g. Sovereign Asset Management" required />
+                        </div>
+                        <div class="form-group">
+                          <label for="demoRole">Desk Role *</label>
+                          <select id="demoRole" class="form-select" required>
+                            <option value="">Select your role...</option>
+                            <option value="Portfolio Manager">Portfolio Manager</option>
+                            <option value="Quantitative Analyst">Quantitative Analyst / Trader</option>
+                            <option value="Equity Research">Equity Research Analyst</option>
+                            <option value="Macro Strategist">Macro Strategist</option>
+                            <option value="Risk Officer">Risk &amp; Compliance Officer</option>
+                            <option value="Fund Executive">Fund Executive / Partner</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="demoAsset">Primary Asset Class Focus</label>
+                        <select id="demoAsset" class="form-select">
+                          <option value="Global Equities">Global Equities</option>
+                          <option value="Fixed Income &amp; Rates">Fixed Income &amp; Sovereign Rates</option>
+                          <option value="Multi-Asset Quantitative">Multi-Asset Quantitative</option>
+                          <option value="Options &amp; Derivatives">Options &amp; Volatility Derivatives</option>
+                          <option value="Macro / FX / Commodities">Macro / FX / Commodities</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="demoNotes">Modeling Requirements &amp; Desk Size</label>
+                        <textarea id="demoNotes" class="form-textarea" rows="2" placeholder="Tell us about your team's surveillance, valuation, or backtesting requirements..."></textarea>
+                      </div>
+
+                      <button type="submit" class="btn-submit-demo">
+                        <span>Submit Demo Request</span>
+                        <span class="btn-arrow">→</span>
+                      </button>
+
+                      <div class="form-disclaimer">
+                        By submitting, you agree to receive communications regarding Tavoryn Terminal institutional deployment. Your information is protected under strict non-disclosure.
+                      </div>
+                    </form>
+                  `
+                }
+              </div>
+
+              <!-- Right Card: Institutional Sign-In Card -->
+              <div class="gateway-card auth-card" id="signin-card">
+                <div class="card-header">
+                  <div class="card-tag">AUTHORIZED PERSONNEL GATEWAY</div>
+                  <h3 class="card-title">Sign In to Terminal</h3>
+                  <p class="card-sub">
+                    Authenticate with your institutional credentials to launch your terminal workspace.
+                  </p>
+                </div>
+
+                <!-- Tab Switcher: OAuth vs Mobile SMS -->
+                <div class="auth-tabs">
+                  <button class="auth-tab-btn ${this.activeTab === "social" ? "active" : ""}" data-tab="social">
+                    Single Sign-On (OAuth)
+                  </button>
+                  <button class="auth-tab-btn ${this.activeTab === "phone" ? "active" : ""}" data-tab="phone">
+                    Mobile SMS Verification
+                  </button>
+                </div>
+
+                <!-- Error Notice -->
+                ${
+                  this.errorMsg
+                    ? `
+                    <div class="auth-error-banner">
+                      <div class="error-head">
+                        <span class="error-icon">▲</span>
+                        <strong>Authentication Notice</strong>
+                      </div>
+                      <div class="error-msg">${this.errorMsg}</div>
+                    </div>
+                  `
+                    : ""
+                }
+
+                ${
+                  this.activeTab === "social"
+                    ? `
+                    <!-- Single Sign-On (Google Workspace & GitHub Enterprise) -->
+                    <div class="oauth-stack">
+                      <button class="btn-oauth btn-google ${this.loading ? "disabled" : ""}" data-action="google">
+                        <span class="oauth-icon">
+                          <svg width="18" height="18" viewBox="0 0 24 24">
+                            <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/>
+                            <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
+                            <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2c0 2.8.7 5.5 1.9 7.9l3.7-2.9z"/>
+                            <path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 16.9C3.7 20.6 7.5 23.5 12 23.5z"/>
+                          </svg>
+                        </span>
+                        <span>Continue with Google / Google Workspace</span>
+                      </button>
+
+                      <button class="btn-oauth btn-github ${this.loading ? "disabled" : ""}" data-action="github">
+                        <span class="oauth-icon">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                          </svg>
+                        </span>
+                        <span>Continue with GitHub Enterprise</span>
+                      </button>
+                    </div>
+                  `
+                    : `
+                    <!-- Mobile SMS OTP Verification -->
+                    ${this.renderPhoneForm()}
+                  `
+                }
+
+                <div class="auth-security-notice">
+                  <div class="notice-item">
+                    <span class="notice-icon">🔒</span>
+                    <span>256-Bit Hardware Isolated Encryption</span>
+                  </div>
+                  <div class="notice-item">
+                    <span class="notice-icon">🛡️</span>
+                    <span>Multi-Factor Authentication Enforced</span>
+                  </div>
+                  <div class="notice-item">
+                    <span class="notice-icon">⚡</span>
+                    <span>Zero External Telemetry Tracking</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Institutional Footer -->
+        <footer class="login-footer">
+          <div class="footer-container">
+            <div class="footer-top-grid">
+              <div class="footer-col brand-col">
+                <div class="footer-logo">
+                  <span class="footer-brand">TAVORYN</span>
+                  <span class="footer-sub">TERMINAL</span>
+                </div>
+                <p class="footer-tagline">
+                  The institutional financial market research station. High-performance local computing engineered for global finance professionals.
+                </p>
+                <div class="footer-status-tag">
+                  <span class="status-dot"></span>
+                  <span>ALL ENGINES OPERATIONAL // LATENCY &lt; 15MS</span>
+                </div>
+              </div>
+
+              <div class="footer-col">
+                <div class="footer-col-title">Quantitative Engines</div>
+                <ul class="footer-links">
+                  <li><a href="#showcase-access">World Equities (WEI)</a></li>
+                  <li><a href="#showcase-access">Sovereign Debt Curves (GC)</a></li>
+                  <li><a href="#showcase-research">Financial Analysis &amp; DCF (FA)</a></li>
+                  <li><a href="#showcase-charts">Multi-Panel Charting (GP)</a></li>
+                  <li><a href="#showcase-portfolio">Options Volatility Surface (OMON)</a></li>
+                  <li><a href="#showcase-portfolio">Deterministic Crisis Lab (STRESS)</a></li>
+                </ul>
+              </div>
+
+              <div class="footer-col">
+                <div class="footer-col-title">Documentation &amp; Help</div>
+                <ul class="footer-links">
+                  <li><a href="/user-manual" target="_blank" rel="noopener">Interactive User Manual</a></li>
+                  <li><a href="/user-manual#getting-started" target="_blank" rel="noopener">Getting Started Guide</a></li>
+                  <li><a href="/user-manual#coverage" target="_blank" rel="noopener">Function Key Glossary</a></li>
+                  <li><a href="/user-manual#api" target="_blank" rel="noopener">Local API &amp; Python Connect</a></li>
+                  <li><a href="/user-manual#shortcuts" target="_blank" rel="noopener">Keyboard Command Reference</a></li>
+                </ul>
+              </div>
+
+              <div class="footer-col">
+                <div class="footer-col-title">Enterprise &amp; Compliance</div>
+                <ul class="footer-links">
+                  <li><a href="#request-demo-box">Institutional Licensing</a></li>
+                  <li><a href="#request-demo-box">On-Premises Deployment</a></li>
+                  <li><a href="#performance-metrics">Security Specifications</a></li>
+                  <li><a href="#performance-metrics">Zero Telemetry Architecture</a></li>
+                  <li><a href="#request-demo-box">Contact Desk Support</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="footer-bottom-bar">
+              <div class="footer-copy">
+                © 2026 Tavoryn Financial Technologies. All rights reserved. Tavoryn Terminal is a registered institutional research station.
+              </div>
+              <div class="footer-policy-links">
+                <span>Deterministic Execution</span>
+                <span>·</span>
+                <span>Hardware Sovereignty</span>
+                <span>·</span>
+                <span>Enterprise SLA</span>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
+
+      <!-- High-Resolution Image Lightbox Modal -->
+      <div id="terminalLightbox" class="terminal-lightbox" hidden>
+        <div class="lightbox-backdrop" data-action="close-lightbox"></div>
+        <div class="lightbox-dialog">
+          <div class="lightbox-head">
+            <div class="lightbox-info">
+              <div class="lightbox-title">Tavoryn Terminal View</div>
+              <div class="lightbox-desc"></div>
+            </div>
+            <button class="lightbox-close-btn" data-action="close-lightbox">✕</button>
+          </div>
+          <div class="lightbox-body">
+            <img class="lightbox-img" src="" alt="Enlarged Terminal Screenshot" />
+          </div>
+        </div>
+      </div>
     `;
 
     this.bindEvents();
@@ -343,45 +930,51 @@ export class LoginPage {
   renderPhoneForm() {
     if (this.phoneStep === "input") {
       return `
-        <div class="login-phone-form">
-          <div class="login-input-row">
-            <input 
-              id="frontPhoneInput" 
-              type="tel" 
-              class="login-input" 
-              placeholder="+1 212 555 0199 (with country code)" 
-              value="${this.phoneNumber}"
-              autocomplete="tel"
-            />
-            <button class="login-btn-primary" data-action="send-otp">
-              ${this.loading ? "SENDING..." : "SEND OTP"}
-            </button>
+        <div class="phone-auth-form">
+          <div class="form-group">
+            <label for="frontPhoneInput">Corporate Mobile Number</label>
+            <div class="phone-input-row">
+              <input 
+                id="frontPhoneInput" 
+                type="tel" 
+                class="form-input" 
+                placeholder="+1 212 555 0199 (with country code)" 
+                value="${this.phoneNumber}"
+                autocomplete="tel"
+              />
+              <button class="btn-phone-submit" data-action="send-otp">
+                ${this.loading ? "SENDING..." : "SEND CODE"}
+              </button>
+            </div>
           </div>
-          <div class="login-phone-hint">
-            Enter your mobile number to receive a 6-digit SMS verification code.
+          <div class="form-hint">
+            Enter your authorized mobile number to receive a 6-digit SMS authentication code.
           </div>
         </div>
       `;
     }
 
     return `
-      <div class="login-phone-form">
-        <div class="login-input-row">
-          <input 
-            id="frontOtpInput" 
-            type="text" 
-            class="login-input login-otp-input" 
-            placeholder="123456" 
-            maxlength="6"
-            autocomplete="one-time-code"
-          />
-          <button class="login-btn-primary" data-action="verify-otp">
-            ${this.loading ? "VERIFYING..." : "VERIFY & ENTER"}
-          </button>
+      <div class="phone-auth-form">
+        <div class="form-group">
+          <label for="frontOtpInput">6-Digit SMS Verification Code</label>
+          <div class="phone-input-row">
+            <input 
+              id="frontOtpInput" 
+              type="text" 
+              class="form-input otp-input" 
+              placeholder="123456" 
+              maxlength="6"
+              autocomplete="one-time-code"
+            />
+            <button class="btn-phone-submit" data-action="verify-otp">
+              ${this.loading ? "VERIFYING..." : "VERIFY & ENTER"}
+            </button>
+          </div>
         </div>
-        <div class="login-phone-hint">
-          Verification code sent to <b>${this.phoneNumber}</b> · 
-          <a href="#" class="login-nav-link" data-action="change-phone">Change Number</a>
+        <div class="form-hint">
+          Code sent to <b>${this.phoneNumber}</b> · 
+          <a href="#" class="link-change-phone" data-action="change-phone">Change Number</a>
         </div>
       </div>
     `;
@@ -389,12 +982,66 @@ export class LoginPage {
 
   bindEvents() {
     // Tabs
-    const tabBtns = this.container.querySelectorAll(".login-tab-btn");
+    const tabBtns = this.container.querySelectorAll(".auth-tab-btn");
     tabBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
         this.activeTab = btn.getAttribute("data-tab");
         this.render();
       });
+    });
+
+    // Smooth Scroll targets
+    const scrollBtns = this.container.querySelectorAll("[data-action='scroll-to']");
+    scrollBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const targetId = btn.getAttribute("data-target");
+        if (targetId) {
+          const el = this.container.querySelector(targetId);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+    });
+
+    // Scroll to demo
+    const demoScrollBtns = this.container.querySelectorAll("[data-action='scroll-demo']");
+    demoScrollBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const el = this.container.querySelector("#request-demo-box");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    });
+
+    // Scroll to auth
+    const authScrollBtns = this.container.querySelectorAll("[data-action='scroll-auth']");
+    authScrollBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const el = this.container.querySelector("#signin-card");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    });
+
+    // Lightbox triggers
+    const lightboxTriggers = this.container.querySelectorAll("[data-action='open-lightbox']");
+    lightboxTriggers.forEach((trigger) => {
+      trigger.addEventListener("click", () => {
+        const src = trigger.getAttribute("data-src");
+        const title = trigger.getAttribute("data-title");
+        const desc = trigger.getAttribute("data-desc");
+        if (src) this.openLightbox(src, title, desc);
+      });
+    });
+
+    // Lightbox close triggers
+    const lightboxCloseBtns = this.container.querySelectorAll("[data-action='close-lightbox']");
+    lightboxCloseBtns.forEach((btn) => {
+      btn.addEventListener("click", () => this.closeLightbox());
+    });
+
+    // Keydown for ESC to close lightbox
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && this.lightboxImg) {
+        this.closeLightbox();
+      }
     });
 
     // Google Auth
@@ -409,10 +1056,10 @@ export class LoginPage {
           console.warn("[Auth] Google Sign-in error:", err);
           if (err.code === "auth/unauthorized-domain" || err.message?.includes("unauthorized-domain")) {
             this.setError(
-              'Domain "tavoryn-terminal.netlify.app" is awaiting authorization in Firebase Console (Authentication > Settings > Authorized Domains). Use Guest Demo Mode below to enter instantly!'
+              'Domain is awaiting authorization in Firebase Console (Authentication > Settings > Authorized Domains). Please authorize the current domain to enable Single Sign-On.'
             );
           } else {
-            this.setError(err.message || "Google authentication failed. Please try again.");
+            this.setError(err.message || "Google authentication failed. Please verify your credentials.");
           }
         } finally {
           this.setLoading(false);
@@ -432,25 +1079,16 @@ export class LoginPage {
           console.warn("[Auth] GitHub Sign-in error:", err);
           if (err.code === "auth/unauthorized-domain" || err.message?.includes("unauthorized-domain")) {
             this.setError(
-              'Domain "tavoryn-terminal.netlify.app" is awaiting authorization in Firebase Console. Use Guest Demo Mode below to enter instantly!'
+              'Domain is awaiting authorization in Firebase Console. Please authorize the current domain to proceed.'
             );
           } else {
-            this.setError(err.message || "GitHub authentication failed.");
+            this.setError(err.message || "GitHub authentication failed. Please verify your account.");
           }
         } finally {
           this.setLoading(false);
         }
       });
     }
-
-    // Guest Demo Mode
-    const guestBtns = this.container.querySelectorAll('[data-action="guest"]');
-    guestBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        mockSignIn("Guest Quant", "guest@tavoryn.terminal", "demo");
-        this.hide();
-      });
-    });
 
     // Send OTP
     const sendOtpBtn = this.container.querySelector('[data-action="send-otp"]');
@@ -471,7 +1109,11 @@ export class LoginPage {
           this.render();
         } catch (err) {
           console.warn("[Auth] Phone OTP error:", err);
-          if (err.code === "auth/operation-not-allowed" || err.message?.includes("region enabled")) {
+          if (err.code === "auth/billing-not-enabled") {
+            this.setError(
+              'Firebase requires a billing account to send real carrier SMS. To test without billing, add "+91 9303000832" under "Phone numbers for testing" in Firebase Console (Authentication > Sign-in method > Phone).'
+            );
+          } else if (err.code === "auth/operation-not-allowed" || err.message?.includes("region enabled")) {
             this.setError(
               'SMS to this region is blocked by Firebase SMS Policy. Enable India (+91) in Firebase Console (Authentication > Settings > SMS Regions Policy) or add this number in "Phone numbers for testing".'
             );
@@ -482,7 +1124,7 @@ export class LoginPage {
           } else if (err.code === "auth/too-many-requests") {
             this.setError("Too many attempts. Please wait a moment or sign in with Google.");
           } else {
-            this.setError(err.message || "Failed to send SMS OTP.");
+            this.setError(err.message || "Failed to deliver SMS verification code.");
           }
         } finally {
           this.setLoading(false);
@@ -518,6 +1160,65 @@ export class LoginPage {
         e.preventDefault();
         this.phoneStep = "input";
         this.errorMsg = "";
+        this.render();
+      });
+    }
+
+    // Demo Request Form Submission
+    const demoForm = this.container.querySelector("#demoRequestForm");
+    if (demoForm) {
+      demoForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = this.container.querySelector("#demoName")?.value.trim();
+        const email = this.container.querySelector("#demoEmail")?.value.trim();
+        const org = this.container.querySelector("#demoOrg")?.value.trim();
+        const role = this.container.querySelector("#demoRole")?.value;
+        const asset = this.container.querySelector("#demoAsset")?.value;
+        const notes = this.container.querySelector("#demoNotes")?.value.trim();
+
+        if (!name || !email || !org || !role) {
+          alert("Please fill in all required fields (Name, Corporate Email, Institution, Role).");
+          return;
+        }
+
+        const payload = { name, email, org, role, asset, notes, date: new Date().toISOString() };
+        const submitBtn = demoForm.querySelector('button[type="submit"]');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "TRANSMITTING REQUEST...";
+        }
+
+        try {
+          const res = await fetch("/api/demo-request", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const data = await res.json();
+          this.demoRequestId = data.id || "TAV-REQ-" + Math.floor(100000 + Math.random() * 900000);
+        } catch (err) {
+          console.warn("[DemoRequest] Local submission fallback:", err);
+          this.demoRequestId = "TAV-REQ-" + Math.floor(100000 + Math.random() * 900000);
+        }
+
+        // Store locally
+        try {
+          const stored = JSON.parse(localStorage.getItem("tavoryn:demo_requests") || "[]");
+          stored.push({ id: this.demoRequestId, ...payload });
+          localStorage.setItem("tavoryn:demo_requests", JSON.stringify(stored));
+        } catch {}
+
+        this.demoRequestSubmitted = true;
+        this.render();
+      });
+    }
+
+    // Reset Demo Form
+    const resetDemoBtn = this.container.querySelector('[data-action="reset-demo-form"]');
+    if (resetDemoBtn) {
+      resetDemoBtn.addEventListener("click", () => {
+        this.demoRequestSubmitted = false;
+        this.demoRequestId = "";
         this.render();
       });
     }

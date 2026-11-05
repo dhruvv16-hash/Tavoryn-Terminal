@@ -74,3 +74,35 @@ test('Safety: Zero npm dependencies and paper trading ledger remains byte-for-by
     'Ledger SHA-256 must match baseline exactly',
   );
 });
+
+test('Production Gateway & Feature Suite: Validates clean branding, 7 pillars, and demo requests', () => {
+  const lpCode = fs.readFileSync(path.join(process.cwd(), 'public', 'js', 'login-page.js'), 'utf8');
+
+  // Verify no cheesy text or demo bypass
+  assert.ok(!lpCode.includes('// SOVEREIGN ACCESS ENCLAVE //'), 'Must eliminate SOVEREIGN ACCESS ENCLAVE');
+  assert.ok(!lpCode.includes('mockSignIn'), 'Must eliminate mockSignIn from production landing');
+  assert.ok(!lpCode.includes('BLOOMBERG-GRADE'), 'Must eliminate BLOOMBERG-GRADE label');
+
+  // Verify Tavoryn branding
+  assert.ok(lpCode.includes('TAVORYN'), 'Must brand as TAVORYN');
+  assert.ok(lpCode.includes('TERMINAL'), 'Must brand as TERMINAL');
+
+  // Verify 7 core feature suite categories from user image 2
+  const suites = ['Research', 'News', 'Access', 'Charts', 'Collaboration Tools', 'Education', 'Portfolio Analytics'];
+  for (const suite of suites) {
+    assert.ok(lpCode.includes(suite), `Must include feature category: ${suite}`);
+  }
+
+  // Verify terminal screenshot references
+  assert.ok(lpCode.includes('/screenshots/bb-company.webp'), 'Must link company research screenshot');
+  assert.ok(lpCode.includes('/screenshots/bb-news.webp'), 'Must link news screenshot');
+  assert.ok(lpCode.includes('/screenshots/bb-markets.webp'), 'Must link markets access screenshot');
+  assert.ok(lpCode.includes('/screenshots/bb-panels.webp'), 'Must link panels charting screenshot');
+  assert.ok(lpCode.includes('/screenshots/bb-workspace.webp'), 'Must link workspace screenshot');
+  assert.ok(lpCode.includes('/screenshots/bb-ask.webp'), 'Must link AI education screenshot');
+  assert.ok(lpCode.includes('/screenshots/bb-omon.webp'), 'Must link options portfolio screenshot');
+
+  // Verify institutional demo request form
+  assert.ok(lpCode.includes('id="demoRequestForm"'), 'Must include demo request form');
+  assert.ok(lpCode.includes('/api/demo-request'), 'Must submit to /api/demo-request');
+});

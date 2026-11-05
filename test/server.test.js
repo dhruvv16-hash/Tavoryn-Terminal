@@ -189,3 +189,22 @@ test('paper trading routes enforce authentication header and origin protection',
   assert.equal(badOrder.status, 400);
 });
 
+test('demo request endpoint accepts and persists institutional submissions', async () => {
+  const r = await fetch(`${base}/api/demo-request`, {
+    method: 'POST',
+    headers: H,
+    body: JSON.stringify({
+      name: 'Jane Doe',
+      email: 'jane@quantfund.com',
+      org: 'Quant Capital Management',
+      role: 'Portfolio Manager',
+      asset: 'Global Equities',
+      notes: 'Testing institutional access'
+    })
+  });
+  assert.equal(r.status, 200);
+  const data = await r.json();
+  assert.equal(data.ok, true);
+  assert.ok(data.id.startsWith('TAV-REQ-'));
+});
+

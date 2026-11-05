@@ -64,6 +64,10 @@ const MIME = {
   ".json": "application/json",
   ".svg": "image/svg+xml",
   ".png": "image/png",
+  ".webp": "image/webp",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".mp4": "video/mp4",
   ".ico": "image/x-icon",
   ".txt": "text/plain; charset=utf-8",
   ".csv": "text/csv; charset=utf-8",
@@ -257,6 +261,23 @@ export async function handle(req, res) {
   }
 
   try {
+    if (p === "/api/demo-request" && req.method === "POST") {
+      const body = await readBody(req);
+      const id = "TAV-REQ-" + Date.now().toString(36).toUpperCase() + "-" + Math.floor(1000 + Math.random() * 9000);
+      const record = { id, timestamp: new Date().toISOString(), ...body };
+      try {
+        const demoPath = path.join(ROOT, "data", "demo-requests.json");
+        let list = [];
+        if (fs.existsSync(demoPath)) {
+          try { list = JSON.parse(fs.readFileSync(demoPath, "utf8")); } catch {}
+        }
+        list.push(record);
+        fs.writeFileSync(demoPath, JSON.stringify(list, null, 2), "utf8");
+      } catch (e) {
+        console.warn("[DemoRequest] Could not persist to disk:", e.message);
+      }
+      return send(res, 200, { ok: true, id, message: "Institutional demo request recorded successfully" });
+    }
     if (p === "/api/health") {
       return send(res, 200, {
         ok: true,
