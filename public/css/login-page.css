@@ -1977,22 +1977,47 @@ html.theme-light .showcase-deep-dive {
 
 html.theme-light .auth-card-title,
 html.theme-light .section-title,
+html.theme-light .section-heading,
+html.theme-light .suite-title,
+html.theme-light .pillar-title,
 html.theme-light .pillar-name,
 html.theme-light .tool-name,
 html.theme-light .metric-val,
-html.theme-light .cat-card-title,
+html.theme-light .showcase-title,
 html.theme-light .showcase-headline {
   color: #0f172a !important;
 }
 
 html.theme-light .auth-card-subtitle,
 html.theme-light .section-lead,
+html.theme-light .section-sub,
 html.theme-light .pillar-desc,
 html.theme-light .tool-desc,
 html.theme-light .metric-lbl,
 html.theme-light .cat-card-sub,
 html.theme-light .showcase-lead {
   color: #475569 !important;
+}
+
+html.theme-light .showcase-bullets li {
+  color: #334155 !important;
+}
+
+html.theme-light .showcase-bullets li strong {
+  color: #0f172a !important;
+}
+
+html.theme-light .cat-card {
+  background: #0b0f19 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+html.theme-light .cat-card-title {
+  color: #ffffff !important;
+}
+
+html.theme-light .cat-card-arrow {
+  color: #ffffff !important;
 }
 
 html.theme-light .auth-input-group input {
