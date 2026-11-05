@@ -14,6 +14,7 @@ import {
 import { UserManual } from "./manual.js";
 import { startTour } from "./tour.js";
 import { AuthGate } from "./auth-ui.js";
+import { LoginPage } from "./login-page.js";
 import { getCurrentUser, signOutUser } from "./auth.js";
 
 const $ = (s, el = document) => el.querySelector(s);
@@ -558,7 +559,8 @@ if (tourBtn) {
   };
 }
 
-// Authentication & Access Control Gate
+// Dedicated Login Front Page & Auth Gate
+const loginPage = new LoginPage();
 const authGate = new AuthGate();
 
 if (!isManualRoute() && !localStorage.getItem("tavoryn:tour_completed") && getCurrentUser()) {
@@ -574,6 +576,7 @@ window.tavoryn = window.amber = {
   showTerminal,
   isManualRoute,
   startTour,
+  loginPage,
   authGate,
   getCurrentUser,
   signOutUser,

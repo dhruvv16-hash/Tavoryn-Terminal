@@ -1,11 +1,12 @@
 // Tavoryn Terminal — Firebase Production Configuration
-// Paste your Firebase web app keys from console.firebase.google.com here.
+// Verified institutional credentials for project "tavoryn-terminal"
 
 export const FIREBASE_CONFIG = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: "",
+  apiKey: "AIzaSyC6rqfOcE8t9cQ1QFWcGccQLNbEWbXhZc8",
+  authDomain: "tavoryn-terminal.firebaseapp.com",
+  projectId: "tavoryn-terminal",
+  storageBucket: "tavoryn-terminal.firebasestorage.app",
+  messagingSenderId: "874751098568",
+  appId: "1:874751098568:web:2f6c274227b5dc75632ffd",
+  measurementId: "G-XPVVX2T6KZ",
 };

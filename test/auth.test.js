@@ -18,13 +18,24 @@ test('Auth Module: Exports all required authentication methods for Google, GitHu
 test('Auth UI: AuthGate class is defined and exported in auth-ui.js', async () => {
   const ui = await import('../public/js/auth-ui.js');
   assert.equal(typeof ui.AuthGate, 'function', 'AuthGate must be a constructible class');
+  const lp = await import('../public/js/login-page.js');
+  assert.equal(typeof lp.LoginPage, 'function', 'LoginPage must be a constructible class');
 });
 
 test('Auth Shell Integration: index.html links auth.css and includes authGate container', () => {
   const indexHtml = fs.readFileSync(path.join(process.cwd(), 'public', 'index.html'), 'utf8');
   assert.ok(indexHtml.includes('/css/auth.css'), 'index.html must link /css/auth.css');
+  assert.ok(indexHtml.includes('/css/login-page.css'), 'index.html must link /css/login-page.css');
   assert.ok(indexHtml.includes('id="userBtn"'), 'index.html must include id="userBtn" in header');
   assert.ok(indexHtml.includes('id="authGate"'), 'index.html must include id="authGate" container');
+  assert.ok(indexHtml.includes('id="loginPageView"'), 'index.html must include id="loginPageView" container');
+});
+
+test('Firebase Config: Verified credentials for tavoryn-terminal are linked', async () => {
+  const { FIREBASE_CONFIG } = await import('../public/js/firebase-config.js');
+  assert.equal(FIREBASE_CONFIG.projectId, 'tavoryn-terminal');
+  assert.equal(FIREBASE_CONFIG.apiKey, 'AIzaSyC6rqfOcE8t9cQ1QFWcGccQLNbEWbXhZc8');
+  assert.ok(FIREBASE_CONFIG.appId.includes('874751098568'));
 });
 
 test('Auth Function Codes: LOGIN, AUTH, and USER are registered terminal commands', async () => {

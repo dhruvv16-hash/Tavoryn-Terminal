@@ -85,6 +85,8 @@ export class AuthGate {
   }
 
   showGate() {
+    const lp = document.getElementById("loginPageView");
+    if (lp && !lp.hidden) return;
     this.container.hidden = false;
     if (this.grid) this.grid.style.filter = "blur(8px)";
     this.render();
