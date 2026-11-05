@@ -662,9 +662,6 @@ if (!isManualRoute()) {
         localStorage.setItem("tavoryn:toured_accounts", JSON.stringify(toured));
         localStorage.setItem("tavoryn:tour_completed", "true");
       } catch {}
-      setTimeout(() => {
-        if (!isManualRoute()) startTour(true);
-      }, 700);
     }
   }
 }

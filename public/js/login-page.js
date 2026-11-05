@@ -177,9 +177,6 @@ export class LoginPage {
         document.documentElement.classList.add("authenticated");
         document.body.classList.add("authenticated");
         this.hide();
-        if (user.isNewUser && !localStorage.getItem("tavoryn:tour_completed")) {
-          setTimeout(() => startTour(false), 500);
-        }
       } else {
         document.documentElement.classList.remove("authenticated");
         document.body.classList.remove("authenticated");

@@ -2,70 +2,69 @@ import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
-// High-DPI Close-up Crops from 1920x1080 Terminal Views
-// Target size: 640x360 (16:9 ratio, razor-sharp on Retina/4K displays)
+// Ultra-High-DPI Razor-Sharp Close-up Crops from 1400x900 Lossless Source Assets
+// Target aspect ratio ~ 1.8:1 (560x310), sharpened and contrast-enhanced for maximum crispness
 const CROPS = [
   {
     name: "card-crop-research",
-    // Focus on FA stock chart + green volume bars + valuation metrics from bb-company.webp
-    src: "public/screenshots/bb-company.webp",
-    fallbackSrc: "public/manual/assets/financial-analysis-fa.png",
-    crop: "crop=700:390:600:150",
+    // Focus on DCF Valuation Model intrinsic value + sensitivity matrix
+    src: "public/manual/assets/dcf-valuation-model.png",
+    crop: "crop=560:310:20:90",
   },
   {
     name: "card-crop-news",
-    // Focus on live news wire headlines & macro calendar from bb-news.webp
-    src: "public/screenshots/bb-news.webp",
-    fallbackSrc: "public/manual/assets/economic-calendar-eco.png",
-    crop: "crop=700:390:100:140",
+    // Focus on Economic Calendar indicators + high impact badges
+    src: "public/manual/assets/economic-calendar-eco.png",
+    crop: "crop=560:310:20:90",
   },
   {
     name: "card-crop-access",
-    // Focus on WEI World Equities board with green % gains and red % losses from bb-markets.webp
-    src: "public/screenshots/bb-markets.webp",
-    fallbackSrc: "public/manual/assets/world-markets-wei.png",
-    crop: "crop=700:390:20:120",
+    // Focus on WEI World Equities Board benchmark indices + green/red changes
+    src: "public/manual/assets/world-markets-wei.png",
+    crop: "crop=560:310:15:90",
   },
   {
     name: "card-crop-charts",
-    // Focus on multi-pane candlestick chart with red/green candles and volume from bb-panels.webp
-    src: "public/screenshots/bb-panels.webp",
-    fallbackSrc: "public/manual/assets/chart-technical-analysis-gp.png",
-    crop: "crop=700:390:300:180",
+    // Focus on Candlestick price chart with green/red candles and moving average ribbons
+    src: "public/manual/assets/chart-technical-analysis-gp.png",
+    crop: "crop=560:310:230:130",
   },
   {
     name: "card-crop-collaboration",
-    // Focus on multi-monitor 4-quadrant layout from bb-workspace.webp
-    src: "public/screenshots/bb-workspace.webp",
-    fallbackSrc: "public/manual/assets/dashboard-workspace-overview.png",
-    crop: "crop=700:390:250:120",
+    // Focus on multi-pane synchronized workstation quadrant panels
+    src: "public/manual/assets/dashboard-workspace-overview.png",
+    crop: "crop=560:310:120:70",
   },
   {
     name: "card-crop-education",
-    // Focus on AI financial assistant & quantitative formula from bb-ask.webp
-    src: "public/screenshots/bb-ask.webp",
-    fallbackSrc: "public/manual/assets/ai-research-assistant-ask.png",
-    crop: "crop=700:390:200:140",
+    // Focus on AI Financial Assistant with natural language prompt + formula breakdown
+    src: "public/manual/assets/ai-research-assistant-ask.png",
+    crop: "crop=560:310:35:95",
   },
   {
     name: "card-crop-portfolio",
-    // Focus on options chain strikes and Greeks matrix from bb-omon.webp
-    src: "public/screenshots/bb-omon.webp",
-    fallbackSrc: "public/manual/assets/options-chain-omon.png",
-    crop: "crop=700:390:100:150",
+    // Focus on Crisis Lab historical scenario shocks with drawdown bars
+    src: "public/manual/assets/portfolio-stress-testing.png",
+    crop: "crop=560:310:20:100",
   },
 ];
 
 for (const c of CROPS) {
-  const inputFile = fs.existsSync(c.src) ? c.src : c.fallbackSrc;
+  const inputFile = c.src;
   const outWebp = path.join("public/screenshots", `${c.name}.webp`);
   const outPng = path.join("public/screenshots", `${c.name}.png`);
 
-  console.log(`Generating ${c.name} from ${inputFile}...`);
-  // Generate high-quality WebP
-  execSync(`ffmpeg -y -i "${inputFile}" -vf "${c.crop}" -quality 95 "${outWebp}"`, { stdio: "pipe" });
-  // Generate high-quality PNG
-  execSync(`ffmpeg -y -i "${inputFile}" -vf "${c.crop}" "${outPng}"`, { stdio: "pipe" });
+  console.log(`Generating crystal-clear crop for ${c.name} from ${inputFile}...`);
+  // Generate ultra-crisp WebP with unsharp sharpening & contrast enhancement
+  execSync(
+    `ffmpeg -y -i "${inputFile}" -vf "${c.crop},unsharp=5:5:1.0:5:5:0.0,eq=contrast=1.12:brightness=0.03" -quality 98 "${outWebp}"`,
+    { stdio: "pipe" }
+  );
+  // Generate PNG fallback
+  execSync(
+    `ffmpeg -y -i "${inputFile}" -vf "${c.crop},unsharp=5:5:1.0:5:5:0.0,eq=contrast=1.12:brightness=0.03" "${outPng}"`,
+    { stdio: "pipe" }
+  );
 }
 
-console.log("All 7 high-DPI crops generated successfully.");
+console.log("All 7 ultra-high-DPI crops generated successfully.");
