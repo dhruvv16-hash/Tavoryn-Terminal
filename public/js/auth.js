@@ -11,8 +11,18 @@ let fbApp = null;
 let fbAuth = null;
 let fbRecaptchaVerifier = null;
 let fbConfirmationResult = null;
-let authListener = null;
 let currentUser = null;
+const authListeners = [];
+
+function notifyAuthListeners(user) {
+  for (const cb of authListeners) {
+    try {
+      cb(user);
+    } catch (err) {
+      console.warn("[Auth] Listener error:", err);
+    }
+  }
+}
 
 // Default client configuration (can be overridden by window.FIREBASE_CONFIG or /api/auth/config)
 export const DEFAULT_CONFIG = FIREBASE_CONFIG;
@@ -90,7 +100,7 @@ export async function initFirebase(config = null) {
         currentUser = null;
         saveStoredUser(null);
       }
-      if (authListener) authListener(currentUser);
+      notifyAuthListeners(currentUser);
     });
 
     return fbAuth;
@@ -114,6 +124,9 @@ export async function signInWithGoogle(forceRedirect = false) {
   const provider = new GoogleAuthProvider();
   provider.addScope("email");
   provider.addScope("profile");
+  provider.setCustomParameters({
+    prompt: "select_account",
+  });
 
   if (forceRedirect) {
     return await signInWithRedirect(auth, provider);
@@ -151,6 +164,9 @@ export async function signInWithGitHub(forceRedirect = false) {
   const provider = new GithubAuthProvider();
   provider.addScope("read:user");
   provider.addScope("user:email");
+  provider.setCustomParameters({
+    prompt: "consent",
+  });
 
   if (forceRedirect) {
     return await signInWithRedirect(auth, provider);
@@ -224,7 +240,7 @@ export function mockSignIn(name, contact, provider = "local") {
   localStorage.setItem("tavoryn:has_logged_in", "1");
   currentUser = user;
   saveStoredUser(user);
-  if (authListener) authListener(user);
+  notifyAuthListeners(user);
   return user;
 }
 
@@ -232,27 +248,34 @@ export function mockSignIn(name, contact, provider = "local") {
  * Sign Out
  */
 export async function signOutUser() {
-  if (fbAuth) {
+  const auth = fbAuth || (await initFirebase());
+  if (auth) {
     try {
       const { signOut } = await import(FIREBASE_AUTH_CDN);
-      await signOut(fbAuth);
+      await signOut(auth);
     } catch {}
   }
   currentUser = null;
   saveStoredUser(null);
-  if (authListener) authListener(null);
+  notifyAuthListeners(null);
 }
 
 /**
  * Registers an auth state listener callback
  */
 export function onAuthChanged(callback) {
-  authListener = callback;
+  authListeners.push(callback);
   const stored = getStoredUser();
   if (stored) {
     currentUser = stored;
-    callback(stored);
+    try {
+      callback(stored);
+    } catch {}
   }
+  return () => {
+    const idx = authListeners.indexOf(callback);
+    if (idx >= 0) authListeners.splice(idx, 1);
+  };
 }
 
 export function getCurrentUser() {
