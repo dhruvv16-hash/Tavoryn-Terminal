@@ -10,6 +10,13 @@
     <link rel="stylesheet" href="/css/tour.css" />
     <link rel="stylesheet" href="/css/auth.css" />
     <link rel="stylesheet" href="/css/login-page.css" />
+    <script>
+      try {
+        if (localStorage.getItem("tavoryn:auth_user")) {
+          document.documentElement.classList.add("authenticated");
+        }
+      } catch (e) {}
+    </script>
     <script src="/vendor/lightweight-charts.standalone.production.js"></script>
   </head>
   <body>
@@ -28,6 +35,7 @@
       <div id="clocks" class="clocks"></div>
       <button id="tourBtn" class="toplink" type="button" title="Interactive Terminal Tour & Onboarding Walkthrough">TOUR</button>
       <button id="userBtn" class="toplink user-toplink" type="button" title="User Account & Security">SIGN IN</button>
+      <div id="userProfilePopover" class="user-profile-popover" hidden></div>
       <a
         id="helpLink"
         class="toplink"
@@ -40,7 +48,7 @@
     <main id="grid" class="grid"></main>
     <div id="manualView" class="manual-view" hidden></div>
     <div id="authGate" class="auth-gate" hidden></div>
-    <div id="loginPageView" class="login-page" hidden></div>
+    <div id="loginPageView" class="login-page"></div>
     <footer class="tape"><div id="tape" class="tape-run"></div></footer>
     <div id="suggest" class="suggest" hidden></div>
     <div id="toast" class="toast" hidden></div>
