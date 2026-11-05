@@ -157,8 +157,22 @@ export class LoginPage {
         document.documentElement.classList.add("authenticated");
         document.body.classList.add("authenticated");
         this.hide();
-        if (user.isNewUser && !localStorage.getItem("tavoryn:tour_completed")) {
-          setTimeout(() => startTour(false), 500);
+
+        // Check if this account has ever received the interactive tour
+        const id = user.uid || user.email || user.phoneNumber;
+        let toured = {};
+        try {
+          toured = JSON.parse(localStorage.getItem("tavoryn:toured_accounts") || "{}");
+        } catch {}
+
+        if (id && !toured[id]) {
+          // First-time account login: deliver interactive tour automatically
+          toured[id] = Date.now();
+          try {
+            localStorage.setItem("tavoryn:toured_accounts", JSON.stringify(toured));
+            localStorage.setItem("tavoryn:tour_completed", "true");
+          } catch {}
+          setTimeout(() => startTour(true), 600);
         }
       } else {
         document.documentElement.classList.remove("authenticated");

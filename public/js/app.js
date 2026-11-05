@@ -59,8 +59,17 @@ window.addEventListener("popstate", () => {
   else showTerminal(false);
 });
 
-const LAYOUTS = { 1: "one", 2: "two", 4: "" };
-const DEFAULT = ["WEI", "TOP", "SPX INDEX GP", "ECO"];
+const LAYOUTS = { 1: "one", 2: "two", 4: "", 6: "six", 8: "eight" };
+const DEFAULT = [
+  "WEI",
+  "TOP",
+  "SPX INDEX GP",
+  "ECO",
+  "GC",
+  "OMON",
+  "FA",
+  "PORT",
+];
 
 let state = { layout: 4, panels: DEFAULT.slice(), active: 0 };
 const panels = [];
@@ -233,6 +242,9 @@ function setLayout(n) {
   grid.className = `grid ${LAYOUTS[n] ?? ""}`;
   panels.forEach((p, j) => (p.el.style.display = j < n ? "" : "none"));
   if (state.active >= n) setActive(0);
+  document.querySelectorAll("#keys button[data-l]").forEach((b) => {
+    b.classList.toggle("active", +b.dataset.l === n);
+  });
   save();
 }
 
@@ -351,7 +363,7 @@ $("#globalCmd").onsubmit = (e) => {
     return;
   }
   showTerminal(true);
-  const n = /^(LAYOUT|GRID)\s+([124])$/i.exec(v);
+  const n = /^(LAYOUT|GRID)\s+([12468])$/i.exec(v);
   if (n) setLayout(+n[2]);
   else panels[state.active].run(v);
   gInput.value = "";
@@ -416,7 +428,7 @@ $("#keys").innerHTML =
         `<button class="key ${y ? "" : "fn"}" data-k="${k}"${fkeyOf[k] ? ` title="${fkeyOf[k]} on the keyboard"` : ""}>${fkeyOf[k] ? `<small>${fkeyOf[k]}</small>` : ""}${k}</button>`,
     )
     .join("") +
-  `<span style="flex:1"></span><button class="key fn" data-l="1">1</button><button class="key fn" data-l="2">2</button><button class="key fn" data-l="4">4</button>`;
+  `<span style="flex:1"></span><button class="key fn" data-l="1">1</button><button class="key fn" data-l="2">2</button><button class="key fn" data-l="4">4</button><button class="key fn" data-l="6">6</button><button class="key fn" data-l="8">8</button>`;
 $("#keys").onclick = (e) => {
   const b = e.target.closest("button");
   if (!b) return;
@@ -517,7 +529,7 @@ document.addEventListener("keydown", (e) => {
     e.preventDefault();
     hideSuggest();
     showManual(true);
-  } else if ((e.metaKey || e.ctrlKey) && /^[1-4]$/.test(e.key)) {
+  } else if ((e.metaKey || e.ctrlKey) && /^[1-8]$/.test(e.key)) {
     e.preventDefault();
     const i = +e.key - 1;
     if (i < state.layout) {
@@ -531,7 +543,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 // ---------- start ----------
-for (let i = 0; i < 4; i++) {
+for (let i = 0; i < 8; i++) {
   const p = new Panel(i);
   panels.push(p);
   grid.append(p.el);
@@ -539,11 +551,11 @@ for (let i = 0; i < 4; i++) {
 try {
   const res = await api.get("/api/state");
   const s = res?.tavoryn || res?.amber;
-  if (s?.panels?.length === 4)
+  if (s?.panels && Array.isArray(s.panels))
     state = { layout: s.layout || 4, panels: s.panels, active: s.active || 0 };
 } catch {}
-setLayout(state.layout);
-setActive(state.active);
+setLayout(state.layout || 4);
+setActive(state.active || 0);
 panels.forEach((p, i) => p.run(state.panels[i] || DEFAULT[i]));
 if (isManualRoute()) {
   showManual(false);
@@ -564,10 +576,25 @@ if (tourBtn) {
 const loginPage = new LoginPage();
 const authGate = new AuthGate();
 
-if (!isManualRoute() && !localStorage.getItem("tavoryn:tour_completed") && getCurrentUser()) {
-  setTimeout(() => {
-    if (!isManualRoute()) startTour(false);
-  }, 600);
+if (!isManualRoute()) {
+  const u = getCurrentUser();
+  if (u) {
+    const id = u.uid || u.email || u.phoneNumber;
+    let toured = {};
+    try {
+      toured = JSON.parse(localStorage.getItem("tavoryn:toured_accounts") || "{}");
+    } catch {}
+    if (id && !toured[id]) {
+      toured[id] = Date.now();
+      try {
+        localStorage.setItem("tavoryn:toured_accounts", JSON.stringify(toured));
+        localStorage.setItem("tavoryn:tour_completed", "true");
+      } catch {}
+      setTimeout(() => {
+        if (!isManualRoute()) startTour(true);
+      }, 700);
+    }
+  }
 }
 
 window.tavoryn = window.amber = {

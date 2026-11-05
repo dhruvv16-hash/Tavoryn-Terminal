@@ -359,6 +359,29 @@ button {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
 }
+.grid.six {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr 1fr;
+}
+.grid.eight {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 1fr 1fr;
+}
+
+.key.fn[data-l].active {
+  background: var(--amber);
+  color: #000000;
+  border-color: var(--amber);
+}
+
+.grid.six .panel .ptitle,
+.grid.eight .panel .ptitle {
+  font-size: 11px;
+}
+.grid.eight .panel .pbar .pbtn {
+  padding: 1px 4px;
+  font-size: 10px;
+}
 
 .panel {
   display: flex;

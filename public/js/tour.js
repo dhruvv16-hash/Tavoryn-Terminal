@@ -4,6 +4,8 @@
 // Zero external dependencies; pure vanilla JS and CSS with CRT Amber aesthetic.
 // ============================================================================
 
+import { getCurrentUser } from "./auth.js";
+
 export const TOUR_STEPS = [
   {
     id: "welcome",
@@ -116,8 +118,8 @@ export const TOUR_STEPS = [
     id: "layout-switcher",
     target: '#keys button[data-l="4"]',
     chapter: "WORKSPACE LAYOUT",
-    title: "1, 2, or 4 Panel Quadrants",
-    desc: "Customize your workspace geometry. Switch between 1 (full focus), 2 (dual split), or 4 (classic Bloomberg quad quadrant) panels instantly. Use keyboard shortcuts Ctrl+1, Ctrl+2, or Ctrl+4.",
+    title: "1, 2, 4, 6, or 8 Panel Workspaces",
+    desc: "Customize your workspace geometry. Switch between 1 (full focus), 2 (dual split), 4 (classic Bloomberg quad), 6 (ultrawide 3x2), or 8 (high-density 4x2) panels instantly. Use keyboard shortcuts Ctrl+1 through Ctrl+8 or click the layout buttons.",
     placement: "bottom",
   },
   {
@@ -269,8 +271,14 @@ class OnboardingTour {
   }
 
   start(force = false) {
-    if (!force && localStorage.getItem("tavoryn:tour_completed")) {
-      return;
+    if (!force) {
+      try {
+        const user = typeof getCurrentUser === "function" ? getCurrentUser() : null;
+        const id = user ? (user.uid || user.email || user.phoneNumber) : null;
+        const toured = JSON.parse(localStorage.getItem("tavoryn:toured_accounts") || "{}");
+        if (id && toured[id]) return;
+        if (!id && localStorage.getItem("tavoryn:tour_completed")) return;
+      } catch {}
     }
     this.init();
     this.currentStep = 0;
@@ -290,7 +298,17 @@ class OnboardingTour {
     document.removeEventListener("keydown", this.onKeydown);
     window.removeEventListener("resize", this.onResize);
     window.removeEventListener("scroll", this.onResize, true);
-    localStorage.setItem("tavoryn:tour_completed", "true");
+    
+    try {
+      const user = typeof getCurrentUser === "function" ? getCurrentUser() : null;
+      const id = user ? (user.uid || user.email || user.phoneNumber) : null;
+      if (id) {
+        const toured = JSON.parse(localStorage.getItem("tavoryn:toured_accounts") || "{}");
+        toured[id] = Date.now();
+        localStorage.setItem("tavoryn:toured_accounts", JSON.stringify(toured));
+      }
+      localStorage.setItem("tavoryn:tour_completed", "true");
+    } catch {}
     
     // Return focus to global command line
     const gInput = document.getElementById("gInput");

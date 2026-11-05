@@ -104,9 +104,11 @@ export const MANUAL_SECTIONS = [
       <p class="manual-lead">Tavoryn offers dynamic multi-panel workspaces allowing analysts to cross-examine market indices, fundamental filings, charts, and risk models simultaneously.</p>
 
       <h2>Panel Layout Controls</h2>
-      <p>You can configure your workspace layout at any time by entering one of the layout commands into the global input bar:</p>
+      <p>You can configure your workspace layout at any time by entering one of the layout commands into the global input bar, or clicking the header geometry buttons <code>[1]</code>, <code>[2]</code>, <code>[4]</code>, <code>[6]</code>, <code>[8]</code>:</p>
       <ul>
-        <li><span class="cmd-pill" data-run="LAYOUT 4">LAYOUT 4</span> — Standard 2x2 four-panel grid (default).</li>
+        <li><span class="cmd-pill" data-run="LAYOUT 8">LAYOUT 8</span> — High-density 8-panel octant grid (4x2), engineered for multi-monitor setups and 4K displays.</li>
+        <li><span class="cmd-pill" data-run="LAYOUT 6">LAYOUT 6</span> — Institutional 6-panel sextant grid (3x2), ideal for ultrawide 21:9 monitors.</li>
+        <li><span class="cmd-pill" data-run="LAYOUT 4">LAYOUT 4</span> — Standard 2x2 four-panel quadrant grid (default).</li>
         <li><span class="cmd-pill" data-run="LAYOUT 2">LAYOUT 2</span> — 2-panel side-by-side comparative layout.</li>
         <li><span class="cmd-pill" data-run="LAYOUT 1">LAYOUT 1</span> — Focused single-panel full-screen workstation.</li>
       </ul>
