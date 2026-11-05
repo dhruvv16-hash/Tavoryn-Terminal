@@ -1947,26 +1947,44 @@ html.theme-light .clock-time {
   color: #0f172a;
 }
 
-html.theme-light .auth-container-card,
-html.theme-light .station-card,
-html.theme-light .feature-pillar-card,
-html.theme-light .tool-row-card,
-html.theme-light .metric-box,
-html.theme-light .demo-request-card,
-html.theme-light .showcase-deep-dive {
+/* Base Cards & Containers */
+html.theme-light .pillar-card,
+html.theme-light .gateway-card {
   background: #ffffff !important;
-  border-color: #e2e8f0 !important;
-  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05);
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.06);
 }
 
+html.theme-light .pillar-card:hover {
+  background: #ffffff !important;
+  border-color: var(--amber) !important;
+  box-shadow: 0 10px 24px -4px rgba(178, 89, 0, 0.16);
+  transform: translateY(-3px);
+}
+
+html.theme-light .section-pillars {
+  border-top-color: #e2e8f0;
+}
+
+html.theme-light .pillar-title {
+  color: #0f172a !important;
+}
+
+html.theme-light .pillar-desc {
+  color: #475569 !important;
+}
+
+html.theme-light .pillar-tags span {
+  background: rgba(178, 89, 0, 0.08) !important;
+  border-color: rgba(178, 89, 0, 0.25) !important;
+  color: #b25900 !important;
+}
+
+/* Headings & Typography */
 html.theme-light .auth-card-title,
 html.theme-light .section-title,
 html.theme-light .section-heading,
 html.theme-light .suite-title,
-html.theme-light .pillar-title,
-html.theme-light .pillar-name,
-html.theme-light .tool-name,
-html.theme-light .metric-val,
 html.theme-light .showcase-title,
 html.theme-light .showcase-headline {
   color: #0f172a !important;
@@ -1975,45 +1993,147 @@ html.theme-light .showcase-headline {
 html.theme-light .auth-card-subtitle,
 html.theme-light .section-lead,
 html.theme-light .section-sub,
-html.theme-light .pillar-desc,
-html.theme-light .tool-desc,
-html.theme-light .metric-lbl,
-html.theme-light .cat-card-sub,
 html.theme-light .showcase-lead {
   color: #475569 !important;
+}
+
+/* 7 Core Tools Suite Section & Cards */
+html.theme-light .section-suite {
+  background: #f1f5f9 !important;
+  border-top: 1px solid #e2e8f0 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+html.theme-light .cat-card {
+  background-color: #0a0c10 !important;
+  background-image: 
+    linear-gradient(90deg, #0a0c10 0%, rgba(10, 12, 16, 0.94) 28%, rgba(10, 12, 16, 0.25) 58%, transparent 100%),
+    var(--card-bg) !important;
+  background-position: left center, right center !important;
+  background-size: 100% 100%, auto 100% !important;
+  background-repeat: no-repeat !important;
+  border: 1px solid rgba(15, 23, 42, 0.2) !important;
+  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.14), 0 2px 6px -1px rgba(15, 23, 42, 0.08) !important;
+}
+
+html.theme-light .cat-card:hover {
+  border-color: rgba(178, 89, 0, 0.75) !important;
+  box-shadow: 0 16px 36px -6px rgba(178, 89, 0, 0.22), 0 0 20px rgba(178, 89, 0, 0.15) !important;
+  transform: translateY(-2px);
+}
+
+html.theme-light .cat-card-title {
+  color: #ffffff !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
+}
+
+html.theme-light .cat-card-arrow {
+  color: #ffffff !important;
+}
+
+html.theme-light .cat-card:hover .cat-card-arrow {
+  color: #ffa028 !important;
+}
+
+/* Feature Showcases */
+html.theme-light .showcase-badge {
+  color: #b25900;
 }
 
 html.theme-light .showcase-bullets li {
   color: #334155 !important;
 }
 
+html.theme-light .showcase-bullets li::before {
+  color: #b25900;
+}
+
 html.theme-light .showcase-bullets li strong {
   color: #0f172a !important;
 }
 
-html.theme-light .cat-card {
-  background-color: #ffffff !important;
-  background-image: 
-    linear-gradient(90deg, #ffffff 0%, rgba(255, 255, 255, 0.94) 28%, rgba(255, 255, 255, 0.35) 60%, transparent 100%),
-    var(--card-bg) !important;
-  background-position: left center, right center !important;
-  background-size: 100% 100%, auto 100% !important;
-  background-repeat: no-repeat !important;
-  border-color: #cbd5e1 !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+html.theme-light .showcase-btn {
+  color: #b25900;
+  border-color: rgba(178, 89, 0, 0.4);
 }
 
-html.theme-light .cat-card-title {
-  color: #0f172a !important;
-  text-shadow: none !important;
+html.theme-light .showcase-btn:hover {
+  background: rgba(178, 89, 0, 0.08);
+  border-color: #b25900;
+  color: #8c4600;
 }
 
-html.theme-light .cat-card-arrow {
-  color: #0f172a !important;
+html.theme-light .showcase-row {
+  border-bottom-color: #e2e8f0;
 }
 
-html.theme-light .cat-card:hover .cat-card-arrow {
-  color: #d97706 !important;
+/* Social Proof & Metrics */
+html.theme-light .section-metrics {
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+html.theme-light .metric-block {
+  border-left-color: var(--amber);
+}
+
+html.theme-light .metric-number {
+  color: #0284c7;
+}
+
+html.theme-light .metric-label {
+  color: #0f172a;
+}
+
+html.theme-light .metric-sub {
+  color: #64748b;
+}
+
+html.theme-light .metrics-footnote {
+  color: #64748b;
+}
+
+/* Institutional Hardware Box */
+html.theme-light .hardware-box {
+  background: #0b0d13;
+  border-color: rgba(178, 89, 0, 0.35);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+}
+
+/* Gateway Section & Dual Mode Switch */
+html.theme-light .section-gateway {
+  background: #f1f5f9;
+  border-top: 1px solid #e2e8f0;
+}
+
+html.theme-light .gateway-card {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08), 0 0 25px rgba(178, 89, 0, 0.05) !important;
+}
+
+html.theme-light .auth-mode-switch {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+html.theme-light .auth-mode-btn {
+  color: #64748b;
+}
+
+html.theme-light .auth-mode-btn.active {
+  background: var(--amber);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(178, 89, 0, 0.3);
+}
+
+html.theme-light .auth-mode-btn:not(.active):hover {
+  color: #0f172a;
+}
+
+html.theme-light .auth-input-group label {
+  color: #334155;
 }
 
 html.theme-light .auth-input-group input {
@@ -2046,6 +2166,14 @@ html.theme-light .auth-btn.secondary {
 
 html.theme-light .auth-btn.secondary:hover {
   background: #e2e8f0;
+}
+
+html.theme-light .auth-agreement {
+  color: #64748b;
+}
+
+html.theme-light .auth-agreement a {
+  color: #b25900;
 }
 
 html.theme-light .floating-stat-card {
