@@ -390,16 +390,37 @@ export function formatSecurityDisplay(secOrId) {
     s = parts.slice(1).join(":");
   }
 
-  // 1. Check known Yahoo Index / Yields (^GSPC, ^DJI, ^IXIC, ^TNX, etc.)
-  const ix = INDEX_BY_YAHOO[s] || INDEX_BY_YAHOO[`^${s}`] || (ticker && INDICES[ticker]) || (ticker && YIELDS[ticker]);
+  // 1. If ticker is a known Bloomberg Index ticker (SPX, INDU, CCMP, NDX, etc.)
+  if (ticker && INDICES[ticker]) {
+    const sym = `${ticker} Index`;
+    const n = INDICES[ticker][1];
+    return { symbol: sym, ticker, name: n, full: `${sym} (${n})` };
+  }
+
+  // 2. If ticker is a known US Treasury yield (USGG10YR, etc.)
+  if (ticker && YIELDS[ticker]) {
+    const sym = `${ticker} Index`;
+    const n = YIELDS[ticker][1];
+    return { symbol: sym, ticker, name: n, full: `${sym} (${n})` };
+  }
+
+  // 3. If ticker is a known Generic Future (CL1, GC1, etc.)
+  if (ticker && GENERICS[ticker]) {
+    const sym = `${ticker} Comdty`;
+    const n = GENERICS[ticker][1];
+    return { symbol: sym, ticker, name: n, full: `${sym} (${n})` };
+  }
+
+  // 4. Check known Yahoo Index / Yields by Yahoo symbol (^GSPC, ^DJI, ^IXIC, ^TNX, etc.)
+  const ix = INDEX_BY_YAHOO[s] || INDEX_BY_YAHOO[`^${s}`];
   if (ix) {
     const sym = `${ix[0]} Index`;
     const n = ix[1];
     return { symbol: sym, ticker: ix[0], name: n, full: `${sym} (${n})` };
   }
 
-  // 2. Check Generic Futures (CL=F, GC=F, etc.)
-  const g = GENERIC_BY_YAHOO[s] || (ticker && GENERICS[ticker]);
+  // 5. Check Generic Futures by Yahoo symbol (CL=F, GC=F, etc.)
+  const g = GENERIC_BY_YAHOO[s];
   if (g) {
     const sym = `${g[0]} Comdty`;
     const n = g[1];
