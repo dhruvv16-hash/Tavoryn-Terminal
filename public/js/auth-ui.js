@@ -290,7 +290,11 @@ export class AuthGate {
         try {
           await signInWithGoogle();
         } catch (err) {
-          this.setError(err.message || "Google Authentication Failed");
+          if (err.code === "auth/unauthorized-domain" || err.message?.includes("unauthorized-domain")) {
+            this.setError('Domain not authorized. In Firebase Console > Authentication > Settings > Authorized Domains, add "tavoryn-terminal.netlify.app"');
+          } else {
+            this.setError(err.message || "Google Authentication Failed");
+          }
         } finally {
           this.setLoading(false);
         }
@@ -304,7 +308,11 @@ export class AuthGate {
         try {
           await signInWithGitHub();
         } catch (err) {
-          this.setError(err.message || "GitHub Authentication Failed");
+          if (err.code === "auth/unauthorized-domain" || err.message?.includes("unauthorized-domain")) {
+            this.setError('Domain not authorized. In Firebase Console > Authentication > Settings > Authorized Domains, add "tavoryn-terminal.netlify.app"');
+          } else {
+            this.setError(err.message || "GitHub Authentication Failed");
+          }
         } finally {
           this.setLoading(false);
         }

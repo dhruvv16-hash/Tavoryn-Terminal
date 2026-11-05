@@ -256,7 +256,11 @@ export class LoginPage {
         try {
           await signInWithGoogle();
         } catch (err) {
-          this.setError(err.message || "Google authentication failed");
+          if (err.code === "auth/unauthorized-domain" || err.message?.includes("unauthorized-domain")) {
+            this.setError('Domain not authorized. In Firebase Console > Authentication > Settings > Authorized Domains, add "tavoryn-terminal.netlify.app"');
+          } else {
+            this.setError(err.message || "Google authentication failed");
+          }
         } finally {
           this.setLoading(false);
         }
@@ -271,7 +275,11 @@ export class LoginPage {
         try {
           await signInWithGitHub();
         } catch (err) {
-          this.setError(err.message || "GitHub authentication failed");
+          if (err.code === "auth/unauthorized-domain" || err.message?.includes("unauthorized-domain")) {
+            this.setError('Domain not authorized. In Firebase Console > Authentication > Settings > Authorized Domains, add "tavoryn-terminal.netlify.app"');
+          } else {
+            this.setError(err.message || "GitHub authentication failed");
+          }
         } finally {
           this.setLoading(false);
         }
