@@ -2132,6 +2132,95 @@ html.theme-light .auth-mode-btn:not(.active):hover {
   color: #0f172a;
 }
 
+html.theme-light .login-nav-btn.secondary {
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+html.theme-light .login-nav-btn.secondary:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+html.theme-light .login-nav-btn.secondary.btn-nav-active {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+html.theme-light .hero-btn.secondary {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+}
+
+html.theme-light .hero-btn.secondary:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+html.theme-light .btn-google {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+html.theme-light .btn-google:hover:not(.disabled) {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+html.theme-light .btn-github {
+  background: #0f172a;
+  border: 1px solid #0f172a;
+  color: #ffffff;
+}
+
+html.theme-light .btn-github:hover:not(.disabled) {
+  background: #1e293b;
+  border-color: #1e293b;
+}
+
+html.theme-light .form-group label {
+  color: #334155;
+}
+
+html.theme-light .form-input,
+html.theme-light .form-select,
+html.theme-light .form-textarea {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+html.theme-light .form-input:focus,
+html.theme-light .form-select:focus,
+html.theme-light .form-textarea:focus {
+  background: #ffffff;
+  border-color: var(--amber);
+  box-shadow: 0 0 10px rgba(178, 89, 0, 0.2);
+}
+
+html.theme-light .auth-security-notice {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+html.theme-light .notice-item {
+  color: #64748b;
+}
+
+html.theme-light .auth-switch-link {
+  color: #64748b;
+}
+
+html.theme-light .auth-switch-link a {
+  color: #b25900;
+}
+
 html.theme-light .auth-input-group label {
   color: #334155;
 }
@@ -2179,32 +2268,94 @@ html.theme-light .auth-agreement a {
 html.theme-light .floating-stat-card {
   background: rgba(255, 255, 255, 0.96) !important;
   border-color: #cbd5e1 !important;
-  color: #0f172a !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
 }
 
-html.theme-light .floating-stat-value {
+html.theme-light .stat-badge-label {
+  color: #b25900 !important;
+}
+
+html.theme-light .stat-badge-val {
   color: #0f172a !important;
 }
 
-html.theme-light .footer-section {
+/* Institutional Footer in Light Mode */
+html.theme-light .login-footer {
   background: #ffffff;
-  border-top-color: #e2e8f0;
+  border-top: 1px solid #e2e8f0;
+}
+
+html.theme-light .footer-brand {
+  color: #b25900;
+}
+
+html.theme-light .footer-sub {
+  color: #64748b;
+}
+
+html.theme-light .footer-tagline {
+  color: #64748b;
+}
+
+html.theme-light .footer-status-tag {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
 }
 
 html.theme-light .footer-col-title {
   color: #0f172a;
 }
 
-html.theme-light .footer-link {
+html.theme-light .footer-links a {
   color: #64748b;
 }
 
-html.theme-light .footer-link:hover {
+html.theme-light .footer-links a:hover {
   color: #b25900;
 }
 
 html.theme-light .footer-bottom-bar {
   border-top-color: #e2e8f0;
   color: #64748b;
+}
+
+html.theme-light .footer-copy {
+  color: #64748b;
+}
+
+html.theme-light .footer-policy-links span {
+  color: #64748b;
+}
+
+/* Lightbox Modal in Light Mode */
+html.theme-light .lightbox-dialog {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
+}
+
+html.theme-light .lightbox-head {
+  background: #f8fafc;
+  border-bottom-color: #e2e8f0;
+}
+
+html.theme-light .lightbox-title {
+  color: #b25900;
+}
+
+html.theme-light .lightbox-desc {
+  color: #64748b;
+}
+
+html.theme-light .lightbox-close-btn {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+html.theme-light .lightbox-close-btn:hover {
+  background: #fee2e2;
+  border-color: #f87171;
+  color: #dc2626;
 }

@@ -356,6 +356,8 @@ export class LoginPage {
     if (modal) {
       modal.hidden = true;
       modal.classList.remove("active");
+      const imgEl = modal.querySelector(".lightbox-img");
+      if (imgEl) imgEl.removeAttribute("src");
     }
   }
 
@@ -943,7 +945,7 @@ export class LoginPage {
             <button class="lightbox-close-btn" data-action="close-lightbox">✕</button>
           </div>
           <div class="lightbox-body">
-            <img class="lightbox-img" src="" alt="Enlarged Terminal Screenshot" />
+            <img class="lightbox-img" alt="Enlarged Terminal Screenshot" />
           </div>
         </div>
       </div>
@@ -1162,14 +1164,29 @@ export class LoginPage {
       });
     });
 
-    // Smooth Scroll targets
+    // Smooth Scroll targets (data-action="scroll-to" and internal hash anchor links)
+    const handleScrollTo = (targetId) => {
+      if (!targetId || targetId === "#") return;
+      const el = this.container.querySelector(targetId);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
     const scrollBtns = this.container.querySelectorAll("[data-action='scroll-to']");
     scrollBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
         const targetId = btn.getAttribute("data-target");
-        if (targetId) {
-          const el = this.container.querySelector(targetId);
-          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        if (targetId) handleScrollTo(targetId);
+      });
+    });
+
+    const hashLinks = this.container.querySelectorAll('a[href^="#"]');
+    hashLinks.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const href = link.getAttribute("href");
+        if (href && href.length > 1) {
+          e.preventDefault();
+          handleScrollTo(href);
         }
       });
     });
