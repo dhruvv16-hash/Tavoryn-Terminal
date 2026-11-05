@@ -493,10 +493,10 @@ body:not(.authenticated) #loginPageView {
   white-space: nowrap;
 }
 
-.card-top-left { top: 68px; left: -24px; }
-.card-top-right { top: 68px; right: -24px; }
-.card-bottom-left { bottom: 44px; left: -24px; }
-.card-bottom-right { bottom: 44px; right: -24px; }
+.card-top-left { top: 80px; left: -36px; }
+.card-top-right { top: 80px; right: -36px; }
+.card-bottom-left { bottom: 50px; left: -36px; }
+.card-bottom-right { bottom: 50px; right: -36px; }
 
 @media (max-width: 1240px) {
   .card-top-left { left: 16px; top: 60px; }
