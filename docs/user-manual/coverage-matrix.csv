@@ -54,6 +54,9 @@ HELP,Function Directory,Help,HELP,Market-wide,Fully Documented,Help & Documentat
 DATA,Data Source Health,Help,DATA,Market-wide,Fully Documented,Data Sources,user-manual-interface.png,PASS,2026-10-17
 MANUAL,Interactive User Manual,Help,MANUAL / /user-manual,Market-wide,Fully Documented,Help & Documentation,user-manual-interface.png,PASS,2026-10-17
 TOUR,Interactive Onboarding Tour,Help,TOUR,Market-wide,Fully Documented,Help & Documentation,user-manual-interface.png,PASS,2026-11-03
+LOGIN,Terminal Access Control,Security,LOGIN,Market-wide,Fully Documented,Security & Access,user-manual-interface.png,PASS,2026-11-05
+AUTH,Authentication Gateway,Security,AUTH,Market-wide,Fully Documented,Security & Access,user-manual-interface.png,PASS,2026-11-05
+USER,User Account & Clearance,Security,USER,Market-wide,Fully Documented,Security & Access,user-manual-interface.png,PASS,2026-11-05
 LAYOUT,Workspace Grid Selector,Shell,LAYOUT 1/2/4,Layout Code,Fully Documented,Dashboard & Workspace,dashboard-workspace-overview.png,PASS,2026-10-17
 EXPORT_CSV,Universal Table CSV Export,Shell,Export Button,Active Panel Table,Fully Documented,Dashboard & Workspace,dashboard-workspace-overview.png,PASS,2026-10-17
 SECF,Security Autocomplete,Shell,Autocomplete Input,Partial Query,Fully Documented,Market Data,dashboard-workspace-overview.png,PASS,2026-10-17

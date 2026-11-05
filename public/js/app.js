@@ -13,6 +13,8 @@ import {
 } from "./ui.js";
 import { UserManual } from "./manual.js";
 import { startTour } from "./tour.js";
+import { AuthGate } from "./auth-ui.js";
+import { getCurrentUser, signOutUser } from "./auth.js";
 
 const $ = (s, el = document) => el.querySelector(s);
 const grid = $("#grid");
@@ -556,7 +558,10 @@ if (tourBtn) {
   };
 }
 
-if (!isManualRoute() && !localStorage.getItem("tavoryn:tour_completed")) {
+// Authentication & Access Control Gate
+const authGate = new AuthGate();
+
+if (!isManualRoute() && !localStorage.getItem("tavoryn:tour_completed") && getCurrentUser()) {
   setTimeout(() => {
     if (!isManualRoute()) startTour(false);
   }, 600);
@@ -569,4 +574,7 @@ window.tavoryn = window.amber = {
   showTerminal,
   isManualRoute,
   startTour,
+  authGate,
+  getCurrentUser,
+  signOutUser,
 };

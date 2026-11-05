@@ -11,6 +11,57 @@ const groups = () => {
 
 export default [
   {
+    id: "LOGIN",
+    name: "Terminal Authentication & Access Control",
+    group: "Security",
+    source: "This app",
+    render(ctx) {
+      if (window.tavoryn?.authGate) {
+        window.tavoryn.authGate.showGate();
+      }
+      ctx.el.innerHTML = `<div class="para">Opening Tavoryn Terminal Access Control Enclave...</div>`;
+      ctx.setSource("Tavoryn Security Enclave");
+    },
+  },
+  {
+    id: "AUTH",
+    name: "Terminal Authentication & Access Control",
+    group: "Security",
+    source: "This app",
+    render(ctx) {
+      if (window.tavoryn?.authGate) {
+        window.tavoryn.authGate.showGate();
+      }
+      ctx.el.innerHTML = `<div class="para">Opening Tavoryn Terminal Access Control Enclave...</div>`;
+      ctx.setSource("Tavoryn Security Enclave");
+    },
+  },
+  {
+    id: "USER",
+    name: "User Account & Profile",
+    group: "Security",
+    source: "This app",
+    render(ctx) {
+      const u = window.tavoryn?.getCurrentUser?.();
+      if (!u) {
+        if (window.tavoryn?.authGate) window.tavoryn.authGate.showGate();
+        ctx.el.innerHTML = `<div class="para">No active user session. Opening Sign In dialog...</div>`;
+      } else {
+        ctx.el.innerHTML = `
+          <div class="para">
+            <h3>ACTIVE TERMINAL CLEARANCE</h3>
+            <p><b>User:</b> ${esc(u.displayName || "Trader")}</p>
+            <p><b>Identity:</b> ${esc(u.email || u.phoneNumber || "Local Enclave")}</p>
+            <p><b>Provider:</b> ${esc(u.provider)}</p>
+            <p><b>UID:</b> <code>${esc(u.uid)}</code></p>
+            <button class="btn" style="margin-top:10px;" onclick="window.tavoryn.signOutUser()">SIGN OUT</button>
+          </div>
+        `;
+      }
+      ctx.setSource("Tavoryn Security Enclave");
+    },
+  },
+  {
     id: "TOUR",
     name: "Interactive Onboarding Tour",
     group: "Help",

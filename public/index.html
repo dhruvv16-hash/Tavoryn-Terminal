@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/terminal.css" />
     <link rel="stylesheet" href="/css/manual.css" />
     <link rel="stylesheet" href="/css/tour.css" />
+    <link rel="stylesheet" href="/css/auth.css" />
     <script src="/vendor/lightweight-charts.standalone.production.js"></script>
   </head>
   <body>
@@ -25,6 +26,7 @@
       </form>
       <div id="clocks" class="clocks"></div>
       <button id="tourBtn" class="toplink" type="button" title="Interactive Terminal Tour & Onboarding Walkthrough">TOUR</button>
+      <button id="userBtn" class="toplink user-toplink" type="button" title="User Account & Security">SIGN IN</button>
       <a
         id="helpLink"
         class="toplink"
@@ -36,6 +38,7 @@
     <div class="keys" id="keys"></div>
     <main id="grid" class="grid"></main>
     <div id="manualView" class="manual-view" hidden></div>
+    <div id="authGate" class="auth-gate" hidden></div>
     <footer class="tape"><div id="tape" class="tape-run"></div></footer>
     <div id="suggest" class="suggest" hidden></div>
     <div id="toast" class="toast" hidden></div>
