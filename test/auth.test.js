@@ -75,7 +75,7 @@ test('Safety: Zero npm dependencies and paper trading ledger remains byte-for-by
   );
 });
 
-test('Production Gateway & Feature Suite: Validates clean branding, 7 pillars, and demo requests', () => {
+test('Production Gateway & Feature Suite: Validates clean branding, 7 pillars, and dual Log In / Sign Up gateway', () => {
   const lpCode = fs.readFileSync(path.join(process.cwd(), 'public', 'js', 'login-page.js'), 'utf8');
 
   // Verify no cheesy text or demo bypass
@@ -102,7 +102,9 @@ test('Production Gateway & Feature Suite: Validates clean branding, 7 pillars, a
   assert.ok(lpCode.includes('/screenshots/bb-ask.webp'), 'Must link AI education screenshot');
   assert.ok(lpCode.includes('/screenshots/bb-omon.webp'), 'Must link options portfolio screenshot');
 
-  // Verify institutional demo request form
-  assert.ok(lpCode.includes('id="demoRequestForm"'), 'Must include demo request form');
-  assert.ok(lpCode.includes('/api/demo-request'), 'Must submit to /api/demo-request');
+  // Verify dual authentication (Log In & Sign Up) and removal of demo requests
+  assert.ok(!lpCode.includes('id="demoRequestForm"'), 'Must eliminate demo request form');
+  assert.ok(!lpCode.includes('Guest Demo Mode'), 'Must eliminate guest demo mode');
+  assert.ok(lpCode.includes('Log In'), 'Must include Log In');
+  assert.ok(lpCode.includes('Sign Up'), 'Must include Sign Up');
 });
