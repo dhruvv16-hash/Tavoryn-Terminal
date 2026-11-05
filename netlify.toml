@@ -44,3 +44,14 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Cache policies: Ensure JavaScript and HTML always revalidate for immediate updates
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"

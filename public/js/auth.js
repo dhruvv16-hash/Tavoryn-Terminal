@@ -125,7 +125,7 @@ export async function signInWithGoogle(forceRedirect = false) {
   provider.addScope("email");
   provider.addScope("profile");
   provider.setCustomParameters({
-    prompt: "select_account",
+    prompt: "select_account consent",
   });
 
   if (forceRedirect) {
@@ -139,12 +139,16 @@ export async function signInWithGoogle(forceRedirect = false) {
     console.warn("[Auth] Popup error:", err.code, err.message);
     if (
       err.code === "auth/popup-blocked" ||
-      err.code === "auth/popup-closed-by-user" ||
-      err.code === "auth/cancelled-popup-request" ||
       err.message?.includes("Cross-Origin-Opener-Policy")
     ) {
       console.log("[Auth] Falling back to signInWithRedirect...");
       return await signInWithRedirect(auth, provider);
+    }
+    if (
+      err.code === "auth/popup-closed-by-user" ||
+      err.code === "auth/cancelled-popup-request"
+    ) {
+      return null;
     }
     throw err;
   }
@@ -178,11 +182,15 @@ export async function signInWithGitHub(forceRedirect = false) {
   } catch (err) {
     if (
       err.code === "auth/popup-blocked" ||
-      err.code === "auth/popup-closed-by-user" ||
-      err.code === "auth/cancelled-popup-request" ||
       err.message?.includes("Cross-Origin-Opener-Policy")
     ) {
       return await signInWithRedirect(auth, provider);
+    }
+    if (
+      err.code === "auth/popup-closed-by-user" ||
+      err.code === "auth/cancelled-popup-request"
+    ) {
+      return null;
     }
     throw err;
   }
