@@ -1,6 +1,8 @@
 // Tavoryn Terminal — Multi-Provider Authentication Engine
 // Zero-dependency modular auth supporting Google/Gmail, GitHub, and Phone SMS OTP.
 
+import { FIREBASE_CONFIG } from "./firebase-config.js";
+
 const FIREBASE_APP_CDN = "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 const FIREBASE_AUTH_CDN = "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
@@ -13,14 +15,7 @@ let authListener = null;
 let currentUser = null;
 
 // Default client configuration (can be overridden by window.FIREBASE_CONFIG or /api/auth/config)
-export const DEFAULT_CONFIG = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: "",
-};
+export const DEFAULT_CONFIG = FIREBASE_CONFIG;
 
 export function getStoredUser() {
   try {
