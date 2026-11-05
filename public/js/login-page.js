@@ -16,6 +16,8 @@ const CORE_SUITE = [
   {
     id: "showcase-research",
     title: "Research",
+    suiteBg: "/screenshots/suite/suite-research.webp",
+    suiteBgFallback: "/screenshots/suite/suite-research.png",
     cardCrop: "/screenshots/card-crop-research.webp",
     cardCropFallback: "/screenshots/card-crop-research.png",
     thumb: "/screenshots/bb-company.webp",
@@ -39,6 +41,8 @@ const CORE_SUITE = [
   {
     id: "showcase-news",
     title: "News",
+    suiteBg: "/screenshots/suite/suite-news.webp",
+    suiteBgFallback: "/screenshots/suite/suite-news.png",
     cardCrop: "/screenshots/card-crop-news.webp",
     cardCropFallback: "/screenshots/card-crop-news.png",
     thumb: "/screenshots/bb-news.webp",
@@ -62,6 +66,8 @@ const CORE_SUITE = [
   {
     id: "showcase-access",
     title: "Access",
+    suiteBg: "/screenshots/suite/suite-access.webp",
+    suiteBgFallback: "/screenshots/suite/suite-access.png",
     cardCrop: "/screenshots/card-crop-access.webp",
     cardCropFallback: "/screenshots/card-crop-access.png",
     thumb: "/screenshots/bb-markets.webp",
@@ -85,6 +91,8 @@ const CORE_SUITE = [
   {
     id: "showcase-charts",
     title: "Charts",
+    suiteBg: "/screenshots/suite/suite-charts.webp",
+    suiteBgFallback: "/screenshots/suite/suite-charts.png",
     cardCrop: "/screenshots/card-crop-charts.webp",
     cardCropFallback: "/screenshots/card-crop-charts.png",
     thumb: "/screenshots/bb-panels.webp",
@@ -108,6 +116,8 @@ const CORE_SUITE = [
   {
     id: "showcase-collaboration",
     title: "Collaboration Tools",
+    suiteBg: "/screenshots/suite/suite-collaboration.webp",
+    suiteBgFallback: "/screenshots/suite/suite-collaboration.png",
     cardCrop: "/screenshots/card-crop-collaboration.webp",
     cardCropFallback: "/screenshots/card-crop-collaboration.png",
     thumb: "/screenshots/bb-workspace.webp",
@@ -131,6 +141,8 @@ const CORE_SUITE = [
   {
     id: "showcase-education",
     title: "Education",
+    suiteBg: "/screenshots/suite/suite-education.webp",
+    suiteBgFallback: "/screenshots/suite/suite-education.png",
     cardCrop: "/screenshots/card-crop-education.webp",
     cardCropFallback: "/screenshots/card-crop-education.png",
     thumb: "/screenshots/bb-ask.webp",
@@ -154,6 +166,8 @@ const CORE_SUITE = [
   {
     id: "showcase-portfolio",
     title: "Portfolio Analytics",
+    suiteBg: "/screenshots/suite/suite-portfolio.webp",
+    suiteBgFallback: "/screenshots/suite/suite-portfolio.png",
     cardCrop: "/screenshots/card-crop-portfolio.webp",
     cardCropFallback: "/screenshots/card-crop-portfolio.png",
     thumb: "/screenshots/bb-omon.webp",
@@ -992,19 +1006,16 @@ export class LoginPage {
 
   renderCategoryCard(item) {
     return `
-      <div class="cat-card" data-action="scroll-to" data-target="#${item.id}" title="Explore ${item.title}">
-        <div class="cat-card-text">
-          <span class="cat-card-title">${item.title}</span>
-          <span class="cat-card-arrow">→</span>
-        </div>
-        <div class="cat-card-thumb">
-          <img 
-            src="${item.cardCrop}" 
-            onerror="this.onerror=null; this.src='${item.cardCropFallback || item.thumb}';" 
-            alt="Tavoryn Terminal ${item.title}" 
-            loading="lazy" 
-          />
-          <div class="cat-thumb-fade"></div>
+      <div class="cat-card" 
+           data-action="scroll-to" 
+           data-target="#${item.id}" 
+           title="Explore ${item.title}"
+           style="--card-bg: url('${item.suiteBg || item.cardCrop}');">
+        <h3 class="cat-card-title">${item.title}</h3>
+        <div class="cat-card-arrow" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M12.7059 8.74589L0 8.74589V7.24589L12.706 7.24589L6.80842 1.03266L7.89635 0L14.9959 7.47953L15.486 7.99586L14.9959 8.51219L7.89635 15.9917L6.80842 14.9591L12.7059 8.74589Z"/>
+          </svg>
         </div>
       </div>
     `;
