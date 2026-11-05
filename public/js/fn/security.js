@@ -284,7 +284,10 @@ export default [
     async render(ctx) {
       const d = await api.fn("des", { symbol: ctx.sec.id });
       if (!ctx.live()) return;
-      if (d.name) ctx.setTitle(`${d.name}  ·  ${ctx.sec.raw}`);
+      if (d.name) {
+        const info = formatSecurityDisplay(ctx.sec);
+        ctx.setTitle(`${d.name}  ·  ${info.symbol || ctx.sec.raw}`);
+      }
       ctx.el.innerHTML = "";
       const p = d.price;
       if (p)
@@ -349,7 +352,10 @@ export default [
       const load = async () => {
         const d = await api.fn("bq", { symbol: ctx.sec.id });
         if (!ctx.live()) return;
-        if (d.name) ctx.setTitle(`${d.name}  ·  ${ctx.sec.raw}`);
+        if (d.name) {
+          const info = formatSecurityDisplay(ctx.sec);
+          ctx.setTitle(`${d.name}  ·  ${info.symbol || ctx.sec.raw}`);
+        }
         ctx.el.innerHTML = "";
         ctx.el.append(
           html(

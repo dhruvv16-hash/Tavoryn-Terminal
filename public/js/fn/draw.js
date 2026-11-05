@@ -1,6 +1,7 @@
 // DRAW: Chart Drawings & Technical Price Levels Manager
 import { api, esc, num, pct, cls } from "../api.js";
 import { table, kv, sect, html } from "../ui.js";
+import { formatSecurityDisplay } from "../securities.js";
 
 export async function getDrawings(symbol) {
   try {
@@ -74,10 +75,12 @@ export default [
         container.innerHTML = "";
 
         // Header info
+        const info = formatSecurityDisplay(sec);
+        const namePart = info.name && info.name !== info.symbol ? ` <span class="dim">(${esc(info.name)})</span>` : "";
         container.append(
           html(
             `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">` +
-              `<div style="font-size:14px"><b class="amber">${esc(sec.ticker || sec.id)}</b> Technical Levels · Current Price: <b class="amber">${curQuote ? `$${num(curQuote, 2)}` : "—"}</b></div>` +
+              `<div style="font-size:14px"><b class="amber">${esc(info.symbol || sec.ticker || sec.id)}</b>${namePart} Technical Levels · Current Price: <b class="amber">${curQuote ? `$${num(curQuote, 2)}` : "—"}</b></div>` +
               `<div><button class="tab active view-chart-btn" style="padding:2px 8px">Open Chart (GP)</button></div>` +
             `</div>`,
           ),

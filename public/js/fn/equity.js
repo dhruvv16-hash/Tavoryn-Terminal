@@ -3,7 +3,7 @@
 // dvd.js, ee.js, anr.js), so the numbers the tests check are the numbers on screen.
 import { api, esc, px, pct, cls, big, num, date } from "../api.js";
 import { table, kv, sect, tabs, html, lineChart } from "../ui.js";
-import { toSecurity, YELLOW } from "../securities.js";
+import { toSecurity, YELLOW, formatSecurityDisplay } from "../securities.js";
 
 // Six line colours that read on black and don't look like the green and red of up and down.
 export const PALETTE = [
@@ -123,8 +123,8 @@ async function renderComp(ctx) {
             html: true,
             fmt: (c) => `<span style="color:${c}">■</span>`,
           },
-          { key: (r) => r.sec.raw, label: "Security", left: true, lbl: true },
-          { key: (r) => r.sec.name || "", label: "Name", left: true },
+          { key: (r) => formatSecurityDisplay(r.sec).symbol || r.sec.raw, label: "Security", left: true, lbl: true },
+          { key: (r) => r.sec.name || formatSecurityDisplay(r.sec).name || "", label: "Name", left: true },
           { key: "from", label: "From", fmt: (v) => (v ? date(v) : "—") },
           { key: "first", label: "Start", fmt: px },
           { key: "last", label: "Last", fmt: px },

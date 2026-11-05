@@ -1,6 +1,7 @@
 // Screens for headlines and company paperwork: top news, SEC filings, insider transactions, institutional holders.
 import { api, esc, px, pct, num, big, ago, cls } from "../api.js";
 import { table, kv, sect, tabs, html } from "../ui.js";
+import { formatSecurityDisplay } from "../securities.js";
 
 // TOP CRYPTO and TOP COINS both open the crypto feeds.
 const NEWS_GROUPS = { ALL: "ALL", TECH: "TECH", CRYPTO: "CRYPTO", ECON: "ECON" };
@@ -19,7 +20,10 @@ const clip = (n) => (v) => {
 const run = (ctx, fn, arg, all = "ALL") =>
   ctx.go(`${ctx.sec.raw} ${fn}${arg === all ? "" : ` ${arg}`}`);
 const withName = (ctx, d) => {
-  if (d.name) ctx.setTitle(`${d.name}  ·  ${ctx.sec.raw}`);
+  if (d.name) {
+    const disp = formatSecurityDisplay(ctx.sec);
+    ctx.setTitle(`${d.name}  ·  ${disp.symbol || ctx.sec.raw}`);
+  }
 };
 
 export default [

@@ -389,6 +389,9 @@ export function formatSecurityDisplay(secOrId) {
     const parts = s.split(":");
     s = parts.slice(1).join(":");
   }
+  if (ticker && ticker.includes(":")) {
+    ticker = ticker.split(":").pop();
+  }
 
   // 1. If ticker is a known Bloomberg Index ticker (SPX, INDU, CCMP, NDX, etc.)
   if (ticker && INDICES[ticker]) {
@@ -427,18 +430,21 @@ export function formatSecurityDisplay(secOrId) {
     return { symbol: sym, ticker: g[0], name: n, full: `${sym} (${n})` };
   }
 
-  // 3. Check Crypto (BTC, BTC-USD, BTCUSDT, etc.)
-  const cMatch = /^([A-Z0-9]{2,12})(-USD|USDT)?$/i.exec(s);
-  const cryptoKey = (ticker || (cMatch ? cMatch[1] : "")).toUpperCase();
-  if (CRYPTO_NAMES[cryptoKey]) {
-    const sym = `${cryptoKey} Crypto`;
-    const n = CRYPTO_NAMES[cryptoKey];
-    return { symbol: sym, ticker: cryptoKey, name: n, full: `${sym} (${n})` };
+  // 6. Check Crypto (BTC, BTC-USD, BTCUSDT, etc.)
+  let cleanCrypto = (ticker || s).toUpperCase();
+  if (cleanCrypto.endsWith("USDT")) cleanCrypto = cleanCrypto.slice(0, -4);
+  else if (cleanCrypto.endsWith("-USD")) cleanCrypto = cleanCrypto.slice(0, -4);
+  else if (cleanCrypto.endsWith("USD") && cleanCrypto.length > 4) cleanCrypto = cleanCrypto.slice(0, -3);
+
+  if (CRYPTO_NAMES[cleanCrypto]) {
+    const sym = `${cleanCrypto} Crypto`;
+    const n = CRYPTO_NAMES[cleanCrypto];
+    return { symbol: sym, ticker: cleanCrypto, name: n, full: `${sym} (${n})` };
   }
 
-  // 4. Check Forex (EURUSD=X, EURUSD, etc.)
-  const fxMatch = /^([A-Z]{3})([A-Z]{3})?(=X)?$/i.exec(s);
-  if (fxMatch && fxMatch[1] && fxMatch[2]) {
+  // 7. Check Forex (EURUSD=X, EURUSD, etc.)
+  const fxMatch = /^([A-Z]{3})([A-Z]{3})(=X)?$/i.exec(s);
+  if (fxMatch && FIAT.includes(fxMatch[1].toUpperCase()) && FIAT.includes(fxMatch[2].toUpperCase())) {
     const pair = `${fxMatch[1].toUpperCase()}${fxMatch[2].toUpperCase()}`;
     const sym = `${pair} Curncy`;
     const n = `${fxMatch[1].toUpperCase()}/${fxMatch[2].toUpperCase()}`;
