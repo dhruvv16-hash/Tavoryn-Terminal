@@ -722,18 +722,28 @@ html.theme-light .login-theme-btn:hover {
 }
 
 .feature-categories-row {
-  display: grid;
-  gap: 16px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .feature-categories-row.row-four {
+  display: grid;
   grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
   margin-top: 36px;
 }
 
 .feature-categories-row.row-three {
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  justify-content: center;
+  gap: 16px;
   margin-top: 16px;
+}
+
+.feature-categories-row.row-three .cat-card {
+  width: calc((100% - 48px) / 4);
+  flex: none;
 }
 
 .cat-card {
@@ -747,8 +757,9 @@ html.theme-light .login-theme-btn:hover {
   flex-direction: row;
   align-items: stretch;
   justify-content: space-between;
-  height: 125px;
+  height: 135px;
   position: relative;
+  text-decoration: none;
 }
 
 .cat-card:hover {
@@ -763,12 +774,12 @@ html.theme-light .login-theme-btn:hover {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 16px 14px;
+  padding: 18px 16px;
   z-index: 2;
-  min-width: 105px;
-  max-width: 120px;
+  min-width: 110px;
+  max-width: 128px;
   flex-shrink: 0;
-  background: linear-gradient(90deg, #090a0f 85%, transparent 100%);
+  background: #090a0f;
 }
 
 .cat-card-title {
@@ -781,14 +792,16 @@ html.theme-light .login-theme-btn:hover {
 
 .cat-card-arrow {
   color: #ffffff;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
   transition: all 0.2s ease;
+  display: inline-block;
 }
 
 .cat-card:hover .cat-card-arrow {
   color: #ffa028;
-  transform: translateX(4px);
+  transform: translateX(5px);
 }
 
 .cat-card-thumb {
@@ -816,8 +829,11 @@ html.theme-light .login-theme-btn:hover {
 
 .cat-thumb-fade {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, #090a0f 0%, rgba(9, 10, 15, 0.4) 8%, transparent 20%);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 22px;
+  background: linear-gradient(90deg, #090a0f 0%, transparent 100%);
   pointer-events: none;
 }
 
@@ -1859,7 +1875,13 @@ html.theme-light .login-theme-btn:hover {
   .hero-title { font-size: 42px; }
   .pillars-grid { grid-template-columns: repeat(2, 1fr); }
   .feature-categories-row.row-four,
-  .feature-categories-row.row-three { grid-template-columns: repeat(2, 1fr); }
+  .feature-categories-row.row-three { 
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+  }
+  .feature-categories-row.row-three .cat-card {
+    width: auto;
+  }
   .showcase-row, .showcase-row.reverse { grid-template-columns: 1fr; gap: 30px; }
   .metrics-grid { grid-template-columns: repeat(2, 1fr); gap: 30px; }
   .hardware-box { grid-template-columns: 1fr; }
@@ -1878,8 +1900,11 @@ html.theme-light .login-theme-btn:hover {
   .feature-categories-row.row-four,
   .feature-categories-row.row-three, 
   .metrics-grid { grid-template-columns: 1fr; }
-  .cat-card { height: 105px; }
-  .cat-card-text { padding: 16px 14px; min-width: 110px; }
+  .feature-categories-row.row-three .cat-card {
+    width: 100%;
+  }
+  .cat-card { height: 110px; }
+  .cat-card-text { padding: 14px 12px; min-width: 100px; }
   .hero-clocks-bar { flex-wrap: wrap; justify-content: center; gap: 10px; }
   .footer-top-grid { grid-template-columns: 1fr; }
   .footer-bottom-bar { flex-direction: column; gap: 12px; text-align: center; }
@@ -2013,16 +2038,25 @@ html.theme-light .showcase-bullets li strong {
 }
 
 html.theme-light .cat-card {
-  background: #0b0f19 !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+html.theme-light .cat-card-text {
+  background: #ffffff !important;
 }
 
 html.theme-light .cat-card-title {
-  color: #ffffff !important;
+  color: #0f172a !important;
 }
 
 html.theme-light .cat-card-arrow {
-  color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+html.theme-light .cat-thumb-fade {
+  background: linear-gradient(90deg, #ffffff 0%, transparent 100%);
 }
 
 html.theme-light .auth-input-group input {
