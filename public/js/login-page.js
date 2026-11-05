@@ -304,7 +304,6 @@ export class LoginPage {
           <a href="#core-tools-suite" class="login-nav-link">Platform Tools</a>
           <a href="#showcase-deep-dive" class="login-nav-link">Terminal Views</a>
           <a href="#performance-metrics" class="login-nav-link">Performance</a>
-          <a href="/user-manual" class="login-nav-link" target="_blank" rel="noopener">User Manual</a>
         </nav>
 
         <div class="login-nav-right">
@@ -397,23 +396,23 @@ export class LoginPage {
 
               <!-- Floating Metric Badges -->
               <div class="floating-stat-card card-top-left">
-                <div class="stat-badge-label">US TREASURY 2s10s SPREAD</div>
-                <div class="stat-badge-val">-42.8 bps <span class="stat-badge-tag invert">INVERTED</span></div>
-              </div>
-
-              <div class="floating-stat-card card-top-right">
-                <div class="stat-badge-label">OPTIONS VOLATILITY SURFACE</div>
-                <div class="stat-badge-val">IV 24.6% <span class="stat-badge-tag normal">SKEW +1.8%</span></div>
-              </div>
-
-              <div class="floating-stat-card card-bottom-left">
                 <div class="stat-badge-label">STREAMING COVERAGE</div>
                 <div class="stat-badge-val">170+ Global Markets Active</div>
               </div>
 
-              <div class="floating-stat-card card-bottom-right">
+              <div class="floating-stat-card card-top-right">
                 <div class="stat-badge-label">CRISIS STRESS LAB</div>
                 <div class="stat-badge-val">Deterministic Scenario Shocks</div>
+              </div>
+
+              <div class="floating-stat-card card-bottom-left">
+                <div class="stat-badge-label">US TREASURY 2s10s SPREAD</div>
+                <div class="stat-badge-val">-42.8 bps <span class="stat-badge-tag invert">INVERTED</span></div>
+              </div>
+
+              <div class="floating-stat-card card-bottom-right">
+                <div class="stat-badge-label">OPTIONS VOLATILITY SURFACE</div>
+                <div class="stat-badge-val">IV 24.6% <span class="stat-badge-tag normal">SKEW +1.8%</span></div>
               </div>
             </div>
           </div>

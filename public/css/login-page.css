@@ -339,7 +339,7 @@ body:not(.authenticated) #loginPageView {
   border: 1px solid rgba(255, 160, 40, 0.2);
   border-radius: 6px;
   padding: 8px 20px;
-  margin-bottom: 48px;
+  margin-bottom: 32px;
   font-family: var(--font-mono, monospace);
   font-size: 12px;
 }
@@ -429,11 +429,15 @@ body:not(.authenticated) #loginPageView {
   cursor: pointer;
   overflow: hidden;
   display: block;
+  min-height: 480px;
+  aspect-ratio: 16 / 10;
+  background: #090c12;
 }
 
 .station-preview-img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
   transition: transform 0.4s ease;
 }
@@ -476,21 +480,30 @@ body:not(.authenticated) #loginPageView {
 /* Floating Stat Badges on Hero */
 .floating-stat-card {
   position: absolute;
-  background: rgba(13, 16, 22, 0.88);
-  border: 1px solid rgba(255, 160, 40, 0.25);
+  background: rgba(13, 16, 22, 0.92);
+  border: 1px solid rgba(255, 160, 40, 0.28);
   backdrop-filter: blur(14px);
   padding: 10px 16px;
   border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75);
   pointer-events: none;
   font-family: var(--font-mono, monospace);
   text-align: left;
+  z-index: 5;
+  white-space: nowrap;
 }
 
-.card-top-left { top: 30px; left: -28px; }
-.card-top-right { top: 40px; right: -28px; }
-.card-bottom-left { bottom: 30px; left: -28px; }
-.card-bottom-right { bottom: 40px; right: -28px; }
+.card-top-left { top: 68px; left: -24px; }
+.card-top-right { top: 68px; right: -24px; }
+.card-bottom-left { bottom: 44px; left: -24px; }
+.card-bottom-right { bottom: 44px; right: -24px; }
+
+@media (max-width: 1240px) {
+  .card-top-left { left: 16px; top: 60px; }
+  .card-top-right { right: 16px; top: 60px; }
+  .card-bottom-left { left: 16px; bottom: 24px; }
+  .card-bottom-right { right: 16px; bottom: 24px; }
+}
 
 .stat-badge-label {
   font-size: 10px;
