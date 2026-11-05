@@ -20,9 +20,11 @@ const CORE_SUITE = [
     cardCropFallback: "/screenshots/card-crop-research.png",
     thumb: "/screenshots/bb-company.webp",
     fallback: "/manual/assets/financial-analysis-fa.png",
-    videoMp4: "/video/tavoryn-research-action.mp4",
-    videoWebm: "/video/tavoryn-research-action.webm",
-    videoPoster: "/video/tavoryn-research-action-poster.webp",
+    videoMp4: "/video/feat-research.mp4",
+    videoWebm: "/video/feat-research.webm",
+    videoPoster: "/video/feat-research-poster.webp",
+    actionPrompt: "<Search All Research and Data>",
+    actionTag: "TAVORYN INTELLIGENCE",
     caption: "Fundamentals, DCF Valuation & Filings",
     badge: "RESEARCH // FA · DCF · EST · CF · INSD",
     headline: "Research at your fingertips.",
@@ -41,6 +43,11 @@ const CORE_SUITE = [
     cardCropFallback: "/screenshots/card-crop-news.png",
     thumb: "/screenshots/bb-news.webp",
     fallback: "/manual/assets/economic-calendar-eco.png",
+    videoMp4: "/video/feat-news.mp4",
+    videoWebm: "/video/feat-news.webm",
+    videoPoster: "/video/feat-news-poster.webp",
+    actionPrompt: "<Stream Breaking Financial Wires & Macro Events>",
+    actionTag: "TAVORYN WIRES",
     caption: "Real-Time Wires & Macro Calendar",
     badge: "NEWS & MACRO // NEWS · ECO · CBRT · TOP",
     headline: "Real-Time Financial Wires & Macro Intelligence",
@@ -59,6 +66,11 @@ const CORE_SUITE = [
     cardCropFallback: "/screenshots/card-crop-access.png",
     thumb: "/screenshots/bb-markets.webp",
     fallback: "/manual/assets/world-markets-wei.png",
+    videoMp4: "/video/feat-access.mp4",
+    videoWebm: "/video/feat-access.webm",
+    videoPoster: "/video/feat-access-poster.webp",
+    actionPrompt: "<Cross-Asset Global Surveillance & Yield Curves>",
+    actionTag: "TAVORYN ACCESS",
     caption: "Cross-Asset Global Surveillance",
     badge: "ACCESS // WEI · GC · BTMM · WIRP · CRED",
     headline: "Cross-Asset Surveillance & Sovereign Yield Curves",
@@ -77,9 +89,11 @@ const CORE_SUITE = [
     cardCropFallback: "/screenshots/card-crop-charts.png",
     thumb: "/screenshots/bb-panels.webp",
     fallback: "/manual/assets/chart-technical-analysis-gp.png",
-    videoMp4: "/video/tavoryn-terminal-action.mp4",
-    videoWebm: "/video/tavoryn-terminal-action.webm",
-    videoPoster: "/video/tavoryn-terminal-action-poster.webp",
+    videoMp4: "/video/feat-charts.mp4",
+    videoWebm: "/video/feat-charts.webm",
+    videoPoster: "/video/feat-charts-poster.webp",
+    actionPrompt: "<Sub-Millisecond Multi-Pane Technical Analytics>",
+    actionTag: "TAVORYN CHARTS",
     caption: "Multi-Pane Technical Diagnostics",
     badge: "CHARTS // GP · GPO · PANELS · VOL · RSI",
     headline: "Sub-Millisecond Multi-Pane Technical Analytics",
@@ -98,6 +112,11 @@ const CORE_SUITE = [
     cardCropFallback: "/screenshots/card-crop-collaboration.png",
     thumb: "/screenshots/bb-workspace.webp",
     fallback: "/manual/assets/dashboard-workspace-overview.png",
+    videoMp4: "/video/feat-collaboration.mp4",
+    videoWebm: "/video/feat-collaboration.webm",
+    videoPoster: "/video/feat-collaboration-poster.webp",
+    actionPrompt: "<Modular Workspaces & Multi-Monitor Grids>",
+    actionTag: "TAVORYN WORKSPACE",
     caption: "Modular Workspaces & Custom Grids",
     badge: "WORKSPACE // MULTI-MONITOR · KEYS · LAYOUT",
     headline: "Modular Workspaces & Multi-Monitor Workstation",
@@ -116,6 +135,11 @@ const CORE_SUITE = [
     cardCropFallback: "/screenshots/card-crop-education.png",
     thumb: "/screenshots/bb-ask.webp",
     fallback: "/manual/assets/ai-research-assistant-ask.png",
+    videoMp4: "/video/feat-education.mp4",
+    videoWebm: "/video/feat-education.webm",
+    videoPoster: "/video/feat-education-poster.webp",
+    actionPrompt: "<Query Quantitative Financial Models & Ratios>",
+    actionTag: "TAVORYN AI DESK",
     caption: "AI Financial Intelligence & Formulas",
     badge: "EDUCATION // ASK · HELP · BTST · FORMULAS",
     headline: "AI Financial Intelligence & Quantitative Manual",
@@ -134,6 +158,11 @@ const CORE_SUITE = [
     cardCropFallback: "/screenshots/card-crop-portfolio.png",
     thumb: "/screenshots/bb-omon.webp",
     fallback: "/manual/assets/options-chain-omon.png",
+    videoMp4: "/video/feat-portfolio.mp4",
+    videoWebm: "/video/feat-portfolio.webm",
+    videoPoster: "/video/feat-portfolio-poster.webp",
+    actionPrompt: "<Crisis Lab Stress Testing & Options Matrix>",
+    actionTag: "TAVORYN RISK LAB",
     caption: "Crisis Stress Testing & Options Chains",
     badge: "RISK & DERIVATIVES // STRESS · OMON · PORT · CRED",
     headline: "Crisis Lab Stress Testing & Options Derivatives",
@@ -911,6 +940,10 @@ export class LoginPage {
 
   renderShowcaseVisual(item) {
     const isVideo = Boolean(item.videoMp4);
+    const actionPrompt = String(item.actionPrompt || "<Search All Research and Data>")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+    const actionTag = item.actionTag || "TAVORYN TERMINAL";
     return `
       <div class="showcase-visual ${isVideo ? "showcase-radiant-frame" : ""}" data-action="open-lightbox" data-src="${item.thumb}" data-fallback="${item.fallback}" data-title="${item.headline}" data-desc="${item.lead}">
         <div class="${isVideo ? "radiant-amber-glow" : "showcase-glow-back"}"></div>
@@ -919,8 +952,8 @@ export class LoginPage {
             isVideo
               ? `
             <div class="terminal-action-header">
-              <span class="terminal-action-prompt">&lt;Search All Research and Data&gt;</span>
-              <span class="terminal-action-tag">TAVORYN INTELLIGENCE</span>
+              <span class="terminal-action-prompt">${actionPrompt}</span>
+              <span class="terminal-action-tag">${actionTag}</span>
             </div>
           `
               : ""
