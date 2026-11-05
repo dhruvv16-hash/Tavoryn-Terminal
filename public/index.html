@@ -15,6 +15,9 @@
         if (localStorage.getItem("tavoryn:auth_user")) {
           document.documentElement.classList.add("authenticated");
         }
+        if (localStorage.getItem("tavoryn:theme") === "light") {
+          document.documentElement.classList.add("theme-light");
+        }
       } catch (e) {}
     </script>
     <script src="/vendor/lightweight-charts.standalone.production.js"></script>
@@ -33,6 +36,7 @@
         <button type="submit" class="go">GO</button>
       </form>
       <div id="clocks" class="clocks"></div>
+      <button id="themeToggleBtn" class="toplink theme-toggle-btn" type="button" title="Toggle Light / Dark Mode">☀ LIGHT</button>
       <button id="tourBtn" class="toplink" type="button" title="Interactive Terminal Tour & Onboarding Walkthrough">TOUR</button>
       <button id="userBtn" class="toplink user-toplink" type="button" title="User Account & Security">SIGN IN</button>
       <div id="userProfilePopover" class="user-profile-popover" hidden></div>

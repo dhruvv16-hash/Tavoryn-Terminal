@@ -362,6 +362,22 @@ $("#globalCmd").onsubmit = (e) => {
     gInput.value = "";
     return;
   }
+  const themeCmd = /^(THEME|LIGHT|DARK|DAY|NIGHT)(\s+(LIGHT|DARK|TOGGLE))?$/i.exec(v);
+  if (themeCmd) {
+    const kw = themeCmd[1].toUpperCase();
+    const sub = themeCmd[3]?.toUpperCase();
+    if (kw === "LIGHT" || kw === "DAY" || sub === "LIGHT") {
+      setTheme("light");
+      toast("THEME: LIGHT (DAYLIGHT TITANIUM) ACTIVATED");
+    } else if (kw === "DARK" || kw === "NIGHT" || sub === "DARK") {
+      setTheme("dark");
+      toast("THEME: DARK (CRT OBSIDIAN) ACTIVATED");
+    } else {
+      toggleTheme();
+    }
+    gInput.value = "";
+    return;
+  }
   showTerminal(true);
   const n = /^(LAYOUT|GRID)\s+([12468])$/i.exec(v);
   if (n) setLayout(+n[2]);
@@ -572,6 +588,62 @@ if (tourBtn) {
   };
 }
 
+// ---------- theme manager ----------
+export function getTheme() {
+  return localStorage.getItem("tavoryn:theme") === "light" ? "light" : "dark";
+}
+
+export function updateThemeButtons() {
+  const isLight = getTheme() === "light";
+  const btn = document.getElementById("themeToggleBtn");
+  if (btn) {
+    btn.textContent = isLight ? "☾ DARK" : "☀ LIGHT";
+    btn.title = isLight ? "Switch to Dark CRT Phosphor Mode" : "Switch to Daylight Titanium Light Mode";
+  }
+  const loginBtn = document.getElementById("loginThemeToggleBtn");
+  if (loginBtn) {
+    loginBtn.textContent = isLight ? "☾ DARK" : "☀ LIGHT";
+    loginBtn.title = isLight ? "Switch to Dark CRT Phosphor Mode" : "Switch to Daylight Titanium Light Mode";
+  }
+}
+
+export function setTheme(theme) {
+  const isLight = theme === "light";
+  if (isLight) {
+    document.documentElement.classList.add("theme-light");
+    document.body.classList.add("theme-light");
+    localStorage.setItem("tavoryn:theme", "light");
+  } else {
+    document.documentElement.classList.remove("theme-light");
+    document.body.classList.remove("theme-light");
+    localStorage.setItem("tavoryn:theme", "dark");
+  }
+  updateThemeButtons();
+  window.dispatchEvent(new CustomEvent("tavoryn:theme", { detail: { theme: isLight ? "light" : "dark" } }));
+  // Re-run current screens across panels to update any charts with the new theme colors
+  panels.forEach((p, i) => {
+    if (p.currentScreen) {
+      p.run(p.input?.value || state.panels[i] || DEFAULT[i], { push: false });
+    }
+  });
+}
+
+export function toggleTheme() {
+  const current = getTheme();
+  const next = current === "light" ? "dark" : "light";
+  setTheme(next);
+  toast(`THEME SET TO ${next.toUpperCase()} MODE`);
+  return next;
+}
+
+const themeToggleBtn = $("#themeToggleBtn");
+if (themeToggleBtn) {
+  themeToggleBtn.onclick = () => {
+    toggleTheme();
+  };
+}
+updateThemeButtons();
+
 // Dedicated Login Front Page & Auth Gate
 const loginPage = new LoginPage();
 const authGate = new AuthGate();
@@ -608,4 +680,7 @@ window.tavoryn = window.amber = {
   authGate,
   getCurrentUser,
   signOutUser,
+  getTheme,
+  setTheme,
+  toggleTheme,
 };

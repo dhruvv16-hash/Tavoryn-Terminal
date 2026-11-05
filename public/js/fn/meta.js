@@ -88,6 +88,68 @@ export default [
     },
   },
   {
+    id: "THEME",
+    name: "Terminal Color Palette Theme (Light / Dark)",
+    group: "Workspace",
+    source: "This app",
+    render(ctx) {
+      const mode = ctx.args?.[0]?.toUpperCase();
+      if (mode === "LIGHT" || mode === "DARK") {
+        window.tavoryn?.setTheme?.(mode.toLowerCase());
+      } else {
+        window.tavoryn?.toggleTheme?.();
+      }
+      const cur = window.tavoryn?.getTheme?.() || "dark";
+      const isLight = cur === "light";
+      ctx.el.innerHTML = `
+        <div class="para">
+          <h3>WORKSPACE PALETTE &amp; APPEARANCE CONFIGURATION</h3>
+          <p>Current Workspace Mode: <b style="color:var(--amber);">${isLight ? "DAYLIGHT TITANIUM (LIGHT)" : "CRT OBSIDIAN (DARK)"}</b></p>
+          <p style="color:var(--muted); margin-top:6px; line-height:1.5;">
+            Tavoryn Terminal supports institutional dual-mode rendering: iconic <b>CRT Amber Phosphor</b> for darkened trading pits, and <b>Daylight Titanium</b> for boardroom reviews, laptop portability, and executive reporting.
+          </p>
+          <div style="margin-top:16px; display:flex; gap:10px;">
+            <button class="btn" style="padding:6px 14px; font-weight:700; cursor:pointer;" onclick="window.tavoryn.setTheme('dark')">☾ DARK CRT PHOSPHOR</button>
+            <button class="btn" style="padding:6px 14px; font-weight:700; cursor:pointer;" onclick="window.tavoryn.setTheme('light')">☀ LIGHT DAYLIGHT TITANIUM</button>
+          </div>
+        </div>
+      `;
+      ctx.setSource("Terminal Display Engine");
+    },
+  },
+  {
+    id: "LIGHT",
+    name: "Switch to Daylight Titanium Light Mode",
+    group: "Workspace",
+    source: "This app",
+    render(ctx) {
+      window.tavoryn?.setTheme?.("light");
+      ctx.el.innerHTML = `
+        <div class="para">
+          <h3>DAYLIGHT TITANIUM ACTIVATED</h3>
+          <p>Workspace transitioned to high-contrast institutional light theme.</p>
+        </div>
+      `;
+      ctx.setSource("Terminal Display Engine");
+    },
+  },
+  {
+    id: "DARK",
+    name: "Switch to CRT Obsidian Dark Mode",
+    group: "Workspace",
+    source: "This app",
+    render(ctx) {
+      window.tavoryn?.setTheme?.("dark");
+      ctx.el.innerHTML = `
+        <div class="para">
+          <h3>CRT OBSIDIAN ACTIVATED</h3>
+          <p>Workspace transitioned to amber CRT phosphor dark theme.</p>
+        </div>
+      `;
+      ctx.setSource("Terminal Display Engine");
+    },
+  },
+  {
     id: "HELP",
     name: "Functions",
     group: "Help",

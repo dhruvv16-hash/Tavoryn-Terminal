@@ -301,6 +301,7 @@ export class LoginPage {
 
   render() {
     const isLogin = this.authMode === "login";
+    const isLight = document.documentElement.classList.contains("theme-light");
 
     this.container.innerHTML = `
       <div class="login-bg-glow"></div>
@@ -326,6 +327,9 @@ export class LoginPage {
             <span class="login-status-pulse"></span>
             <span>REAL-TIME ENGINE ACTIVE</span>
           </div>
+          <button class="login-theme-btn" id="loginThemeToggleBtn" type="button" title="${isLight ? "Switch to Dark CRT Phosphor Mode" : "Switch to Daylight Titanium Light Mode"}">
+            ${isLight ? "☾ DARK" : "☀ LIGHT"}
+          </button>
           <button class="login-nav-btn secondary ${isLogin ? "btn-nav-active" : ""}" data-action="set-mode" data-mode="login">
             Log In
           </button>
@@ -1026,6 +1030,24 @@ export class LoginPage {
   }
 
   bindEvents() {
+    // Theme Switcher (Daylight Light Mode vs Obsidian Dark Mode)
+    const themeBtn = this.container.querySelector("#loginThemeToggleBtn");
+    if (themeBtn) {
+      themeBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (window.tavoryn?.toggleTheme) {
+          window.tavoryn.toggleTheme();
+        } else {
+          const isLight = document.documentElement.classList.toggle("theme-light");
+          document.body.classList.toggle("theme-light", isLight);
+          localStorage.setItem("tavoryn:theme", isLight ? "light" : "dark");
+        }
+        const isNowLight = document.documentElement.classList.contains("theme-light");
+        themeBtn.textContent = isNowLight ? "☾ DARK" : "☀ LIGHT";
+        themeBtn.title = isNowLight ? "Switch to Dark CRT Phosphor Mode" : "Switch to Daylight Titanium Light Mode";
+      });
+    }
+
     // Mode Switch (Log In vs Sign Up)
     const modeBtns = this.container.querySelectorAll("[data-action='set-mode']");
     modeBtns.forEach((btn) => {

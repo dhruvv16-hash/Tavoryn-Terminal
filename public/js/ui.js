@@ -81,19 +81,25 @@ const css = (n) =>
 // A price chart in the terminal's colours. Returns { chart, series, remove }.
 export function priceChart(host, { type = "line", height } = {}) {
   const LW = window.LightweightCharts;
+  const isLight = document.documentElement.classList.contains("theme-light");
+  const bgColor = isLight ? (css("--panel") || "#ffffff") : (css("--panel") || "#050505");
+  const gridColor = isLight ? "#eceff3" : "#161616";
+  const borderColor = isLight ? "#d0d7de" : "#262626";
+  const amberColor = css("--amber") || (isLight ? "#b25900" : "#ffa028");
+
   const chart = LW.createChart(host, {
     autoSize: true,
     height,
     layout: {
-      background: { type: "solid", color: "#050505" },
-      textColor: css("--amber"),
+      background: { type: "solid", color: bgColor },
+      textColor: amberColor,
       fontFamily: css("--mono"),
       fontSize: 11,
       attributionLogo: false, // credited on the DATA screen and in the README instead
     },
-    grid: { vertLines: { color: "#161616" }, horzLines: { color: "#161616" } },
-    rightPriceScale: { borderColor: "#262626" },
-    timeScale: { borderColor: "#262626", timeVisible: true },
+    grid: { vertLines: { color: gridColor }, horzLines: { color: gridColor } },
+    rightPriceScale: { borderColor: borderColor },
+    timeScale: { borderColor: borderColor, timeVisible: true },
     crosshair: { mode: 0 },
   });
   const series =
@@ -106,9 +112,9 @@ export function priceChart(host, { type = "line", height } = {}) {
           borderVisible: false,
         })
       : chart.addSeries(LW.AreaSeries, {
-          lineColor: css("--amber"),
-          topColor: "rgba(255,160,40,0.28)",
-          bottomColor: "rgba(255,160,40,0.02)",
+          lineColor: amberColor,
+          topColor: isLight ? "rgba(178,89,0,0.22)" : "rgba(255,160,40,0.28)",
+          bottomColor: isLight ? "rgba(178,89,0,0.02)" : "rgba(255,160,40,0.02)",
           lineWidth: 2,
         });
   return { chart, series, remove: () => chart.remove() };
@@ -116,18 +122,24 @@ export function priceChart(host, { type = "line", height } = {}) {
 
 export function lineChart(host, seriesList, { percent = false } = {}) {
   const LW = window.LightweightCharts;
+  const isLight = document.documentElement.classList.contains("theme-light");
+  const bgColor = isLight ? (css("--panel") || "#ffffff") : (css("--panel") || "#050505");
+  const gridColor = isLight ? "#eceff3" : "#161616";
+  const borderColor = isLight ? "#d0d7de" : "#262626";
+  const amberColor = css("--amber") || (isLight ? "#b25900" : "#ffa028");
+
   const chart = LW.createChart(host, {
     autoSize: true,
     layout: {
-      background: { type: "solid", color: "#050505" },
-      textColor: css("--amber"),
+      background: { type: "solid", color: bgColor },
+      textColor: amberColor,
       fontFamily: css("--mono"),
       fontSize: 11,
       attributionLogo: false, // credited on the DATA screen and in the README instead
     },
-    grid: { vertLines: { color: "#161616" }, horzLines: { color: "#161616" } },
-    rightPriceScale: { borderColor: "#262626", mode: percent ? 2 : 0 },
-    timeScale: { borderColor: "#262626" },
+    grid: { vertLines: { color: gridColor }, horzLines: { color: gridColor } },
+    rightPriceScale: { borderColor: borderColor, mode: percent ? 2 : 0 },
+    timeScale: { borderColor: borderColor },
   });
   for (const s of seriesList) {
     const ser = chart.addSeries(LW.LineSeries, {

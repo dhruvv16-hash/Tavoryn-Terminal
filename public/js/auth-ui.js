@@ -181,6 +181,8 @@ export class AuthGate {
       initials = user.email.slice(0, 2).toUpperCase();
     }
 
+    const isLight = document.documentElement.classList.contains("theme-light");
+
     this.popover.innerHTML = `
       <div class="user-popover-card">
         <div class="user-card-head">
@@ -206,14 +208,18 @@ export class AuthGate {
             <span class="stat-val">${provider}</span>
           </div>
           <div class="user-stat-row">
-            <span class="stat-label">Workspace</span>
-            <span class="stat-val">Bloomberg 4-Panel CRT</span>
+            <span class="stat-label">Workspace Theme</span>
+            <span class="stat-val">${isLight ? "Daylight Titanium" : "CRT Obsidian"}</span>
           </div>
         </div>
 
         <div class="user-card-sep"></div>
 
         <div class="user-card-nav">
+          <button type="button" class="user-nav-item" id="popoverThemeAction">
+            <span>${isLight ? "☾" : "☀"}</span>
+            <span>Switch to ${isLight ? "Dark CRT Mode" : "Daylight Mode"}</span>
+          </button>
           <button type="button" class="user-nav-item" id="popoverTourAction">
             <span>🗺️</span>
             <span>Interactive Terminal Tour (TOUR)</span>
@@ -232,6 +238,15 @@ export class AuthGate {
         </button>
       </div>
     `;
+
+    // Bind Theme button
+    const themeActionBtn = this.popover.querySelector("#popoverThemeAction");
+    if (themeActionBtn) {
+      themeActionBtn.addEventListener("click", () => {
+        this.hidePopover();
+        window.tavoryn?.toggleTheme?.();
+      });
+    }
 
     // Bind Tour button
     const tourBtn = this.popover.querySelector("#popoverTourAction");

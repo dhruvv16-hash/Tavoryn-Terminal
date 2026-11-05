@@ -48,6 +48,30 @@
   color-scheme: dark;
 }
 
+/* Daylight Titanium Light Mode Variables */
+html.theme-light,
+body.theme-light {
+  color-scheme: light;
+  --bg: #eceff3;
+  --panel: #ffffff;
+  --bar: #f3f5f8;
+  --line: #d2d8e0;
+  --line-light: #e4e8ec;
+  --amber: #b25900;
+  --amber-2: #8f4700;
+  --amber-dim: #6e3902;
+  --white: #1a1e23;
+  --white-bright: #090a0c;
+  --muted: #57606a;
+  --dim: #86909c;
+  --up: #0d8a43;
+  --down: #cf222e;
+  --blue: #0969da;
+  --yellow: #9a6700;
+  --go: #1b873a;
+  --red-key: #b3261e;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -284,6 +308,27 @@ button {
   background: var(--amber);
   color: #000000;
   text-decoration: none;
+}
+
+.theme-toggle-btn {
+  color: var(--amber);
+  border: 1px solid var(--amber-dim);
+  background: transparent;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  flex: none;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.theme-toggle-btn:hover {
+  background: var(--amber);
+  color: #000000;
+}
+html.theme-light .theme-toggle-btn:hover {
+  color: #ffffff;
 }
 
 /* ==========================================================================
@@ -995,4 +1040,180 @@ table.t td.wrap {
   .clocks {
     display: none;
   }
+}
+
+/* ==========================================================================
+   Daylight Titanium Light Mode UI Component Overrides
+   ========================================================================== */
+html.theme-light body {
+  background: var(--bg);
+  color: var(--white);
+}
+
+html.theme-light .top {
+  background: var(--bar);
+  border-bottom: 1px solid var(--line);
+}
+
+html.theme-light .brand .logo {
+  background: var(--amber);
+  color: #ffffff;
+}
+
+html.theme-light .brand .sub {
+  color: var(--amber);
+}
+
+html.theme-light .gcmd input {
+  background: #ffffff;
+  border-color: var(--line);
+  color: var(--white-bright);
+}
+
+html.theme-light .gcmd input:focus {
+  background: #ffffff;
+  border-color: var(--amber);
+}
+
+html.theme-light .gcmd input::placeholder {
+  color: var(--dim);
+}
+
+html.theme-light .clocks {
+  color: var(--muted);
+}
+
+html.theme-light .clocks b {
+  color: var(--white-bright);
+}
+
+html.theme-light .toplink {
+  color: var(--amber);
+  border-color: var(--line);
+  background: #ffffff;
+}
+
+html.theme-light .toplink:hover {
+  background: var(--amber);
+  color: #ffffff;
+}
+
+html.theme-light .keys {
+  background: var(--bar);
+  border-bottom: 1px solid var(--line);
+}
+
+html.theme-light .key {
+  background: #ffe3a8;
+  color: #6b3e00;
+  border: 1px solid #ebd08d;
+}
+
+html.theme-light .key.fn {
+  background: #ffffff;
+  color: var(--amber);
+  border: 1px solid var(--line);
+}
+
+html.theme-light .key.fn:hover {
+  background: #e9eef5;
+}
+
+html.theme-light .panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+html.theme-light .panel.active {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 1px var(--amber), 0 2px 8px rgba(178, 89, 0, 0.12);
+}
+
+html.theme-light .ptitle {
+  background: var(--bar);
+  border-bottom: 1px solid var(--line);
+  color: var(--amber);
+}
+
+html.theme-light .pcmd input {
+  background: #f8fafc;
+  color: var(--white);
+  border-bottom: 1px solid var(--line);
+}
+
+html.theme-light .pcmd input:focus {
+  background: #ffffff;
+  border-bottom-color: var(--amber);
+}
+
+html.theme-light .pfoot {
+  background: var(--bar);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
+
+html.theme-light footer.tape {
+  background: var(--bar);
+  border-top: 1px solid var(--line);
+  color: var(--white);
+}
+
+html.theme-light .tape-run span {
+  color: var(--white);
+}
+
+html.theme-light .suggest {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+html.theme-light .suggest > div {
+  color: var(--white);
+}
+
+html.theme-light .suggest > div.sel,
+html.theme-light .suggest > div:hover {
+  background: #f0f4f9;
+  color: var(--amber);
+}
+
+html.theme-light .suggest .yk {
+  background: #ffe3a8;
+  color: #6b3e00;
+}
+
+html.theme-light table th {
+  background: var(--bar);
+  color: var(--amber);
+  border-color: var(--line);
+}
+
+html.theme-light table td {
+  border-color: var(--line-light);
+  color: var(--white);
+}
+
+html.theme-light tr:nth-child(even) td {
+  background: #f9fafb;
+}
+
+html.theme-light .toast {
+  background: #ffffff;
+  border-color: var(--amber);
+  color: var(--white-bright);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
+}
+
+html.theme-light ::-webkit-scrollbar-thumb {
+  background: #c5cbd3;
+}
+
+html.theme-light ::-webkit-scrollbar-thumb:hover {
+  background: var(--amber);
+}
+
+html.theme-light ::-webkit-scrollbar-track {
+  background: #f0f2f5;
 }

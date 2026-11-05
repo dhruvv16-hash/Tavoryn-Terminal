@@ -64,3 +64,6 @@ CLOCKS,World Financial Clocks,Shell,Header Clocks,None,Fully Documented,Understa
 TAPE,Cross-Asset Ticker Tape,Shell,Footer Tape,None,Fully Documented,Understanding Terminal,dashboard-workspace-overview.png,PASS,2026-10-17
 RISK_GATE,Pre-Trade Risk Gateway,Trading,Order Submission,Order Payload,Fully Documented,Execution & Orders,paper-trading-trad.png,PASS,2026-10-17
 PAPER_LEDGER,Persistent Account Ledger,Trading,Local Ledger,Paper State,Fully Documented,Accounts & Paper Trading,paper-trading-trad.png,PASS,2026-10-17
+THEME,Terminal Palette Theme,Shell,THEME / THEME LIGHT / THEME DARK,Theme Mode,Fully Documented,Dashboard & Workspace,dashboard-workspace-overview.png,PASS,2026-11-05
+LIGHT,Daylight Titanium Light Mode,Shell,LIGHT,Market-wide,Fully Documented,Dashboard & Workspace,dashboard-workspace-overview.png,PASS,2026-11-05
+DARK,CRT Obsidian Dark Mode,Shell,DARK,Market-wide,Fully Documented,Dashboard & Workspace,dashboard-workspace-overview.png,PASS,2026-11-05

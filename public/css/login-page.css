@@ -218,6 +218,43 @@ body:not(.authenticated) #loginPageView {
   border-color: #ffa028;
 }
 
+.login-theme-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 160, 40, 0.4);
+  color: #ffa028;
+  font-family: var(--mono, monospace);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.login-theme-btn:hover {
+  background: #ffa028;
+  color: #000000;
+  border-color: #ffa028;
+  box-shadow: 0 0 10px rgba(255, 160, 40, 0.4);
+}
+
+html.theme-light .login-theme-btn {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #b25900;
+}
+
+html.theme-light .login-theme-btn:hover {
+  background: #b25900;
+  color: #ffffff;
+  border-color: #b25900;
+}
+
 /* ==========================================================================
    Hero Section
    ========================================================================== */
@@ -1762,4 +1799,184 @@ body:not(.authenticated) #loginPageView {
   .hero-clocks-bar { flex-wrap: wrap; justify-content: center; gap: 10px; }
   .footer-top-grid { grid-template-columns: 1fr; }
   .footer-bottom-bar { flex-direction: column; gap: 12px; text-align: center; }
+}
+
+/* ==========================================================================
+   Daylight Titanium Light Mode for Landing Page & Gateway
+   ========================================================================== */
+html.theme-light .login-page {
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+html.theme-light .login-bg-glow {
+  background: radial-gradient(circle, rgba(178, 89, 0, 0.05) 0%, rgba(248, 250, 252, 0) 70%);
+}
+
+html.theme-light .login-bg-glow-left {
+  background: radial-gradient(circle, rgba(13, 138, 67, 0.04) 0%, rgba(248, 250, 252, 0) 70%);
+}
+
+html.theme-light .login-grid-overlay {
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+}
+
+html.theme-light .login-nav {
+  background: rgba(248, 250, 252, 0.94);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+html.theme-light .login-logo-brand {
+  background: var(--amber);
+  color: #ffffff;
+}
+
+html.theme-light .login-logo-sub {
+  color: var(--amber-dim);
+}
+
+html.theme-light .login-nav-link {
+  color: #475569;
+}
+
+html.theme-light .login-nav-link:hover {
+  color: var(--amber);
+}
+
+html.theme-light .login-status-indicator {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+html.theme-light .hero-title {
+  color: #0f172a;
+}
+
+html.theme-light .hero-highlight {
+  color: #b25900;
+}
+
+html.theme-light .hero-lead {
+  color: #475569;
+}
+
+html.theme-light .hero-badge {
+  background: rgba(178, 89, 0, 0.08);
+  border-color: rgba(178, 89, 0, 0.25);
+  color: #b25900;
+}
+
+html.theme-light .hero-clocks-bar {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+html.theme-light .clock-city {
+  color: #b25900;
+}
+
+html.theme-light .clock-time {
+  color: #0f172a;
+}
+
+html.theme-light .auth-container-card,
+html.theme-light .station-card,
+html.theme-light .feature-pillar-card,
+html.theme-light .tool-row-card,
+html.theme-light .metric-box,
+html.theme-light .demo-request-card,
+html.theme-light .cat-card,
+html.theme-light .showcase-deep-dive {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.05);
+}
+
+html.theme-light .auth-card-title,
+html.theme-light .section-title,
+html.theme-light .pillar-name,
+html.theme-light .tool-name,
+html.theme-light .metric-val,
+html.theme-light .cat-card-title,
+html.theme-light .showcase-headline {
+  color: #0f172a !important;
+}
+
+html.theme-light .auth-card-subtitle,
+html.theme-light .section-lead,
+html.theme-light .pillar-desc,
+html.theme-light .tool-desc,
+html.theme-light .metric-lbl,
+html.theme-light .cat-card-sub,
+html.theme-light .showcase-lead {
+  color: #475569 !important;
+}
+
+html.theme-light .auth-input-group input {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+html.theme-light .auth-input-group input:focus {
+  background: #ffffff;
+  border-color: var(--amber);
+}
+
+html.theme-light .auth-tab-btn {
+  color: #64748b;
+  background: #f1f5f9;
+}
+
+html.theme-light .auth-tab-btn.active {
+  background: #ffffff;
+  color: #b25900;
+  border-color: #cbd5e1;
+}
+
+html.theme-light .auth-btn.secondary {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+html.theme-light .auth-btn.secondary:hover {
+  background: #e2e8f0;
+}
+
+html.theme-light .floating-stat-card {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+html.theme-light .floating-stat-value {
+  color: #0f172a !important;
+}
+
+html.theme-light .footer-section {
+  background: #ffffff;
+  border-top-color: #e2e8f0;
+}
+
+html.theme-light .footer-col-title {
+  color: #0f172a;
+}
+
+html.theme-light .footer-link {
+  color: #64748b;
+}
+
+html.theme-light .footer-link:hover {
+  color: #b25900;
+}
+
+html.theme-light .footer-bottom-bar {
+  border-top-color: #e2e8f0;
+  color: #64748b;
 }

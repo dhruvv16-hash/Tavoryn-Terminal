@@ -635,3 +635,47 @@
     margin-top: 6px;
   }
 }
+
+/* ==========================================================================
+   Daylight Titanium Light Mode for User Manual
+   ========================================================================== */
+html.theme-light .manual-view {
+  background: var(--bg);
+  color: var(--white);
+}
+
+html.theme-light .manual-header-bar {
+  background: var(--bar);
+  border-bottom-color: var(--line);
+}
+
+html.theme-light .manual-sidebar {
+  background: var(--panel);
+  border-right-color: var(--line);
+}
+
+html.theme-light .manual-nav-item {
+  color: var(--muted);
+}
+
+html.theme-light .manual-nav-item:hover,
+html.theme-light .manual-nav-item.active {
+  background: #f1f5f9;
+  color: var(--amber);
+}
+
+html.theme-light .manual-main {
+  background: var(--bg);
+}
+
+html.theme-light .manual-card,
+html.theme-light .manual-section {
+  background: var(--panel);
+  border-color: var(--line);
+}
+
+html.theme-light .manual-search-input {
+  background: #ffffff;
+  border-color: var(--line);
+  color: var(--white);
+}
