@@ -16,12 +16,17 @@ const CORE_SUITE = [
   {
     id: "showcase-research",
     title: "Research",
+    cardCrop: "/screenshots/card-crop-research.webp",
+    cardCropFallback: "/screenshots/card-crop-research.png",
     thumb: "/screenshots/bb-company.webp",
     fallback: "/manual/assets/financial-analysis-fa.png",
+    videoMp4: "/video/tavoryn-research-action.mp4",
+    videoWebm: "/video/tavoryn-research-action.webm",
+    videoPoster: "/video/tavoryn-research-action-poster.webp",
     caption: "Fundamentals, DCF Valuation & Filings",
     badge: "RESEARCH // FA · DCF · EST · CF · INSD",
-    headline: "Institutional Equity Research & DCF Valuation",
-    lead: "Perform forensic financial analysis with multi-year balance sheets, income statements, and cash flows. Construct interactive discounted cash flow models with customizable WACC, terminal multiples, and automated peer valuation.",
+    headline: "Research at your fingertips.",
+    lead: "Tavoryn Intelligence provides interactive financial statements, consensus estimates, and exclusive quantitative outlooks across 170+ global markets from our deterministic institutional engine.",
     bullets: [
       "<strong>Full Financial Statements:</strong> GAAP and non-GAAP historical financials with revenue segmentation.",
       "<strong>Intrinsic DCF Engine:</strong> Live sensitivity matrices for terminal growth rates versus weighted cost of capital.",
@@ -32,6 +37,8 @@ const CORE_SUITE = [
   {
     id: "showcase-news",
     title: "News",
+    cardCrop: "/screenshots/card-crop-news.webp",
+    cardCropFallback: "/screenshots/card-crop-news.png",
     thumb: "/screenshots/bb-news.webp",
     fallback: "/manual/assets/economic-calendar-eco.png",
     caption: "Real-Time Wires & Macro Calendar",
@@ -48,6 +55,8 @@ const CORE_SUITE = [
   {
     id: "showcase-access",
     title: "Access",
+    cardCrop: "/screenshots/card-crop-access.webp",
+    cardCropFallback: "/screenshots/card-crop-access.png",
     thumb: "/screenshots/bb-markets.webp",
     fallback: "/manual/assets/world-markets-wei.png",
     caption: "Cross-Asset Global Surveillance",
@@ -64,8 +73,13 @@ const CORE_SUITE = [
   {
     id: "showcase-charts",
     title: "Charts",
+    cardCrop: "/screenshots/card-crop-charts.webp",
+    cardCropFallback: "/screenshots/card-crop-charts.png",
     thumb: "/screenshots/bb-panels.webp",
     fallback: "/manual/assets/chart-technical-analysis-gp.png",
+    videoMp4: "/video/tavoryn-terminal-action.mp4",
+    videoWebm: "/video/tavoryn-terminal-action.webm",
+    videoPoster: "/video/tavoryn-terminal-action-poster.webp",
     caption: "Multi-Pane Technical Diagnostics",
     badge: "CHARTS // GP · GPO · PANELS · VOL · RSI",
     headline: "Sub-Millisecond Multi-Pane Technical Analytics",
@@ -80,6 +94,8 @@ const CORE_SUITE = [
   {
     id: "showcase-collaboration",
     title: "Collaboration Tools",
+    cardCrop: "/screenshots/card-crop-collaboration.webp",
+    cardCropFallback: "/screenshots/card-crop-collaboration.png",
     thumb: "/screenshots/bb-workspace.webp",
     fallback: "/manual/assets/dashboard-workspace-overview.png",
     caption: "Modular Workspaces & Custom Grids",
@@ -96,6 +112,8 @@ const CORE_SUITE = [
   {
     id: "showcase-education",
     title: "Education",
+    cardCrop: "/screenshots/card-crop-education.webp",
+    cardCropFallback: "/screenshots/card-crop-education.png",
     thumb: "/screenshots/bb-ask.webp",
     fallback: "/manual/assets/ai-research-assistant-ask.png",
     caption: "AI Financial Intelligence & Formulas",
@@ -112,6 +130,8 @@ const CORE_SUITE = [
   {
     id: "showcase-portfolio",
     title: "Portfolio Analytics",
+    cardCrop: "/screenshots/card-crop-portfolio.webp",
+    cardCropFallback: "/screenshots/card-crop-portfolio.png",
     thumb: "/screenshots/bb-omon.webp",
     fallback: "/manual/assets/options-chain-omon.png",
     caption: "Crisis Stress Testing & Options Chains",
@@ -549,18 +569,7 @@ export class LoginPage {
                   ${
                     idx % 2 === 1
                       ? `
-                    <div class="showcase-visual" data-action="open-lightbox" data-src="${item.thumb}" data-fallback="${item.fallback}" data-title="${item.headline}" data-desc="${item.lead}">
-                      <div class="showcase-glow-back"></div>
-                      <div class="showcase-screen-frame">
-                        <img 
-                          src="${item.thumb}" 
-                          onerror="this.onerror=null; this.src='${item.fallback}';" 
-                          alt="${item.title} Terminal Screenshot" 
-                          loading="lazy" 
-                        />
-                        <div class="screen-zoom-badge">🔍 Click to Expand</div>
-                      </div>
-                    </div>
+                    ${this.renderShowcaseVisual(item)}
                     <div class="showcase-text">
                       <div class="showcase-badge">${item.badge}</div>
                       <h3 class="showcase-title">${item.headline}</h3>
@@ -585,18 +594,7 @@ export class LoginPage {
                         <button class="showcase-btn primary" data-action="set-mode" data-mode="signup">Sign Up for Access →</button>
                       </div>
                     </div>
-                    <div class="showcase-visual" data-action="open-lightbox" data-src="${item.thumb}" data-fallback="${item.fallback}" data-title="${item.headline}" data-desc="${item.lead}">
-                      <div class="showcase-glow-back"></div>
-                      <div class="showcase-screen-frame">
-                        <img 
-                          src="${item.thumb}" 
-                          onerror="this.onerror=null; this.src='${item.fallback}';" 
-                          alt="${item.title} Terminal Screenshot" 
-                          loading="lazy" 
-                        />
-                        <div class="screen-zoom-badge">🔍 Click to Expand</div>
-                      </div>
-                    </div>
+                    ${this.renderShowcaseVisual(item)}
                   `
                   }
                 </div>
@@ -914,17 +912,65 @@ export class LoginPage {
     this.bindEvents();
   }
 
+  renderShowcaseVisual(item) {
+    const isVideo = Boolean(item.videoMp4);
+    return `
+      <div class="showcase-visual ${isVideo ? "showcase-radiant-frame" : ""}" data-action="open-lightbox" data-src="${item.thumb}" data-fallback="${item.fallback}" data-title="${item.headline}" data-desc="${item.lead}">
+        <div class="${isVideo ? "radiant-amber-glow" : "showcase-glow-back"}"></div>
+        <div class="showcase-screen-frame">
+          ${
+            isVideo
+              ? `
+            <div class="terminal-action-header">
+              <span class="terminal-action-prompt">&lt;Search All Research and Data&gt;</span>
+              <span class="terminal-action-tag">TAVORYN INTELLIGENCE</span>
+            </div>
+          `
+              : ""
+          }
+          <div class="showcase-media-wrap">
+            ${
+              isVideo
+                ? `
+              <video 
+                class="showcase-feature-video" 
+                autoplay 
+                loop 
+                muted 
+                playsinline 
+                poster="${item.videoPoster || item.thumb}">
+                <source src="${item.videoMp4}" type="video/mp4" />
+                ${item.videoWebm ? `<source src="${item.videoWebm}" type="video/webm" />` : ""}
+                <img src="${item.thumb}" onerror="this.onerror=null; this.src='${item.fallback}';" alt="${item.title}" />
+              </video>
+            `
+                : `
+              <img 
+                src="${item.thumb}" 
+                onerror="this.onerror=null; this.src='${item.fallback}';" 
+                alt="${item.title} Terminal Screenshot" 
+                loading="lazy" 
+              />
+            `
+            }
+            <div class="screen-zoom-badge">🔍 Click to Expand</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
   renderCategoryCard(item) {
     return `
-      <div class="cat-card" data-action="scroll-to" data-target="#${item.id}">
+      <div class="cat-card" data-action="scroll-to" data-target="#${item.id}" title="Explore ${item.title}">
         <div class="cat-card-text">
           <span class="cat-card-title">${item.title}</span>
           <span class="cat-card-arrow">→</span>
         </div>
         <div class="cat-card-thumb">
           <img 
-            src="${item.thumb}" 
-            onerror="this.onerror=null; this.src='${item.fallback}';" 
+            src="${item.cardCrop}" 
+            onerror="this.onerror=null; this.src='${item.cardCropFallback || item.thumb}';" 
             alt="Tavoryn Terminal ${item.title}" 
             loading="lazy" 
           />
@@ -1109,6 +1155,14 @@ export class LoginPage {
       if (e.key === "Escape" && this.lightboxImg) {
         this.closeLightbox();
       }
+    });
+
+    // Autoplay feature videos smoothly
+    const featureVideos = this.container.querySelectorAll(".showcase-feature-video");
+    featureVideos.forEach((vid) => {
+      vid.muted = true;
+      const p = vid.play();
+      if (p !== undefined) p.catch(() => {});
     });
 
     // Google Auth

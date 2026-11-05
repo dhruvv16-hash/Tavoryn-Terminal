@@ -4,6 +4,7 @@ data/*
 *.tmp
 .DS_Store
 video/
+!public/video/
 dist/
 research/
 data_backup_initial/

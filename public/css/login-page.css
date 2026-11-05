@@ -941,6 +941,85 @@ html.theme-light .login-theme-btn:hover {
   cursor: pointer;
 }
 
+/* Radiant Amber Feature Visual Frame (Matching User Image 3 & Bloomberg) */
+.showcase-radiant-frame {
+  border-radius: 14px;
+  background: radial-gradient(ellipse at 42% 50%, #ffa028 0%, #d46b00 42%, #5a2400 80%, #0d0400 100%);
+  padding: 24px 28px;
+  box-shadow: 
+    0 25px 60px rgba(0, 0, 0, 0.85),
+    0 0 50px rgba(255, 160, 40, 0.22);
+  transition: all 0.3s ease;
+}
+
+.showcase-radiant-frame:hover {
+  box-shadow: 
+    0 30px 75px rgba(0, 0, 0, 0.95),
+    0 0 65px rgba(255, 160, 40, 0.35);
+}
+
+.radiant-amber-glow {
+  position: absolute;
+  inset: -15px -20px;
+  background: radial-gradient(ellipse at center, rgba(255, 160, 40, 0.45) 0%, rgba(212, 107, 0, 0.22) 50%, transparent 75%);
+  filter: blur(28px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.showcase-radiant-frame .showcase-screen-frame {
+  background: #000000;
+  border: 1px solid rgba(255, 160, 40, 0.45);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.9);
+  position: relative;
+  z-index: 2;
+}
+
+.terminal-action-header {
+  background: #080a0e;
+  border-bottom: 1px solid rgba(255, 160, 40, 0.25);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.terminal-action-prompt {
+  background: #ffa028;
+  color: #000000;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+}
+
+.terminal-action-tag {
+  color: #8b949e;
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.showcase-media-wrap {
+  position: relative;
+  background: #000000;
+  overflow: hidden;
+}
+
+.showcase-feature-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #000000;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
 .showcase-screen-frame {
   background: #090a0f;
   border: 1px solid rgba(255, 160, 40, 0.25);

@@ -23,6 +23,17 @@
   to = "/manual/assets/:splat"
   status = 200
 
+# High-resolution screenshot crops and terminal showcase video
+[[redirects]]
+  from = "/screenshots/*"
+  to = "/screenshots/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/video/*"
+  to = "/video/:splat"
+  status = 200
+
 # Client-side SPA routing for User Manual and in-app documentation
 [[redirects]]
   from = "/user-manual"
