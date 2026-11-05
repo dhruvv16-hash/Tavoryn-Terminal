@@ -200,23 +200,53 @@ export async function signInWithGitHub(forceRedirect = false) {
  * Sends Phone SMS OTP code using Firebase reCAPTCHA
  */
 export async function sendPhoneOtp(phoneNumber, containerId = "recaptcha-container") {
+  // Normalize phone number to strict E.164 format (+[country code][number], no spaces or formatting)
+  let cleanPhone = String(phoneNumber || "").trim().replace(/[\s\(\)\-\.]/g, "");
+  if (!cleanPhone.startsWith("+")) {
+    cleanPhone = `+${cleanPhone}`;
+  }
+
   const auth = await initFirebase();
   if (!auth) {
     // Mock simulation
     return { mock: true, verificationId: "mock-123456" };
   }
 
-  const { RecaptchaVerifier, signInWithPhoneNumber } = await import(FIREBASE_AUTH_CDN);
-
-  if (!fbRecaptchaVerifier) {
-    fbRecaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
-      size: "invisible",
-      callback: () => {},
-    });
+  // Ensure reCAPTCHA container element exists in DOM
+  let container = document.getElementById(containerId);
+  if (!container) {
+    container = document.createElement("div");
+    container.id = containerId;
+    document.body.appendChild(container);
   }
 
-  fbConfirmationResult = await signInWithPhoneNumber(auth, phoneNumber, fbRecaptchaVerifier);
-  return fbConfirmationResult;
+  const { RecaptchaVerifier, signInWithPhoneNumber } = await import(FIREBASE_AUTH_CDN);
+
+  // Clear previous verifier instance to prevent duplicate widget errors
+  if (fbRecaptchaVerifier) {
+    try {
+      fbRecaptchaVerifier.clear();
+    } catch {}
+    fbRecaptchaVerifier = null;
+  }
+
+  fbRecaptchaVerifier = new RecaptchaVerifier(auth, container, {
+    size: "invisible",
+    callback: () => {},
+  });
+
+  try {
+    fbConfirmationResult = await signInWithPhoneNumber(auth, cleanPhone, fbRecaptchaVerifier);
+    return fbConfirmationResult;
+  } catch (err) {
+    if (fbRecaptchaVerifier) {
+      try {
+        fbRecaptchaVerifier.clear();
+      } catch {}
+      fbRecaptchaVerifier = null;
+    }
+    throw err;
+  }
 }
 
 /**

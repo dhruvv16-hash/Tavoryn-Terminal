@@ -470,7 +470,20 @@ export class LoginPage {
           this.errorMsg = "";
           this.render();
         } catch (err) {
-          this.setError(err.message || "Failed to send SMS OTP.");
+          console.warn("[Auth] Phone OTP error:", err);
+          if (err.code === "auth/operation-not-allowed") {
+            this.setError(
+              'Phone Authentication is not enabled in Firebase Console (Authentication > Sign-in method > Phone). Please toggle Phone provider to "Enabled" in Firebase.'
+            );
+          } else if (err.code === "auth/invalid-phone-number") {
+            this.setError("The phone number format is invalid. Please include country code (e.g. +91 9303000832).");
+          } else if (err.code === "auth/quota-exceeded") {
+            this.setError("SMS verification quota exceeded for this project. Try Google SSO or Guest Demo Mode.");
+          } else if (err.code === "auth/too-many-requests") {
+            this.setError("Too many attempts. Please wait a moment or sign in with Google.");
+          } else {
+            this.setError(err.message || "Failed to send SMS OTP.");
+          }
         } finally {
           this.setLoading(false);
         }
