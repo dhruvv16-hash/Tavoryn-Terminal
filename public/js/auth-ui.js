@@ -10,6 +10,9 @@ import {
   onAuthChanged,
   getCurrentUser,
   mockSignIn,
+  getStoredFirebaseConfig,
+  saveStoredFirebaseConfig,
+  initFirebase,
 } from "./auth.js";
 import { startTour } from "./tour.js";
 
@@ -18,11 +21,17 @@ export class AuthGate {
     this.container = container || this.createContainer();
     this.userBtn = document.getElementById("userBtn");
     this.grid = document.getElementById("grid");
-    this.activeTab = "oauth"; // "oauth" | "phone"
+    this.activeTab = "oauth"; // "oauth" | "phone" | "config"
     this.phoneStep = "input"; // "input" | "code"
     this.phoneNumber = "";
     this.loading = false;
     this.errorMsg = "";
+    this.successMsg = "";
+
+    const storedCfg = getStoredFirebaseConfig();
+    this.cfgApiKey = storedCfg?.apiKey || "";
+    this.cfgProjectId = storedCfg?.projectId || "tavoryn-terminal";
+    this.cfgAppId = storedCfg?.appId || "";
 
     this.init();
   }
@@ -114,6 +123,7 @@ export class AuthGate {
         </div>
 
         ${this.errorMsg ? `<div class="auth-error-banner">▲ ${this.errorMsg}</div>` : ""}
+        ${this.successMsg ? `<div class="auth-success-banner">✔ ${this.successMsg}</div>` : ""}
 
         <div class="auth-tabs">
           <button class="auth-tab ${this.activeTab === "oauth" ? "active" : ""}" data-tab="oauth">
@@ -122,10 +132,19 @@ export class AuthGate {
           <button class="auth-tab ${this.activeTab === "phone" ? "active" : ""}" data-tab="phone">
             [2] MOBILE SMS OTP
           </button>
+          <button class="auth-tab ${this.activeTab === "config" ? "active" : ""}" data-tab="config">
+            [3] ⚙ PROJECT KEYS
+          </button>
         </div>
 
         <div class="auth-body">
-          ${this.activeTab === "oauth" ? this.renderOAuthSection() : this.renderPhoneSection()}
+          ${
+            this.activeTab === "oauth"
+              ? this.renderOAuthSection()
+              : this.activeTab === "phone"
+                ? this.renderPhoneSection()
+                : this.renderConfigSection()
+          }
         </div>
 
         <div id="recaptcha-container"></div>
@@ -206,6 +225,46 @@ export class AuthGate {
         <div class="auth-hint">
           Sent to <b>${this.phoneNumber}</b> · 
           <a href="#" class="auth-link" data-action="change-phone">Change Number</a>
+        </div>
+      </div>
+    `;
+  }
+
+  renderConfigSection() {
+    return `
+      <div class="auth-phone-form">
+        <label class="auth-label" for="cfgApiKey">FIREBASE WEB API KEY (FROM YOUR FIREBASE CONSOLE):</label>
+        <input 
+          id="cfgApiKey" 
+          type="text" 
+          class="auth-input" 
+          placeholder="AIzaSy..." 
+          value="${this.cfgApiKey}"
+          style="margin-bottom: 8px;"
+        />
+        <label class="auth-label" for="cfgProjectId">PROJECT ID:</label>
+        <input 
+          id="cfgProjectId" 
+          type="text" 
+          class="auth-input" 
+          placeholder="tavoryn-terminal" 
+          value="${this.cfgProjectId}"
+          style="margin-bottom: 8px;"
+        />
+        <label class="auth-label" for="cfgAppId">APP ID (OPTIONAL):</label>
+        <input 
+          id="cfgAppId" 
+          type="text" 
+          class="auth-input" 
+          placeholder="1:123456789:web:..." 
+          value="${this.cfgAppId}"
+          style="margin-bottom: 12px;"
+        />
+        <button class="auth-btn auth-btn-action" data-action="save-config" style="width: 100%;">
+          ${this.loading ? "CONNECTING..." : "SAVE & CONNECT LIVE FIREBASE"}
+        </button>
+        <div class="auth-hint">
+          Keys are stored securely in your browser's local sandbox enclave.
         </div>
       </div>
     `;
@@ -301,6 +360,47 @@ export class AuthGate {
         this.phoneStep = "input";
         this.errorMsg = "";
         this.render();
+      });
+    }
+
+    const saveConfigBtn = this.container.querySelector('[data-action="save-config"]');
+    if (saveConfigBtn) {
+      saveConfigBtn.addEventListener("click", async () => {
+        const apiKey = (this.container.querySelector("#cfgApiKey")?.value || "").trim();
+        const projectId = (this.container.querySelector("#cfgProjectId")?.value || "").trim() || "tavoryn-terminal";
+        const appId = (this.container.querySelector("#cfgAppId")?.value || "").trim();
+
+        if (!apiKey) {
+          this.setError("Please enter your Web API Key from the Firebase Console.");
+          return;
+        }
+
+        this.cfgApiKey = apiKey;
+        this.cfgProjectId = projectId;
+        this.cfgAppId = appId;
+
+        const cfg = {
+          apiKey,
+          authDomain: `${projectId}.firebaseapp.com`,
+          projectId,
+          storageBucket: `${projectId}.appspot.com`,
+          messagingSenderId: "",
+          appId,
+        };
+
+        saveStoredFirebaseConfig(cfg);
+        this.setLoading(true);
+        try {
+          await initFirebase(cfg);
+          this.successMsg = `Connected to Firebase project "${projectId}" successfully!`;
+          this.errorMsg = "";
+          this.activeTab = "oauth";
+          this.render();
+        } catch (err) {
+          this.setError("Failed to initialize Firebase with provided keys: " + err.message);
+        } finally {
+          this.setLoading(false);
+        }
       });
     }
 

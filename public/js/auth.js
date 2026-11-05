@@ -17,6 +17,22 @@ let currentUser = null;
 // Default client configuration (can be overridden by window.FIREBASE_CONFIG or /api/auth/config)
 export const DEFAULT_CONFIG = FIREBASE_CONFIG;
 
+export function getStoredFirebaseConfig() {
+  try {
+    const raw = localStorage.getItem("tavoryn:firebase_config");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveStoredFirebaseConfig(config) {
+  try {
+    if (!config) localStorage.removeItem("tavoryn:firebase_config");
+    else localStorage.setItem("tavoryn:firebase_config", JSON.stringify(config));
+  } catch {}
+}
+
 export function getStoredUser() {
   try {
     const raw = localStorage.getItem("tavoryn:auth_user");
@@ -42,7 +58,8 @@ export function saveStoredUser(user) {
 export async function initFirebase(config = null) {
   if (fbAuth) return fbAuth;
 
-  const cfg = config || window.FIREBASE_CONFIG || DEFAULT_CONFIG;
+  const stored = getStoredFirebaseConfig();
+  const cfg = config || stored || window.FIREBASE_CONFIG || DEFAULT_CONFIG;
   if (!cfg.apiKey || !cfg.projectId) {
     // Config not yet populated: use local authenticated mock session for offline/testing
     return null;
