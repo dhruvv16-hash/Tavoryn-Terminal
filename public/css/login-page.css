@@ -2133,19 +2133,21 @@ html.theme-light .auth-mode-btn:not(.active):hover {
 }
 
 html.theme-light .login-nav-btn.secondary {
-  border-color: #cbd5e1;
-  color: #0f172a;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  background: #ffffff !important;
 }
 
 html.theme-light .login-nav-btn.secondary:hover {
-  background: #f1f5f9;
-  border-color: #94a3b8;
-  color: #0f172a;
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+  color: #0f172a !important;
 }
 
 html.theme-light .login-nav-btn.secondary.btn-nav-active {
-  border-color: var(--amber);
-  color: var(--amber);
+  background: var(--amber) !important;
+  border-color: var(--amber) !important;
+  color: #ffffff !important;
 }
 
 html.theme-light .hero-btn.secondary {
