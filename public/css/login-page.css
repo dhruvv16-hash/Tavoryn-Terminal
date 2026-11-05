@@ -12,6 +12,10 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
+.login-page[hidden] {
+  display: none !important;
+}
+
 /* Background Subtle Grid & CRT Glow */
 .login-bg-glow {
   position: absolute;

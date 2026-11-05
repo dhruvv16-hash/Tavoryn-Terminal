@@ -11,6 +11,10 @@
   font-family: var(--font-mono, "Courier New", Courier, monospace);
 }
 
+.auth-gate[hidden] {
+  display: none !important;
+}
+
 .auth-backdrop {
   position: absolute;
   inset: 0;

@@ -66,10 +66,13 @@ export async function initFirebase(config = null) {
 
   try {
     const { initializeApp, getApps } = await import(FIREBASE_APP_CDN);
-    const { getAuth, onAuthStateChanged } = await import(FIREBASE_AUTH_CDN);
+    const { getAuth, onAuthStateChanged, getRedirectResult } = await import(FIREBASE_AUTH_CDN);
 
     fbApp = getApps().length ? getApps()[0] : initializeApp(cfg);
     fbAuth = getAuth(fbApp);
+
+    // Check if returning from redirect sign-in
+    getRedirectResult(fbAuth).catch(() => {});
 
     onAuthStateChanged(fbAuth, (user) => {
       if (user) {
@@ -98,41 +101,75 @@ export async function initFirebase(config = null) {
 }
 
 /**
- * Sign In with Google / Gmail Popup
+ * Sign In with Google / Gmail Popup (with automatic redirect fallback)
  */
-export async function signInWithGoogle() {
+export async function signInWithGoogle(forceRedirect = false) {
   const auth = await initFirebase();
   if (!auth) {
     // Fallback Mock Sign-In for offline / local preview
     return mockSignIn("Google Trader", "trader@gmail.com", "google.com");
   }
 
-  const { GoogleAuthProvider, signInWithPopup } = await import(FIREBASE_AUTH_CDN);
+  const { GoogleAuthProvider, signInWithPopup, signInWithRedirect } = await import(FIREBASE_AUTH_CDN);
   const provider = new GoogleAuthProvider();
   provider.addScope("email");
   provider.addScope("profile");
 
-  const result = await signInWithPopup(auth, provider);
-  return result.user;
+  if (forceRedirect) {
+    return await signInWithRedirect(auth, provider);
+  }
+
+  try {
+    const result = await signInWithPopup(auth, provider);
+    return result.user;
+  } catch (err) {
+    console.warn("[Auth] Popup error:", err.code, err.message);
+    if (
+      err.code === "auth/popup-blocked" ||
+      err.code === "auth/popup-closed-by-user" ||
+      err.code === "auth/cancelled-popup-request" ||
+      err.message?.includes("Cross-Origin-Opener-Policy")
+    ) {
+      console.log("[Auth] Falling back to signInWithRedirect...");
+      return await signInWithRedirect(auth, provider);
+    }
+    throw err;
+  }
 }
 
 /**
- * Sign In with GitHub OAuth Popup
+ * Sign In with GitHub OAuth Popup (with automatic redirect fallback)
  */
-export async function signInWithGitHub() {
+export async function signInWithGitHub(forceRedirect = false) {
   const auth = await initFirebase();
   if (!auth) {
     // Fallback Mock Sign-In for offline / local preview
     return mockSignIn("GitHub Quant", "quant@github.com", "github.com");
   }
 
-  const { GithubAuthProvider, signInWithPopup } = await import(FIREBASE_AUTH_CDN);
+  const { GithubAuthProvider, signInWithPopup, signInWithRedirect } = await import(FIREBASE_AUTH_CDN);
   const provider = new GithubAuthProvider();
   provider.addScope("read:user");
   provider.addScope("user:email");
 
-  const result = await signInWithPopup(auth, provider);
-  return result.user;
+  if (forceRedirect) {
+    return await signInWithRedirect(auth, provider);
+  }
+
+  try {
+    const result = await signInWithPopup(auth, provider);
+    return result.user;
+  } catch (err) {
+    if (
+      err.code === "auth/popup-blocked" ||
+      err.code === "auth/popup-closed-by-user" ||
+      err.code === "auth/cancelled-popup-request" ||
+      err.message?.includes("Cross-Origin-Opener-Policy")
+    ) {
+      return await signInWithRedirect(auth, provider);
+    }
+    throw err;
+  }
 }
 
 /**

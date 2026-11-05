@@ -56,6 +56,7 @@ export class LoginPage {
 
   show() {
     this.container.hidden = false;
+    this.container.style.display = "flex";
     const top = document.querySelector("header.top");
     const grid = document.getElementById("grid");
     const keys = document.getElementById("keys");
@@ -71,6 +72,7 @@ export class LoginPage {
 
   hide() {
     this.container.hidden = true;
+    this.container.style.display = "none";
     const top = document.querySelector("header.top");
     const grid = document.getElementById("grid");
     const keys = document.getElementById("keys");
@@ -80,6 +82,15 @@ export class LoginPage {
     if (grid) grid.style.display = "";
     if (keys) keys.style.display = "";
     if (tape) tape.style.display = "";
+  }
+
+  setLoading(val) {
+    this.loading = val;
+    if (getCurrentUser()) {
+      this.hide();
+      return;
+    }
+    this.render();
   }
 
   render() {
@@ -349,11 +360,6 @@ export class LoginPage {
         mockSignIn("Demo Trader", "trader@tavoryn.terminal", "demo");
       });
     });
-  }
-
-  setLoading(val) {
-    this.loading = val;
-    this.render();
   }
 
   setError(msg) {
