@@ -3,6 +3,7 @@
 import { api, esc, px, pct, chg, cls, big, num, date, ago } from "../api.js";
 import { table, kv, sect, tabs, priceChart, html } from "../ui.js";
 import { compute } from "../../lib/indicators.js";
+import { formatSecurityDisplay } from "../securities.js";
 
 const RANGES = {
   "1D": ["5m", 120],
@@ -261,7 +262,11 @@ async function chartScreen(ctx, range, type = "candles") {
       first = bars[Math.max(0, bars.length - n)];
     const move =
       last && first ? ((last.close - first.open) / first.open) * 100 : null;
-    quote.innerHTML = `${esc(res.symbol)}  last <b class="amber">${px(last?.close)}</b>  <span class="${cls(move)}">${pct(move)}</span> over ${r}`;
+    const info = formatSecurityDisplay(sec || res.symbol);
+    const symHtml = info.name && info.name !== info.symbol
+      ? `<b class="amber">${esc(info.symbol)}</b> <span class="sec-proper-name dim">(${esc(info.name)})</span>`
+      : `<b class="amber">${esc(info.symbol)}</b>`;
+    quote.innerHTML = `${symHtml}  last <b class="amber">${px(last?.close)}</b>  <span class="${cls(move)}">${pct(move)}</span> over ${r}`;
     ctx.setSource(
       `${res.provider}${res.notes?.length ? `. ${res.notes.join(" ")}` : ""}`,
     );

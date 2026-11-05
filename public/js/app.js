@@ -3,7 +3,7 @@
 import { api, esc, px, pct, cls } from "./api.js";
 import { parse, defaultFn, suggestions, securityQuery } from "./commands.js";
 import { FUNCS } from "./fn/index.js";
-import { lookupList, bbgCode } from "./securities.js";
+import { lookupList, bbgCode, formatSecurityDisplay } from "./securities.js";
 import {
   tableBlocks,
   buildCsv,
@@ -175,7 +175,8 @@ class Panel {
         c();
       } catch {}
     $(".fn", this.el).textContent = `${fn}  ${f.name}`;
-    $(".sec", this.el).textContent = subject ? subject.name || subject.raw : "";
+    const disp = subject ? formatSecurityDisplay(subject) : null;
+    $(".sec", this.el).textContent = disp ? (disp.name ? `${disp.symbol} (${disp.name})` : disp.symbol) : "";
     $(".src", this.el).textContent = "";
     $(".asof", this.el).textContent = "";
     this.body.innerHTML = `<div class="loading">Loading ${esc(f.name)}</div>`;

@@ -364,3 +364,101 @@ export function lookupList(results, query, max = 8) {
   return [...exact, ...rest.filter((r) => !funds.has(r)), ...rest.filter((r) => funds.has(r))].slice(0, max);
 }
 
+
+
+// Bloomberg-grade institutional display formatter: formats symbols and names cleanly
+// Example: "YAHOO:^GSPC" -> { symbol: "SPX Index", ticker: "SPX", name: "S&P 500", full: "SPX Index (S&P 500)" }
+export function formatSecurityDisplay(secOrId) {
+  if (!secOrId) return { symbol: "", ticker: "", name: "", full: "" };
+
+  let raw = "";
+  let name = "";
+  let ticker = "";
+
+  if (typeof secOrId === "object" && secOrId !== null) {
+    ticker = secOrId.ticker || "";
+    name = secOrId.name || "";
+    raw = secOrId.raw || secOrId.id || secOrId.ticker || "";
+  } else {
+    raw = String(secOrId || "").trim();
+  }
+
+  // Strip source prefixes like "YAHOO:", "US:", "BINANCE:", "FX:", "SPREAD:"
+  let s = raw;
+  if (s.includes(":")) {
+    const parts = s.split(":");
+    s = parts.slice(1).join(":");
+  }
+
+  // 1. Check known Yahoo Index / Yields (^GSPC, ^DJI, ^IXIC, ^TNX, etc.)
+  const ix = INDEX_BY_YAHOO[s] || INDEX_BY_YAHOO[`^${s}`] || (ticker && INDICES[ticker]) || (ticker && YIELDS[ticker]);
+  if (ix) {
+    const sym = `${ix[0]} Index`;
+    const n = ix[1];
+    return { symbol: sym, ticker: ix[0], name: n, full: `${sym} (${n})` };
+  }
+
+  // 2. Check Generic Futures (CL=F, GC=F, etc.)
+  const g = GENERIC_BY_YAHOO[s] || (ticker && GENERICS[ticker]);
+  if (g) {
+    const sym = `${g[0]} Comdty`;
+    const n = g[1];
+    return { symbol: sym, ticker: g[0], name: n, full: `${sym} (${n})` };
+  }
+
+  // 3. Check Crypto (BTC, BTC-USD, BTCUSDT, etc.)
+  const cMatch = /^([A-Z0-9]{2,12})(-USD|USDT)?$/i.exec(s);
+  const cryptoKey = (ticker || (cMatch ? cMatch[1] : "")).toUpperCase();
+  if (CRYPTO_NAMES[cryptoKey]) {
+    const sym = `${cryptoKey} Crypto`;
+    const n = CRYPTO_NAMES[cryptoKey];
+    return { symbol: sym, ticker: cryptoKey, name: n, full: `${sym} (${n})` };
+  }
+
+  // 4. Check Forex (EURUSD=X, EURUSD, etc.)
+  const fxMatch = /^([A-Z]{3})([A-Z]{3})?(=X)?$/i.exec(s);
+  if (fxMatch && fxMatch[1] && fxMatch[2]) {
+    const pair = `${fxMatch[1].toUpperCase()}${fxMatch[2].toUpperCase()}`;
+    const sym = `${pair} Curncy`;
+    const n = `${fxMatch[1].toUpperCase()}/${fxMatch[2].toUpperCase()}`;
+    return { symbol: sym, ticker: pair, name: n, full: `${sym} (${n})` };
+  }
+
+  // 5. Stocks with Exchange Suffix (.L -> VOD LN Equity, .DE -> SAP GR Equity)
+  const eqMatch = /^([A-Z0-9-]+)(\.[A-Z]+)$/i.exec(s);
+  if (eqMatch && SUFFIX[eqMatch[2].toUpperCase()]) {
+    const exCode = SUFFIX[eqMatch[2].toUpperCase()];
+    const sym = `${eqMatch[1].toUpperCase()} ${exCode} Equity`;
+    return { symbol: sym, ticker: eqMatch[1].toUpperCase(), name: name || "", full: name ? `${sym} (${name})` : sym };
+  }
+
+  // 6. Object sec with sector/bbgCode
+  if (typeof secOrId === "object" && secOrId !== null) {
+    const bbg = bbgCode(secOrId);
+    if (bbg) {
+      const formattedBbg = bbg
+        .replace(/\bEQUITY\b/g, "Equity")
+        .replace(/\bINDEX\b/g, "Index")
+        .replace(/\bCOMDTY\b/g, "Comdty")
+        .replace(/\bCURNCY\b/g, "Curncy")
+        .replace(/\bCRYPTO\b/g, "Crypto")
+        .replace(/\bGOVT\b/g, "Govt");
+      return {
+        symbol: formattedBbg,
+        ticker: secOrId.ticker || "",
+        name: name || "",
+        full: name && name !== formattedBbg ? `${formattedBbg} (${name})` : formattedBbg,
+      };
+    }
+  }
+
+  // 7. Standard US Stock (AAPL -> AAPL US Equity)
+  if (/^[A-Z0-9.-]{1,8}$/i.test(s) && !s.startsWith("^")) {
+    const sym = `${s.toUpperCase()} US Equity`;
+    return { symbol: sym, ticker: s.toUpperCase(), name: name || "", full: name ? `${sym} (${name})` : sym };
+  }
+
+  // 8. Fallback: clean up raw string
+  const cleanSym = s.replace(/^\^/, "");
+  return { symbol: cleanSym, ticker: cleanSym, name: name || "", full: name ? `${cleanSym} (${name})` : cleanSym };
+}
