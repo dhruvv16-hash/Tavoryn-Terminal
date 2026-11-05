@@ -222,29 +222,24 @@ export async function sendPhoneOtp(phoneNumber, containerId = "recaptcha-contain
 
   const { RecaptchaVerifier, signInWithPhoneNumber } = await import(FIREBASE_AUTH_CDN);
 
-  // Clear previous verifier instance to prevent duplicate widget errors
-  if (fbRecaptchaVerifier) {
-    try {
-      fbRecaptchaVerifier.clear();
-    } catch {}
-    fbRecaptchaVerifier = null;
+  // Reuse existing verifier if available, otherwise initialize once
+  if (!fbRecaptchaVerifier) {
+    container.innerHTML = "";
+    fbRecaptchaVerifier = new RecaptchaVerifier(auth, container, {
+      size: "invisible",
+      callback: () => {},
+    });
   }
-
-  fbRecaptchaVerifier = new RecaptchaVerifier(auth, container, {
-    size: "invisible",
-    callback: () => {},
-  });
 
   try {
     fbConfirmationResult = await signInWithPhoneNumber(auth, cleanPhone, fbRecaptchaVerifier);
     return fbConfirmationResult;
   } catch (err) {
-    if (fbRecaptchaVerifier) {
-      try {
-        fbRecaptchaVerifier.clear();
-      } catch {}
-      fbRecaptchaVerifier = null;
-    }
+    try {
+      if (fbRecaptchaVerifier) fbRecaptchaVerifier.clear();
+    } catch {}
+    fbRecaptchaVerifier = null;
+    container.innerHTML = "";
     throw err;
   }
 }

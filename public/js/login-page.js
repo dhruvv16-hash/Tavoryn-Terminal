@@ -471,9 +471,9 @@ export class LoginPage {
           this.render();
         } catch (err) {
           console.warn("[Auth] Phone OTP error:", err);
-          if (err.code === "auth/operation-not-allowed") {
+          if (err.code === "auth/operation-not-allowed" || err.message?.includes("region enabled")) {
             this.setError(
-              'Phone Authentication is not enabled in Firebase Console (Authentication > Sign-in method > Phone). Please toggle Phone provider to "Enabled" in Firebase.'
+              'SMS to this region is blocked by Firebase SMS Policy. Enable India (+91) in Firebase Console (Authentication > Settings > SMS Regions Policy) or add this number in "Phone numbers for testing".'
             );
           } else if (err.code === "auth/invalid-phone-number") {
             this.setError("The phone number format is invalid. Please include country code (e.g. +91 9303000832).");
