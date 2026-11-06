@@ -14,7 +14,7 @@ import {
 import { UserManual } from "./manual.js";
 import { startTour } from "./tour.js";
 import { AuthGate } from "./auth-ui.js";
-import { LoginPage } from "./login-page.js?v=20261106_download";
+import { LoginPage } from "./login-page.js?v=20261106b";
 import { getCurrentUser, signOutUser } from "./auth.js";
 import { DownloadCenter } from "./download-page.js";
 

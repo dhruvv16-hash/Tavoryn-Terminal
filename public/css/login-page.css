@@ -2520,16 +2520,21 @@ html.theme-light .lightbox-close-btn:hover {
   width: 48px;
   height: 48px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 160, 40, 0.12);
+  border: 1px solid rgba(255, 160, 40, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffa028;
   flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
+.download-card:hover .dl-card-icon-wrap,
 .download-card.highlight-platform .dl-card-icon-wrap {
-  background: rgba(255, 160, 40, 0.15);
+  background: rgba(255, 160, 40, 0.2);
+  border-color: #ffa028;
+  box-shadow: 0 0 16px rgba(255, 160, 40, 0.35);
 }
 
 .dl-card-title-group {
