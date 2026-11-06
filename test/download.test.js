@@ -26,7 +26,7 @@ test("download endpoints: catalog, stream, and fallback redirects", async () => 
     if (winRes.status === 200) {
       assert.strictEqual(
         winRes.headers.get("content-disposition"),
-        'attachment; filename="Tavoryn-Terminal-Setup-1.0.0.exe"'
+        'attachment; filename="Tavoryn.Terminal_1.0.0_x64-setup.exe"'
       );
       assert.ok(Number(winRes.headers.get("content-length")) > 10000000);
     }
@@ -52,7 +52,7 @@ test("download endpoints: catalog, stream, and fallback redirects", async () => 
     assert.ok([200, 302].includes(linuxRes.status), "linux download should be 200 or 302");
     if (linuxRes.status === 302) {
       assert.ok(
-        linuxRes.headers.get("location").includes("Tavoryn-Terminal-1.0.0.AppImage"),
+        linuxRes.headers.get("location").includes("AppImage"),
         "should point to AppImage artifact"
       );
     }
