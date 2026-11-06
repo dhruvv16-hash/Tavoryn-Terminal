@@ -61,7 +61,8 @@ jobs:
             libxdo-dev \
             libssl-dev \
             libayatana-appindicator3-dev \
-            librsvg2-dev
+            librsvg2-dev \
+            xvfb
 
       - name: Run Existing Regression Test Suite
         run: npm test
@@ -71,6 +72,9 @@ jobs:
 
       - name: Build and Package Tauri Desktop Installers
         run: node desktop-runtime/scripts/build.js --target ${{ matrix.target }} --bundles ${{ matrix.bundles }}
+
+      - name: Smoke Test Compiled Native Desktop Binary
+        run: node desktop-runtime/scripts/smoke-test-binary.js
 
       - name: Compute Checksums
         shell: bash

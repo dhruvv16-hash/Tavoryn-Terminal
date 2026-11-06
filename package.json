@@ -22,7 +22,8 @@
     "desktop:prepare": "node desktop-runtime/scripts/prepare-runtime.js",
     "desktop:dev": "node desktop-runtime/scripts/dev.js",
     "desktop:build": "node desktop-runtime/scripts/build.js",
-    "desktop:test": "node desktop-runtime/scripts/test-desktop.js"
+    "desktop:test": "node desktop-runtime/scripts/test-desktop.js",
+    "desktop:smoke": "node desktop-runtime/scripts/smoke-test-binary.js"
   },
   "license": "MIT"
 }
