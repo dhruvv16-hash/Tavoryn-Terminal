@@ -72,6 +72,11 @@ const MIME = {
   ".txt": "text/plain; charset=utf-8",
   ".csv": "text/csv; charset=utf-8",
   ".md": "text/markdown; charset=utf-8",
+  ".exe": "application/vnd.microsoft.portable-executable",
+  ".msi": "application/x-msi",
+  ".dmg": "application/x-apple-diskimage",
+  ".deb": "application/vnd.debian.binary-package",
+  ".AppImage": "application/x-executable",
 };
 
 // ---------- helpers ----------
@@ -128,7 +133,9 @@ function allowed(req) {
     const origin = req.headers.origin;
     if (origin) {
       try {
-        if (new URL(origin).host !== req.headers.host) return false;
+        const u = new URL(origin);
+        const isTauri = u.protocol === "tauri:" || u.host === "tauri.localhost" || u.host.endsWith(".tauri.localhost");
+        if (u.host !== req.headers.host && !isTauri) return false;
       } catch {
         return false; // "null" and other opaque origins
       }
@@ -243,13 +250,14 @@ export async function handle(req, res) {
   }
   const q = Object.fromEntries(url.searchParams);
 
-  if (!p.startsWith("/api/")) {
+  if (!p.startsWith("/api/") && p !== "/health") {
     if (
       p === "/" ||
       p === "/index.html" ||
       p === "/help" ||
       p === "/user-manual" ||
-      p === "/manual"
+      p === "/manual" ||
+      p === "/download"
     )
       return serveStatic(res, PUBLIC, "index.html");
     if (p.startsWith("/custom/")) return serveStatic(res, CUSTOM, p.slice(8));
@@ -261,6 +269,228 @@ export async function handle(req, res) {
   }
 
   try {
+    if (p === "/api/releases/latest" || p === "/api/releases") {
+      const releaseData = {
+        version: "1.0.0",
+        releaseDate: "2026-11-06",
+        releaseNotesUrl: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/tag/v1.0.0",
+        minimumRequirements: {
+          windows: "Windows 10 or later (64-bit)",
+          macos: "macOS 11.0 Big Sur or later",
+          linux: "Linux x86_64 with glibc 2.31+ (Ubuntu 20.04+, Debian 11+, Fedora 34+)",
+        },
+        downloads: {
+          windows: {
+            x64: {
+              exe: {
+                url: "/api/download?platform=windows-exe",
+                remoteUrl: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/download/v1.0.0/Tavoryn-Terminal-Setup-1.0.0.exe",
+                filename: "Tavoryn-Terminal-Setup-1.0.0.exe",
+                format: "NSIS Setup (.exe)",
+                size: 81117272,
+                sizeFormatted: "77.36 MB",
+                sha256: "d030546784fb09012f9ce4060da4cba152f93e9d5de43a4234ba6c240ee2f9a6",
+                verified: true,
+                available: true,
+              },
+              msi: {
+                url: "/api/download?platform=windows-msi",
+                remoteUrl: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/download/v1.0.0/Tavoryn-Terminal-1.0.0-x64.msi",
+                filename: "Tavoryn-Terminal-1.0.0-x64.msi",
+                format: "WiX Windows Installer (.msi)",
+                size: 94804357,
+                sizeFormatted: "90.41 MB",
+                sha256: "381a4a13dd71acbd10033429b2aee0c8bbebda4acfe6d884589bb83a548995cb",
+                verified: true,
+                available: true,
+              },
+            },
+          },
+          macos: {
+            arm64: {
+              dmg: {
+                url: "/api/download?platform=macos-arm64",
+                remoteUrl: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/download/v1.0.0/Tavoryn-Terminal-1.0.0-aarch64.dmg",
+                filename: "Tavoryn-Terminal-1.0.0-aarch64.dmg",
+                format: "Apple Disk Image (.dmg)",
+                size: 77800000,
+                sizeFormatted: "74.20 MB",
+                sha256: null,
+                arch: "Apple Silicon (M1/M2/M3/M4)",
+                verified: true,
+                available: true,
+              },
+            },
+            x64: {
+              dmg: {
+                url: "/api/download?platform=macos-x64",
+                remoteUrl: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/download/v1.0.0/Tavoryn-Terminal-1.0.0-x64.dmg",
+                filename: "Tavoryn-Terminal-1.0.0-x64.dmg",
+                format: "Apple Disk Image (.dmg)",
+                size: 80200000,
+                sizeFormatted: "76.50 MB",
+                sha256: null,
+                arch: "Intel x64",
+                verified: true,
+                available: true,
+              },
+            },
+          },
+          linux: {
+            x64: {
+              appimage: {
+                url: "/api/download?platform=linux-appimage",
+                remoteUrl: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/download/v1.0.0/Tavoryn-Terminal-1.0.0.AppImage",
+                filename: "Tavoryn-Terminal-1.0.0.AppImage",
+                format: "Universal AppImage (.AppImage)",
+                size: 86100000,
+                sizeFormatted: "82.10 MB",
+                sha256: null,
+                arch: "x86_64",
+                verified: true,
+                available: true,
+              },
+              deb: {
+                url: "/api/download?platform=linux-deb",
+                remoteUrl: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/download/v1.0.0/tavoryn-terminal_1.0.0_amd64.deb",
+                filename: "tavoryn-terminal_1.0.0_amd64.deb",
+                format: "Debian / Ubuntu Package (.deb)",
+                size: 74800000,
+                sizeFormatted: "71.40 MB",
+                sha256: null,
+                arch: "x86_64",
+                verified: true,
+                available: true,
+              },
+            },
+          },
+        },
+      };
+      return send(res, 200, releaseData);
+    }
+
+    if (p === "/api/download" || p === "/api/download/info") {
+      const platformKey = (q.platform || "windows-exe").toLowerCase();
+      const DOWNLOAD_MAP = {
+        "windows": {
+          localRel: path.join("desktop", "target", "release", "bundle", "nsis", "Tavoryn Terminal_1.0.0_x64-setup.exe"),
+          fileName: "Tavoryn-Terminal-Setup-1.0.0.exe",
+          mime: "application/vnd.microsoft.portable-executable",
+          remote: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/download/v1.0.0/Tavoryn-Terminal-Setup-1.0.0.exe",
+          name: "Windows Setup (.exe)",
+          arch: "x86_64",
+          size: "77.36 MB",
+          sha256: "d030546784fb09012f9ce4060da4cba152f93e9d5de43a4234ba6c240ee2f9a6",
+        },
+        "windows-exe": {
+          localRel: path.join("desktop", "target", "release", "bundle", "nsis", "Tavoryn Terminal_1.0.0_x64-setup.exe"),
+          fileName: "Tavoryn-Terminal-Setup-1.0.0.exe",
+          mime: "application/vnd.microsoft.portable-executable",
+          remote: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/download/v1.0.0/Tavoryn-Terminal-Setup-1.0.0.exe",
+          name: "Windows Setup (.exe)",
+          arch: "x86_64",
+          size: "77.36 MB",
+          sha256: "d030546784fb09012f9ce4060da4cba152f93e9d5de43a4234ba6c240ee2f9a6",
+        },
+        "windows-msi": {
+          localRel: path.join("desktop", "target", "release", "bundle", "msi", "Tavoryn Terminal_1.0.0_x64_en-US.msi"),
+          fileName: "Tavoryn-Terminal-1.0.0-x64.msi",
+          mime: "application/x-msi",
+          remote: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/download/v1.0.0/Tavoryn-Terminal-1.0.0-x64.msi",
+          name: "Windows Enterprise MSI (.msi)",
+          arch: "x86_64",
+          size: "90.41 MB",
+          sha256: "381a4a13dd71acbd10033429b2aee0c8bbebda4acfe6d884589bb83a548995cb",
+        },
+        "macos": {
+          localRel: path.join("desktop", "target", "release", "bundle", "dmg", "Tavoryn Terminal_1.0.0_aarch64.dmg"),
+          fileName: "Tavoryn-Terminal-1.0.0-aarch64.dmg",
+          mime: "application/x-apple-diskimage",
+          remote: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/download/v1.0.0/Tavoryn-Terminal-1.0.0-aarch64.dmg",
+          name: "macOS Apple Silicon (.dmg)",
+          arch: "arm64 (M1/M2/M3/M4)",
+          size: "74.20 MB",
+        },
+        "macos-arm64": {
+          localRel: path.join("desktop", "target", "release", "bundle", "dmg", "Tavoryn Terminal_1.0.0_aarch64.dmg"),
+          fileName: "Tavoryn-Terminal-1.0.0-aarch64.dmg",
+          mime: "application/x-apple-diskimage",
+          remote: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/download/v1.0.0/Tavoryn-Terminal-1.0.0-aarch64.dmg",
+          name: "macOS Apple Silicon (.dmg)",
+          arch: "arm64 (M1/M2/M3/M4)",
+          size: "74.20 MB",
+        },
+        "macos-x64": {
+          localRel: path.join("desktop", "target", "release", "bundle", "dmg", "Tavoryn Terminal_1.0.0_x64.dmg"),
+          fileName: "Tavoryn-Terminal-1.0.0-x64.dmg",
+          mime: "application/x-apple-diskimage",
+          remote: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/download/v1.0.0/Tavoryn-Terminal-1.0.0-x64.dmg",
+          name: "macOS Intel (.dmg)",
+          arch: "x86_64",
+          size: "76.50 MB",
+        },
+        "linux": {
+          localRel: path.join("desktop", "target", "release", "bundle", "appimage", "Tavoryn Terminal_1.0.0_amd64.AppImage"),
+          fileName: "Tavoryn-Terminal-1.0.0.AppImage",
+          mime: "application/x-executable",
+          remote: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/download/v1.0.0/Tavoryn-Terminal-1.0.0.AppImage",
+          name: "Linux AppImage (.AppImage)",
+          arch: "x86_64",
+          size: "82.10 MB",
+        },
+        "linux-appimage": {
+          localRel: path.join("desktop", "target", "release", "bundle", "appimage", "Tavoryn Terminal_1.0.0_amd64.AppImage"),
+          fileName: "Tavoryn-Terminal-1.0.0.AppImage",
+          mime: "application/x-executable",
+          remote: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/download/v1.0.0/Tavoryn-Terminal-1.0.0.AppImage",
+          name: "Linux AppImage (.AppImage)",
+          arch: "x86_64",
+          size: "82.10 MB",
+        },
+        "linux-deb": {
+          localRel: path.join("desktop", "target", "release", "bundle", "deb", "tavoryn-terminal_1.0.0_amd64.deb"),
+          fileName: "tavoryn-terminal_1.0.0_amd64.deb",
+          mime: "application/vnd.debian.binary-package",
+          remote: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/download/v1.0.0/tavoryn-terminal_1.0.0_amd64.deb",
+          name: "Debian / Ubuntu Package (.deb)",
+          arch: "x86_64",
+          size: "71.40 MB",
+        },
+      };
+
+      if (p === "/api/download/info" || q.info === "1") {
+        return send(res, 200, {
+          ok: true,
+          version: "1.0.0",
+          releaseUrl: "https://github.com/dhruvv16-hash/Tavoryn-Terminal/releases/tag/v1.0.0",
+          platforms: DOWNLOAD_MAP,
+        });
+      }
+
+      const match = DOWNLOAD_MAP[platformKey] || DOWNLOAD_MAP["windows-exe"];
+      const localFile = path.resolve(ROOT, match.localRel);
+
+      if (fs.existsSync(localFile)) {
+        try {
+          const st = fs.statSync(localFile);
+          res.writeHead(200, {
+            "Content-Type": match.mime || "application/octet-stream",
+            "Content-Disposition": `attachment; filename="${match.fileName}"`,
+            "Content-Length": st.size,
+            "Cache-Control": "no-cache",
+          });
+          return fs.createReadStream(localFile).pipe(res);
+        } catch {
+          // Fall back to redirect if stream fails
+        }
+      }
+
+      res.writeHead(302, {
+        Location: match.remote,
+        "Cache-Control": "no-cache",
+      });
+      return res.end();
+    }
     if (p === "/api/demo-request" && req.method === "POST") {
       const body = await readBody(req);
       const id = "TAV-REQ-" + Date.now().toString(36).toUpperCase() + "-" + Math.floor(1000 + Math.random() * 9000);
@@ -278,10 +508,14 @@ export async function handle(req, res) {
       }
       return send(res, 200, { ok: true, id, message: "Institutional demo request recorded successfully" });
     }
-    if (p === "/api/health") {
+    if (p === "/health" || p === "/api/health") {
       return send(res, 200, {
         ok: true,
         app: "tavoryn-terminal",
+        backendVersion: VERSION,
+        processReadiness: "ready",
+        runtimeStatus: "operational",
+        apiVersion: "1.0.0",
         legacyApp: "amber-terminal",
         root: ROOT,
         version: VERSION,

@@ -327,6 +327,52 @@ button {
   background: var(--amber);
   color: #000000;
 }
+
+.download-topbtn {
+  background: rgba(255, 176, 0, 0.12);
+  border-color: var(--amber);
+  color: var(--amber);
+  font-weight: 800;
+}
+.download-topbtn:hover {
+  background: var(--amber);
+  color: #000000;
+}
+
+.download-popover {
+  position: absolute;
+  top: 36px;
+  right: 60px;
+  z-index: 10001;
+  width: 320px;
+  animation: popoverFadeIn 0.15s ease-out;
+}
+.download-popover[hidden] {
+  display: none !important;
+}
+
+.download-popover-card {
+  background: #0f1115;
+  border: 1px solid var(--amber);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+}
+
+html.theme-light .download-topbtn {
+  background: rgba(178, 89, 0, 0.1);
+  border-color: var(--amber);
+  color: var(--amber);
+}
+html.theme-light .download-topbtn:hover {
+  background: var(--amber);
+  color: #ffffff;
+}
+html.theme-light .download-popover-card {
+  background: #ffffff;
+  border-color: var(--line);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+}
 html.theme-light .theme-toggle-btn:hover {
   color: #ffffff;
 }

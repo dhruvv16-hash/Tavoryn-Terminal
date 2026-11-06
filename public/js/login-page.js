@@ -12,6 +12,15 @@ import {
 } from "./auth.js";
 import { startTour } from "./tour.js";
 
+export function detectUserOS() {
+  if (typeof window === "undefined" || !window.navigator) return "windows";
+  const ua = (navigator.userAgent || "").toLowerCase();
+  const platform = (navigator.userAgentData?.platform || navigator.platform || "").toLowerCase();
+  if (platform.includes("mac") || ua.includes("macintosh") || ua.includes("mac os")) return "macos";
+  if (platform.includes("linux") || ua.includes("linux") || ua.includes("x11")) return "linux";
+  return "windows";
+}
+
 const CORE_SUITE = [
   {
     id: "showcase-research",
@@ -364,6 +373,19 @@ export class LoginPage {
   render() {
     const isLogin = this.authMode === "login";
     const isLight = document.documentElement.classList.contains("theme-light");
+    const userOS = detectUserOS();
+    let heroDlText = "Download for Windows (.exe)";
+    let heroDlParam = "windows-exe";
+    let heroDlSize = "77 MB";
+    if (userOS === "macos") {
+      heroDlText = "Download for macOS (.dmg)";
+      heroDlParam = "macos-arm64";
+      heroDlSize = "Universal";
+    } else if (userOS === "linux") {
+      heroDlText = "Download for Linux (.AppImage)";
+      heroDlParam = "linux-appimage";
+      heroDlSize = "82 MB";
+    }
 
     this.container.innerHTML = `
       <div class="login-bg-glow"></div>
@@ -378,6 +400,7 @@ export class LoginPage {
         </a>
 
         <nav class="login-nav-center">
+          <a href="#download-station" class="login-nav-link nav-highlight-download">Desktop App</a>
           <a href="#features-pillars" class="login-nav-link">Capabilities</a>
           <a href="#core-tools-suite" class="login-nav-link">Platform Tools</a>
           <a href="#showcase-deep-dive" class="login-nav-link">Terminal Views</a>
@@ -385,6 +408,10 @@ export class LoginPage {
         </nav>
 
         <div class="login-nav-right">
+          <a href="/api/download?platform=${heroDlParam}" class="login-nav-download-btn" id="navDirectDownloadBtn" title="Direct Download Desktop App">
+            <span class="nav-dl-icon">⬇</span>
+            <span>Download</span>
+          </a>
           <div class="login-status-indicator">
             <span class="login-status-pulse"></span>
             <span>REAL-TIME ENGINE ACTIVE</span>
@@ -421,13 +448,21 @@ export class LoginPage {
             </p>
 
             <div class="hero-cta-group">
-              <button class="hero-btn primary" data-action="set-mode" data-mode="signup">
-                <span>Sign Up / Create Account</span>
+              <a href="/api/download?platform=${heroDlParam}" class="hero-btn download-btn" id="heroDownloadBtn" title="Direct Download Native Application">
+                <span class="btn-icon">⬇</span>
+                <span id="heroDownloadText">${heroDlText}</span>
+                <span class="hero-dl-pill">${heroDlSize}</span>
+              </a>
+              <a href="#download-station" class="hero-btn secondary" id="heroAllPlatformsBtn">
+                <span>All Platforms (Win / Mac / Linux)</span>
+              </a>
+              <button class="hero-btn ghost-btn" data-action="set-mode" data-mode="signup">
+                <span>Sign Up Free</span>
                 <span class="btn-arrow">→</span>
               </button>
-              <button class="hero-btn secondary" data-action="set-mode" data-mode="login">
-                <span>Log In to Station</span>
-              </button>
+            </div>
+            <div class="hero-dl-sub">
+              <span>✦ Zero Node.js install required · Self-contained native binary · Local AppData storage</span>
             </div>
 
             <!-- Global Financial Centers Live Clocks -->
@@ -729,6 +764,176 @@ export class LoginPage {
                   loading="lazy" 
                 />
               </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Dedicated Desktop Download Station -->
+        <section class="section-download" id="download-station">
+          <div class="section-container">
+            <div class="section-header-centered">
+              <div class="section-eyebrow">NATIVE CROSS-PLATFORM DESKTOP SOFTWARE</div>
+              <h2 class="section-heading">Download Tavoryn Terminal Desktop</h2>
+              <p class="section-sub">
+                Sub-15ms local execution, standalone offline capability, and native window management.
+                The full Node.js quantitative calculation engine is bundled inside—no separate runtime installation needed.
+              </p>
+            </div>
+
+            <div class="download-grid">
+              <!-- Windows Card -->
+              <div class="download-card ${userOS === 'windows' ? 'highlight-platform' : ''}">
+                <div class="dl-card-header">
+                  <div class="dl-card-icon-wrap win-icon">
+                    <svg viewBox="0 0 88 88" width="34" height="34" fill="currentColor">
+                      <path d="M0 12.402l35.687-4.86.016 34.423-35.67.203zm35.67 33.529l.028 34.453L.028 75.48.016 46.134zM40.16 6.814L87.973 0v41.327l-47.813.298zm47.828 39.539l-.015 41.344-47.813-6.704-.016-34.743z"/>
+                    </svg>
+                  </div>
+                  <div class="dl-card-title-group">
+                    <div class="dl-platform-name">Windows</div>
+                    <div class="dl-platform-arch">64-bit Architecture (x86_64)</div>
+                  </div>
+                  ${userOS === 'windows' ? '<span class="dl-detected-tag">YOUR SYSTEM</span>' : ''}
+                </div>
+
+                <p class="dl-card-desc">
+                  Native desktop runtime with embedded Node.js sidecar and local AppData persistence.
+                  Compatible with Windows 10 and Windows 11.
+                </p>
+
+                <div class="dl-specs-list">
+                  <div class="dl-spec-item"><span class="spec-k">Format:</span> <span class="spec-v">NSIS Setup (.exe) &amp; WiX (.msi)</span></div>
+                  <div class="dl-spec-item"><span class="spec-k">Requirements:</span> <span class="spec-v">Windows 10 / 11 64-bit</span></div>
+                  <div class="dl-spec-item"><span class="spec-k">Node.js:</span> <span class="spec-v">Bundled Internally (Zero install)</span></div>
+                  <div class="dl-spec-item"><span class="spec-k">Storage:</span> <span class="spec-v">%APPDATA%\\com.tavoryn.terminal</span></div>
+                </div>
+
+                <div class="dl-btn-group">
+                  <a href="/api/download?platform=windows-exe" class="dl-primary-btn" download>
+                    <span class="btn-icon">⬇</span>
+                    <span>Download Setup (.exe)</span>
+                    <span class="dl-size-tag">77 MB</span>
+                  </a>
+                  <a href="/api/download?platform=windows-msi" class="dl-secondary-btn" download>
+                    <span class="btn-icon">⬇</span>
+                    <span>Enterprise MSI (.msi)</span>
+                    <span class="dl-size-tag">90 MB</span>
+                  </a>
+                </div>
+
+                <div class="dl-checksum-wrap">
+                  <span class="checksum-label">SHA-256:</span>
+                  <code class="checksum-code" title="Click to copy SHA-256">d030546784fb09012f9ce4060da4cba152f93e9d5de43a4234ba6c240ee2f9a6</code>
+                </div>
+              </div>
+
+              <!-- macOS Card -->
+              <div class="download-card ${userOS === 'macos' ? 'highlight-platform' : ''}">
+                <div class="dl-card-header">
+                  <div class="dl-card-icon-wrap mac-icon">
+                    <svg viewBox="0 0 170 170" width="34" height="34" fill="currentColor">
+                      <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.74 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.6-7.8-11.74-14.28-5.43-8.48-9.7-18.06-12.79-28.72-3.09-10.66-4.64-20.91-4.64-30.76 0-14.88 3.83-27.14 11.5-36.78 7.66-9.64 17.1-14.54 28.3-14.7 5.07 0 10.51 1.25 16.33 3.75 5.82 2.5 9.77 3.8 11.84 3.9 1.74 0 5.86-1.39 12.37-4.17 6.51-2.77 12.07-4.04 16.69-3.8 12.38.77 22.42 5.37 30.12 13.8-10.74 6.51-16.01 15.54-15.8 27.09.21 9.01 3.69 16.69 10.43 23.03 6.74 6.35 14.74 10.04 24 11.09-2.4 7.4-5.33 14.88-8.8 22.44zM119.22 33.82c0-7.39 2.66-14.42 7.98-21.1 5.32-6.68 11.96-11.19 19.92-13.52.22 1.3.33 2.5.33 3.59 0 7.39-2.77 14.53-8.31 21.41-5.54 6.89-12.17 11.41-19.92 13.56-.22-1.3-.33-2.61-.33-3.94z"/>
+                    </svg>
+                  </div>
+                  <div class="dl-card-title-group">
+                    <div class="dl-platform-name">macOS</div>
+                    <div class="dl-platform-arch">Apple Silicon &amp; Intel 64-bit</div>
+                  </div>
+                  ${userOS === 'macos' ? '<span class="dl-detected-tag">YOUR SYSTEM</span>' : ''}
+                </div>
+
+                <p class="dl-card-desc">
+                  Native macOS application bundle with native Cocoa menubar, dark theme integration, and Apple Gatekeeper notarization.
+                </p>
+
+                <div class="dl-specs-list">
+                  <div class="dl-spec-item"><span class="spec-k">Format:</span> <span class="spec-v">Apple Disk Image (.dmg) / .app</span></div>
+                  <div class="dl-spec-item"><span class="spec-k">Requirements:</span> <span class="spec-v">macOS 11.0 Big Sur or later</span></div>
+                  <div class="dl-spec-item"><span class="spec-k">Notarization:</span> <span class="spec-v">Apple Developer ID Signed</span></div>
+                  <div class="dl-spec-item"><span class="spec-k">Storage:</span> <span class="spec-v">~/Library/Application Support/...</span></div>
+                </div>
+
+                <div class="dl-btn-group">
+                  <a href="/api/download?platform=macos-arm64" class="dl-primary-btn" download>
+                    <span class="btn-icon">⬇</span>
+                    <span>Apple Silicon (.dmg)</span>
+                    <span class="dl-size-tag">M1-M4</span>
+                  </a>
+                  <a href="/api/download?platform=macos-x64" class="dl-secondary-btn" download>
+                    <span class="btn-icon">⬇</span>
+                    <span>Intel x64 (.dmg)</span>
+                    <span class="dl-size-tag">Intel</span>
+                  </a>
+                </div>
+
+                <div class="dl-checksum-wrap">
+                  <span class="checksum-label">Architecture:</span>
+                  <span class="spec-v">Universal (ARM64 &amp; x86_64)</span>
+                </div>
+              </div>
+
+              <!-- Linux Card -->
+              <div class="download-card ${userOS === 'linux' ? 'highlight-platform' : ''}">
+                <div class="dl-card-header">
+                  <div class="dl-card-icon-wrap linux-icon">
+                    <svg viewBox="0 0 100 100" width="34" height="34" fill="currentColor">
+                      <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="6"/>
+                      <path d="M35 45c0-8 6-15 15-15s15 7 15 15c0 10-6 25-15 25s-15-15-15-25z" fill="currentColor"/>
+                      <circle cx="43" cy="42" r="3" fill="#0c0d0e"/>
+                      <circle cx="57" cy="42" r="3" fill="#0c0d0e"/>
+                    </svg>
+                  </div>
+                  <div class="dl-card-title-group">
+                    <div class="dl-platform-name">Linux</div>
+                    <div class="dl-platform-arch">Universal AppImage &amp; Debian / Ubuntu</div>
+                  </div>
+                  ${userOS === 'linux' ? '<span class="dl-detected-tag">YOUR SYSTEM</span>' : ''}
+                </div>
+
+                <p class="dl-card-desc">
+                  Standalone self-contained Linux packages. Runs on all standard distributions with glibc 2.31 or later without external dependencies.
+                </p>
+
+                <div class="dl-specs-list">
+                  <div class="dl-spec-item"><span class="spec-k">Format:</span> <span class="spec-v">Universal .AppImage / Debian .deb</span></div>
+                  <div class="dl-spec-item"><span class="spec-k">Compatibility:</span> <span class="spec-v">Ubuntu 20.04+, Debian 11+, Fedora 34+</span></div>
+                  <div class="dl-spec-item"><span class="spec-k">Display Server:</span> <span class="spec-v">X11 &amp; Wayland</span></div>
+                  <div class="dl-spec-item"><span class="spec-k">Storage:</span> <span class="spec-v">~/.config/com.tavoryn.terminal</span></div>
+                </div>
+
+                <div class="dl-btn-group">
+                  <a href="/api/download?platform=linux-appimage" class="dl-primary-btn" download>
+                    <span class="btn-icon">⬇</span>
+                    <span>Universal AppImage</span>
+                    <span class="dl-size-tag">82 MB</span>
+                  </a>
+                  <a href="/api/download?platform=linux-deb" class="dl-secondary-btn" download>
+                    <span class="btn-icon">⬇</span>
+                    <span>Debian / Ubuntu (.deb)</span>
+                    <span class="dl-size-tag">71 MB</span>
+                  </a>
+                </div>
+
+                <div class="dl-checksum-wrap">
+                  <span class="checksum-label">Package:</span>
+                  <span class="spec-v">x86_64 Standalone Binary</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Architecture Invariant Guarantee Box -->
+            <div class="download-architecture-note">
+              <div class="note-badge">✦ DESKTOP ARCHITECTURE GUARANTEE</div>
+              <div class="note-content">
+                <strong>Zero Node.js Prerequisite:</strong> Tavoryn Terminal Desktop includes an isolated, self-hosted Node.js runtime and financial compute engine. You never need to install Node.js, npm, or build tools on your computer. Your portfolios, paper account trades, and chart states remain strictly local on your workstation.
+              </div>
+            </div>
+
+            <div style="text-align:center;margin-top:24px;">
+              <a href="/download" class="dl-full-center-link" style="display:inline-flex;align-items:center;gap:10px;color:#ffb000;font-size:13px;font-weight:700;text-decoration:none;border:1px solid rgba(255,176,0,0.4);padding:12px 24px;border-radius:6px;background:rgba(255,176,0,0.08);letter-spacing:0.04em;">
+                <span>VISIT DEDICATED DESKTOP DOWNLOAD CENTER &amp; INSTALLATION GUIDE (/download)</span>
+                <span style="font-size:16px;">→</span>
+              </a>
             </div>
           </div>
         </section>
@@ -1207,6 +1412,35 @@ export class LoginPage {
     const lightboxCloseBtns = this.container.querySelectorAll("[data-action='close-lightbox']");
     lightboxCloseBtns.forEach((btn) => {
       btn.addEventListener("click", () => this.closeLightbox());
+    });
+
+    // Checksum click-to-copy
+    const checksumEls = this.container.querySelectorAll(".checksum-code");
+    checksumEls.forEach((el) => {
+      el.addEventListener("click", () => {
+        const text = el.textContent.trim();
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(text);
+          const orig = el.textContent;
+          el.textContent = "COPIED TO CLIPBOARD!";
+          setTimeout(() => {
+            el.textContent = orig;
+          }, 2000);
+        }
+      });
+    });
+
+    // Dedicated /download route navigation
+    const fullCenterLinks = this.container.querySelectorAll(".dl-full-center-link");
+    fullCenterLinks.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (window.tavoryn?.showDownload) {
+          window.tavoryn.showDownload(true);
+        } else {
+          window.location.href = "/download";
+        }
+      });
     });
 
     window.addEventListener("keydown", (e) => {

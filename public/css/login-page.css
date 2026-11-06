@@ -16,6 +16,8 @@ body:not(.authenticated) footer.tape {
 
 html.authenticated #loginPageView,
 body.authenticated #loginPageView,
+html.route-download #loginPageView,
+body.route-download #loginPageView,
 .login-page[hidden] {
   display: none !important;
 }
@@ -2360,4 +2362,503 @@ html.theme-light .lightbox-close-btn:hover {
   background: #fee2e2;
   border-color: #f87171;
   color: #dc2626;
+}
+
+/* ==========================================================================
+   Desktop Download Station & Hero CTA Styles
+   ========================================================================== */
+
+.nav-highlight-download {
+  color: #ffa028 !important;
+  font-weight: 700;
+  position: relative;
+}
+
+.nav-highlight-download::after {
+  content: "NATIVE";
+  font-size: 8.5px;
+  background: rgba(255, 160, 40, 0.2);
+  color: #ffa028;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+.login-nav-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 160, 40, 0.15);
+  border: 1px solid #ffa028;
+  color: #ffa028;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  transition: all 0.18s ease;
+}
+
+.login-nav-download-btn:hover {
+  background: #ffa028;
+  color: #0c0d0e;
+  box-shadow: 0 0 16px rgba(255, 160, 40, 0.4);
+}
+
+.hero-cta-group .download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffa028;
+  color: #0c0d0e;
+  border: 1px solid #ffa028;
+  font-weight: 800;
+  font-size: 14.5px;
+  padding: 13px 24px;
+  border-radius: 5px;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(255, 160, 40, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-cta-group .download-btn:hover {
+  background: #ffb44a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255, 160, 40, 0.5);
+  color: #0c0d0e;
+}
+
+.hero-dl-pill {
+  font-size: 10.5px;
+  background: rgba(12, 13, 14, 0.25);
+  color: #0c0d0e;
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.hero-dl-sub {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #8b949e;
+  letter-spacing: 0.02em;
+  font-family: var(--font-mono, monospace);
+}
+
+.hero-cta-group .ghost-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #c9d1d9;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 13px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-cta-group .ghost-btn:hover {
+  border-color: #ffa028;
+  color: #ffa028;
+  background: rgba(255, 160, 40, 0.05);
+}
+
+/* Download Station Section */
+.section-download {
+  padding: 90px 24px 80px;
+  position: relative;
+  background: #090a0d;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.download-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1160px;
+  margin: 40px auto 0;
+}
+
+.download-card {
+  background: #111319;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.download-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 160, 40, 0.4);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+}
+
+.download-card.highlight-platform {
+  border-color: #ffa028;
+  box-shadow: 0 0 24px rgba(255, 160, 40, 0.18);
+}
+
+.dl-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.dl-card-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffa028;
+  flex-shrink: 0;
+}
+
+.download-card.highlight-platform .dl-card-icon-wrap {
+  background: rgba(255, 160, 40, 0.15);
+}
+
+.dl-card-title-group {
+  flex: 1;
+}
+
+.dl-platform-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+}
+
+.dl-platform-arch {
+  font-size: 11.5px;
+  color: #8b949e;
+  font-family: var(--font-mono, monospace);
+  margin-top: 2px;
+}
+
+.dl-detected-tag {
+  background: #ffa028;
+  color: #0c0d0e;
+  font-size: 9.5px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+
+.dl-card-desc {
+  font-size: 13px;
+  color: #8b949e;
+  line-height: 1.5;
+  margin: 0 0 20px;
+  min-height: 40px;
+}
+
+.dl-specs-list {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 5px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 24px;
+  font-size: 11.5px;
+  font-family: var(--font-mono, monospace);
+}
+
+.dl-spec-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dl-spec-item .spec-k {
+  color: #6e7681;
+}
+
+.dl-spec-item .spec-v {
+  color: #c9d1d9;
+  font-weight: 600;
+  text-align: right;
+  word-break: break-all;
+}
+
+.dl-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: auto;
+}
+
+.dl-primary-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #ffa028;
+  color: #0c0d0e;
+  padding: 11px 16px;
+  border-radius: 5px;
+  font-weight: 800;
+  font-size: 13.5px;
+  text-decoration: none;
+  transition: all 0.18s ease;
+}
+
+.dl-primary-btn:hover {
+  background: #ffb44a;
+  box-shadow: 0 4px 16px rgba(255, 160, 40, 0.4);
+  color: #0c0d0e;
+}
+
+.dl-secondary-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #c9d1d9;
+  padding: 9px 14px;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 12.5px;
+  text-decoration: none;
+  transition: all 0.18s ease;
+}
+
+.dl-secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 160, 40, 0.5);
+  color: #ffa028;
+}
+
+.dl-size-tag {
+  font-size: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  margin-left: auto;
+}
+
+.dl-checksum-wrap {
+  margin-top: 14px;
+  font-size: 10.5px;
+  color: #6e7681;
+  font-family: var(--font-mono, monospace);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.checksum-code {
+  color: #ffa028;
+  background: rgba(255, 160, 40, 0.08);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 9.5px;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 220px;
+  transition: all 0.15s ease;
+}
+
+.checksum-code:hover {
+  background: rgba(255, 160, 40, 0.2);
+}
+
+.download-architecture-note {
+  max-width: 1160px;
+  margin: 32px auto 0;
+  background: rgba(255, 160, 40, 0.06);
+  border: 1px solid rgba(255, 160, 40, 0.25);
+  border-radius: 6px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.download-architecture-note .note-badge {
+  color: #ffa028;
+  font-weight: 800;
+  font-size: 11.5px;
+  letter-spacing: 0.05em;
+  font-family: var(--font-mono, monospace);
+  white-space: nowrap;
+  padding-top: 2px;
+}
+
+.download-architecture-note .note-content {
+  color: #c9d1d9;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+.download-architecture-note .note-content strong {
+  color: #ffa028;
+}
+
+/* Light Mode Overrides */
+html.theme-light .section-download {
+  background: #f1f5f9;
+  border-top-color: #e2e8f0;
+  border-bottom-color: #e2e8f0;
+}
+
+html.theme-light .download-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+html.theme-light .download-card:hover {
+  border-color: #b25900;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+html.theme-light .download-card.highlight-platform {
+  border-color: #b25900;
+  box-shadow: 0 0 20px rgba(178, 89, 0, 0.15);
+}
+
+html.theme-light .dl-platform-name {
+  color: #0f172a;
+}
+
+html.theme-light .dl-platform-arch {
+  color: #64748b;
+}
+
+html.theme-light .dl-card-desc {
+  color: #475569;
+}
+
+html.theme-light .dl-card-icon-wrap {
+  background: #f8fafc;
+  color: #b25900;
+  border: 1px solid #e2e8f0;
+}
+
+html.theme-light .dl-specs-list {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+html.theme-light .dl-spec-item .spec-k {
+  color: #64748b;
+}
+
+html.theme-light .dl-spec-item .spec-v {
+  color: #0f172a;
+}
+
+html.theme-light .dl-primary-btn {
+  background: #b25900;
+  color: #ffffff;
+}
+
+html.theme-light .dl-primary-btn:hover {
+  background: #8f4700;
+  color: #ffffff;
+}
+
+html.theme-light .dl-secondary-btn {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+html.theme-light .dl-secondary-btn:hover {
+  background: #ffffff;
+  border-color: #b25900;
+  color: #b25900;
+}
+
+html.theme-light .dl-size-tag {
+  background: rgba(0, 0, 0, 0.08);
+  color: #475569;
+}
+
+html.theme-light .dl-checksum-wrap {
+  color: #64748b;
+}
+
+html.theme-light .checksum-code {
+  color: #b25900;
+  background: rgba(178, 89, 0, 0.08);
+}
+
+html.theme-light .download-architecture-note {
+  background: #ffffff;
+  border-color: #cbd5e1;
+}
+
+html.theme-light .download-architecture-note .note-badge {
+  color: #b25900;
+}
+
+html.theme-light .download-architecture-note .note-content {
+  color: #334155;
+}
+
+html.theme-light .download-architecture-note .note-content strong {
+  color: #b25900;
+}
+
+html.theme-light .login-nav-download-btn {
+  background: rgba(178, 89, 0, 0.1);
+  border-color: #b25900;
+  color: #b25900;
+}
+
+html.theme-light .login-nav-download-btn:hover {
+  background: #b25900;
+  color: #ffffff;
+}
+
+html.theme-light .hero-cta-group .download-btn {
+  background: #b25900;
+  border-color: #b25900;
+  color: #ffffff;
+}
+
+html.theme-light .hero-cta-group .download-btn:hover {
+  background: #8f4700;
+  color: #ffffff;
+}
+
+html.theme-light .hero-dl-pill {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+html.theme-light .hero-dl-sub {
+  color: #64748b;
+}
+
+@media (max-width: 992px) {
+  .download-grid {
+    grid-template-columns: 1fr;
+    max-width: 520px;
+  }
 }

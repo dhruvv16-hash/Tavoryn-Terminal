@@ -9,3 +9,7 @@ dist/
 research/
 data_backup_initial/
 test-screenshot.png
+desktop/target/
+desktop/binaries/
+desktop/gen/
+

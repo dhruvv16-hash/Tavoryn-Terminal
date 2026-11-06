@@ -18,7 +18,11 @@
     "check": "node scripts/check.js",
     "launch": "node scripts/launch.js",
     "stop": "node scripts/stop.js",
-    "setup": "node scripts/setup.js"
+    "setup": "node scripts/setup.js",
+    "desktop:prepare": "node desktop-runtime/scripts/prepare-runtime.js",
+    "desktop:dev": "node desktop-runtime/scripts/dev.js",
+    "desktop:build": "node desktop-runtime/scripts/build.js",
+    "desktop:test": "node desktop-runtime/scripts/test-desktop.js"
   },
   "license": "MIT"
 }

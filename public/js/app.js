@@ -14,20 +14,29 @@ import {
 import { UserManual } from "./manual.js";
 import { startTour } from "./tour.js";
 import { AuthGate } from "./auth-ui.js";
-import { LoginPage } from "./login-page.js";
+import { LoginPage } from "./login-page.js?v=20261106_download";
 import { getCurrentUser, signOutUser } from "./auth.js";
+import { DownloadCenter } from "./download-page.js";
 
 const $ = (s, el = document) => el.querySelector(s);
 const grid = $("#grid");
 const manualView = $("#manualView");
+const downloadView = $("#downloadView");
 let manualInstance = null;
+let downloadInstance = null;
 
 export function isManualRoute(pathname = window.location.pathname) {
   return pathname === "/help" || pathname === "/user-manual" || pathname === "/manual";
 }
 
+export function isDownloadRoute(pathname = window.location.pathname) {
+  return pathname === "/download" || pathname === "/downloads" || pathname === "/desktop";
+}
+
 export function showManual(push = true) {
   grid.hidden = true;
+  if (downloadView) downloadView.hidden = true;
+  document.documentElement.classList.remove("route-download");
   if (manualView) manualView.hidden = false;
   if (!manualInstance && manualView) {
     manualInstance = new UserManual(
@@ -45,17 +54,36 @@ export function showManual(push = true) {
   }
 }
 
+export function showDownload(push = true) {
+  grid.hidden = true;
+  if (manualView) manualView.hidden = true;
+  if (downloadView) downloadView.hidden = false;
+  document.documentElement.classList.add("route-download");
+  if (!downloadInstance && downloadView) {
+    downloadInstance = new DownloadCenter(
+      downloadView,
+      () => showTerminal(true)
+    );
+  }
+  if (push && !isDownloadRoute()) {
+    history.pushState({ view: "download" }, "", "/download");
+  }
+}
+
 export function showTerminal(push = true) {
   if (manualView) manualView.hidden = true;
+  if (downloadView) downloadView.hidden = true;
+  document.documentElement.classList.remove("route-download");
   grid.hidden = false;
-  if (push && isManualRoute()) {
+  if (push && (isManualRoute() || isDownloadRoute())) {
     history.pushState({ view: "grid" }, "", "/");
   }
   gInput.focus();
 }
 
 window.addEventListener("popstate", () => {
-  if (isManualRoute()) showManual(false);
+  if (isDownloadRoute()) showDownload(false);
+  else if (isManualRoute()) showManual(false);
   else showTerminal(false);
 });
 
@@ -362,6 +390,11 @@ $("#globalCmd").onsubmit = (e) => {
     gInput.value = "";
     return;
   }
+  if (/^(DOWNLOAD|DOWNLOADS|DESKTOP|APP)$/i.test(v)) {
+    showDownload(true);
+    gInput.value = "";
+    return;
+  }
   const themeCmd = /^(THEME|LIGHT|DARK|DAY|NIGHT)(\s+(LIGHT|DARK|TOGGLE))?$/i.exec(v);
   if (themeCmd) {
     const kw = themeCmd[1].toUpperCase();
@@ -399,6 +432,88 @@ const brandLogo = $("#brandLogo");
 if (brandLogo) {
   brandLogo.onclick = () => showTerminal(true);
 }
+
+const downloadTopBtn = $("#downloadTopBtn");
+const downloadPopover = $("#downloadPopover");
+
+function toggleDownloadPopover() {
+  if (!downloadPopover) return;
+  if (downloadPopover.hidden) {
+    downloadPopover.innerHTML = `
+      <div class="user-popover-card download-popover-card">
+        <div class="user-popover-header">
+          <div class="user-popover-avatar" style="background:#ffb000;color:#0c0d0e;font-weight:900;display:flex;align-items:center;justify-content:center;">⬇</div>
+          <div class="user-popover-info">
+            <div class="user-popover-name" style="color:#ffb000;font-weight:700;">Tavoryn Terminal Desktop</div>
+            <div class="user-popover-email">v1.0.0 · Native Standalone</div>
+          </div>
+        </div>
+        <div class="user-popover-meta" style="margin:10px 0;font-size:11px;color:#94a3b8;line-height:1.4;">
+          Sub-15ms local calculation engine. Zero Node.js install required. Persistent AppData ledger.
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <a href="/api/download?platform=windows-exe" class="popover-btn primary" style="text-align:center;text-decoration:none;display:block;" download>
+            <span>Windows Setup (.exe) — 77 MB</span>
+          </a>
+          <a href="/api/download?platform=windows-msi" class="popover-btn secondary" style="text-align:center;text-decoration:none;display:block;" download>
+            <span>Windows MSI Package (.msi) — 90 MB</span>
+          </a>
+          <a href="/api/download?platform=macos-arm64" class="popover-btn secondary" style="text-align:center;text-decoration:none;display:block;" download>
+            <span>macOS Apple Silicon (.dmg)</span>
+          </a>
+          <a href="/api/download?platform=macos-x64" class="popover-btn secondary" style="text-align:center;text-decoration:none;display:block;" download>
+            <span>macOS Intel x64 (.dmg)</span>
+          </a>
+          <a href="/api/download?platform=linux-appimage" class="popover-btn secondary" style="text-align:center;text-decoration:none;display:block;" download>
+            <span>Linux Universal (.AppImage) — 82 MB</span>
+          </a>
+          <a href="/api/download?platform=linux-deb" class="popover-btn secondary" style="text-align:center;text-decoration:none;display:block;" download>
+            <span>Linux Debian / Ubuntu (.deb) — 71 MB</span>
+          </a>
+          <a href="/download" id="popoverDownloadCenterBtn" class="popover-btn" style="text-align:center;text-decoration:none;display:block;background:rgba(255,176,0,0.12);color:#ffb000;border:1px solid #ffb000;margin-top:6px;font-weight:700;">
+            <span>Open Download Center (/download) →</span>
+          </a>
+        </div>
+      </div>
+    `;
+    const dlCenterBtn = downloadPopover.querySelector("#popoverDownloadCenterBtn");
+    if (dlCenterBtn) {
+      dlCenterBtn.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        downloadPopover.hidden = true;
+        showDownload(true);
+      });
+    }
+    downloadPopover.hidden = false;
+  } else {
+    downloadPopover.hidden = true;
+  }
+}
+
+if (downloadTopBtn) {
+  downloadTopBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleDownloadPopover();
+  });
+}
+
+document.addEventListener("click", (e) => {
+  if (
+    downloadPopover &&
+    !downloadPopover.hidden &&
+    !downloadPopover.contains(e.target) &&
+    e.target !== downloadTopBtn &&
+    !downloadTopBtn?.contains(e.target)
+  ) {
+    downloadPopover.hidden = true;
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && downloadPopover && !downloadPopover.hidden) {
+    downloadPopover.hidden = true;
+  }
+});
 
 // The yellow keys sit on the F-keys of a Bloomberg keyboard: F2 GOVT, F8 EQUITY, F9 CMDTY, F10 INDEX, F11 CRNCY.
 const FKEYS = {
@@ -533,6 +648,11 @@ document.addEventListener("keydown", (e) => {
     showTerminal(true);
     return;
   }
+  if (e.key === "Escape" && downloadView && !downloadView.hidden) {
+    e.preventDefault();
+    showTerminal(true);
+    return;
+  }
   if (FKEYS[e.key] && !e.metaKey && !e.ctrlKey && !e.altKey) {
     // A yellow key goes on the end of the command line being typed in (the top bar if none is).
     e.preventDefault();
@@ -573,7 +693,9 @@ try {
 setLayout(state.layout || 4);
 setActive(state.active || 0);
 panels.forEach((p, i) => p.run(state.panels[i] || DEFAULT[i]));
-if (isManualRoute()) {
+if (isDownloadRoute()) {
+  showDownload(false);
+} else if (isManualRoute()) {
   showManual(false);
 } else {
   showTerminal(false);
@@ -648,7 +770,7 @@ updateThemeButtons();
 const loginPage = new LoginPage();
 const authGate = new AuthGate();
 
-if (!isManualRoute()) {
+if (!isManualRoute() && !isDownloadRoute()) {
   const u = getCurrentUser();
   if (u) {
     const id = u.uid || u.email || u.phoneNumber;
@@ -670,8 +792,10 @@ window.tavoryn = window.amber = {
   panels,
   run: (c, i = state.active) => panels[i].run(c),
   showManual,
+  showDownload,
   showTerminal,
   isManualRoute,
+  isDownloadRoute,
   startTour,
   loginPage,
   authGate,

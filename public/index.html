@@ -9,9 +9,13 @@
     <link rel="stylesheet" href="/css/manual.css" />
     <link rel="stylesheet" href="/css/tour.css" />
     <link rel="stylesheet" href="/css/auth.css" />
-    <link rel="stylesheet" href="/css/login-page.css?v=20261105e" />
+    <link rel="stylesheet" href="/css/download-page.css?v=20261106" />
+    <link rel="stylesheet" href="/css/login-page.css?v=20261106_download" />
     <script>
       try {
+        if (window.location.pathname === "/download" || window.location.pathname === "/downloads" || window.location.pathname === "/desktop") {
+          document.documentElement.classList.add("route-download");
+        }
         if (localStorage.getItem("tavoryn:auth_user")) {
           document.documentElement.classList.add("authenticated");
         }
@@ -47,16 +51,25 @@
         title="Interactive User Manual & Help Center"
         >HELP</a
       >
+      <button
+        id="downloadTopBtn"
+        class="toplink download-topbtn"
+        type="button"
+        title="Download Tavoryn Terminal Desktop for Windows, Mac & Linux"
+        >⬇ DOWNLOAD</button
+      >
+      <div id="downloadPopover" class="download-popover" hidden></div>
     </header>
     <div class="keys" id="keys"></div>
     <main id="grid" class="grid"></main>
     <div id="manualView" class="manual-view" hidden></div>
+    <div id="downloadView" class="download-view" hidden></div>
     <div id="authGate" class="auth-gate" hidden></div>
     <div id="recaptcha-container"></div>
     <div id="loginPageView" class="login-page"></div>
     <footer class="tape"><div id="tape" class="tape-run"></div></footer>
     <div id="suggest" class="suggest" hidden></div>
     <div id="toast" class="toast" hidden></div>
-    <script type="module" src="/js/app.js?v=20261105c"></script>
+    <script type="module" src="/js/app.js?v=20261106_download"></script>
   </body>
 </html>
