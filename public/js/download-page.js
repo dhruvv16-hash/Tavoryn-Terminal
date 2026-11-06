@@ -151,7 +151,6 @@ export class DownloadCenter {
             <!-- Detected OS Hero Action -->
             <div class="dl-hero-actions">
               <a href="/api/download?platform=${heroDlParam}" class="dl-hero-btn primary" id="dlHeroPrimaryBtn" download>
-                <span class="btn-icon">⬇</span>
                 <span class="btn-label" id="dlHeroBtnText">${heroBtnText}</span>
                 <span class="btn-meta">${heroSizeTag}</span>
               </a>
@@ -299,12 +298,10 @@ export class DownloadCenter {
 
                 <div class="p-action-btns">
                   <a href="/api/download?platform=windows-exe" class="p-btn primary" download>
-                    <span class="btn-icon">⬇</span>
                     <span>Download Setup (.exe)</span>
                     <span class="size-pill">77.36 MB</span>
                   </a>
                   <a href="/api/download?platform=windows-msi" class="p-btn secondary" download>
-                    <span class="btn-icon">⬇</span>
                     <span>Enterprise MSI (.msi)</span>
                     <span class="size-pill">90.41 MB</span>
                   </a>
@@ -346,12 +343,10 @@ export class DownloadCenter {
 
                 <div class="p-action-btns">
                   <a href="/api/download?platform=macos-arm64" class="p-btn primary" download>
-                    <span class="btn-icon">⬇</span>
                     <span>Apple Silicon (.dmg)</span>
                     <span class="size-pill">M1-M4</span>
                   </a>
                   <a href="/api/download?platform=macos-x64" class="p-btn secondary" download>
-                    <span class="btn-icon">⬇</span>
                     <span>Intel x64 (.dmg)</span>
                     <span class="size-pill">Intel</span>
                   </a>
@@ -402,12 +397,10 @@ export class DownloadCenter {
 
                 <div class="p-action-btns">
                   <a href="/api/download?platform=linux-appimage" class="p-btn primary" download>
-                    <span class="btn-icon">⬇</span>
                     <span>Universal AppImage</span>
                     <span class="size-pill">82.10 MB</span>
                   </a>
                   <a href="/api/download?platform=linux-deb" class="p-btn secondary" download>
-                    <span class="btn-icon">⬇</span>
                     <span>Debian / Ubuntu (.deb)</span>
                     <span class="size-pill">71.40 MB</span>
                   </a>

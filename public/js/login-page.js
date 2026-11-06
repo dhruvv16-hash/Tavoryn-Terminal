@@ -407,10 +407,6 @@ export class LoginPage {
         </nav>
 
         <div class="login-nav-right">
-          <a href="#download-station" class="login-nav-download-btn" id="navDirectDownloadBtn" title="Download Tavoryn Terminal Desktop">
-            <span class="nav-dl-icon">⬇</span>
-            <span>Download</span>
-          </a>
           <div class="login-status-indicator">
             <span class="login-status-pulse"></span>
             <span>REAL-TIME ENGINE ACTIVE</span>
@@ -448,7 +444,6 @@ export class LoginPage {
 
             <div class="hero-cta-group">
               <a href="#download-station" class="hero-btn download-btn" id="heroDownloadBtn" title="Download Tavoryn Terminal Desktop">
-                <span class="btn-icon">⬇</span>
                 <span>Download</span>
               </a>
               <button class="hero-btn ghost-btn" data-action="set-mode" data-mode="signup">
@@ -805,12 +800,10 @@ export class LoginPage {
 
                 <div class="dl-btn-group">
                   <a href="/api/download?platform=windows-exe" class="dl-primary-btn" download>
-                    <span class="btn-icon">⬇</span>
                     <span>Download Setup (.exe)</span>
                     <span class="dl-size-tag">77 MB</span>
                   </a>
                   <a href="/api/download?platform=windows-msi" class="dl-secondary-btn" download>
-                    <span class="btn-icon">⬇</span>
                     <span>Enterprise MSI (.msi)</span>
                     <span class="dl-size-tag">90 MB</span>
                   </a>
@@ -850,12 +843,10 @@ export class LoginPage {
 
                 <div class="dl-btn-group">
                   <a href="/api/download?platform=macos-arm64" class="dl-primary-btn" download>
-                    <span class="btn-icon">⬇</span>
                     <span>Apple Silicon (.dmg)</span>
                     <span class="dl-size-tag">M1-M4</span>
                   </a>
                   <a href="/api/download?platform=macos-x64" class="dl-secondary-btn" download>
-                    <span class="btn-icon">⬇</span>
                     <span>Intel x64 (.dmg)</span>
                     <span class="dl-size-tag">Intel</span>
                   </a>
@@ -904,12 +895,10 @@ export class LoginPage {
 
                 <div class="dl-btn-group">
                   <a href="/api/download?platform=linux-appimage" class="dl-primary-btn" download>
-                    <span class="btn-icon">⬇</span>
                     <span>Universal AppImage</span>
                     <span class="dl-size-tag">82 MB</span>
                   </a>
                   <a href="/api/download?platform=linux-deb" class="dl-secondary-btn" download>
-                    <span class="btn-icon">⬇</span>
                     <span>Debian / Ubuntu (.deb)</span>
                     <span class="dl-size-tag">71 MB</span>
                   </a>

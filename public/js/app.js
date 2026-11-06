@@ -14,7 +14,7 @@ import {
 import { UserManual } from "./manual.js";
 import { startTour } from "./tour.js";
 import { AuthGate } from "./auth-ui.js";
-import { LoginPage } from "./login-page.js?v=20261106b";
+import { LoginPage } from "./login-page.js?v=20261106c";
 import { getCurrentUser, signOutUser } from "./auth.js";
 import { DownloadCenter } from "./download-page.js";
 
@@ -442,7 +442,7 @@ function toggleDownloadPopover() {
     downloadPopover.innerHTML = `
       <div class="user-popover-card download-popover-card">
         <div class="user-popover-header">
-          <div class="user-popover-avatar" style="background:#ffb000;color:#0c0d0e;font-weight:900;display:flex;align-items:center;justify-content:center;">⬇</div>
+          <div class="user-popover-avatar" style="background:#ffb000;color:#0c0d0e;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:11px;">TT</div>
           <div class="user-popover-info">
             <div class="user-popover-name" style="color:#ffb000;font-weight:700;">Tavoryn Terminal Desktop</div>
             <div class="user-popover-email">v1.0.0 · Native Standalone</div>
