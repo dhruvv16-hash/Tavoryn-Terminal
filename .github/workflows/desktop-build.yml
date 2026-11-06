@@ -119,10 +119,10 @@ jobs:
           draft: ${{ github.event.inputs.release_draft == 'true' }}
           prerelease: false
           files: |
-            release-artifacts/**/bundle/**/*.exe
-            release-artifacts/**/bundle/**/*.msi
-            release-artifacts/**/bundle/**/*.dmg
-            release-artifacts/**/bundle/**/*.AppImage
-            release-artifacts/**/bundle/**/*.deb
-            release-artifacts/SHA256SUMS-ALL.txt
+            release-artifacts/**/*.exe
+            release-artifacts/**/*.msi
+            release-artifacts/**/*.dmg
+            release-artifacts/**/*.AppImage
+            release-artifacts/**/*.deb
+            release-artifacts/**/SHA256SUMS*.txt
           generate_release_notes: true
