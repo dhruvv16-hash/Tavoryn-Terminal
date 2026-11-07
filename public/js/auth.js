@@ -116,8 +116,7 @@ export async function initFirebase(config = null) {
 export async function signInWithGoogle(forceRedirect = false) {
   const auth = await initFirebase();
   if (!auth) {
-    // Fallback Mock Sign-In for offline / local preview
-    return mockSignIn("Google Trader", "trader@gmail.com", "google.com");
+    throw new Error("Authentication service is currently unavailable. Please verify your connection.");
   }
 
   const { GoogleAuthProvider, signInWithPopup, signInWithRedirect } = await import(FIREBASE_AUTH_CDN);
@@ -155,13 +154,47 @@ export async function signInWithGoogle(forceRedirect = false) {
 }
 
 /**
+ * Sign In with Corporate Email & Password using Firebase Authentication
+ */
+export async function signInWithCorporateEmail(email, password) {
+  const auth = await initFirebase();
+  if (!auth) {
+    throw new Error("Authentication service is currently unavailable. Please verify your connection.");
+  }
+
+  const { signInWithEmailAndPassword } = await import(FIREBASE_AUTH_CDN);
+  const result = await signInWithEmailAndPassword(auth, email.trim(), password);
+  return result.user;
+}
+
+/**
+ * Sign Up with Corporate Email & Password using Firebase Authentication
+ */
+export async function signUpWithCorporateEmail(name, email, password) {
+  const auth = await initFirebase();
+  if (!auth) {
+    throw new Error("Authentication service is currently unavailable. Please verify your connection.");
+  }
+
+  const { createUserWithEmailAndPassword, updateProfile } = await import(FIREBASE_AUTH_CDN);
+  const result = await createUserWithEmailAndPassword(auth, email.trim(), password);
+  
+  if (name && result.user) {
+    try {
+      await updateProfile(result.user, { displayName: name.trim() });
+    } catch {}
+  }
+
+  return result.user;
+}
+
+/**
  * Sign In with GitHub OAuth Popup (with automatic redirect fallback)
  */
 export async function signInWithGitHub(forceRedirect = false) {
   const auth = await initFirebase();
   if (!auth) {
-    // Fallback Mock Sign-In for offline / local preview
-    return mockSignIn("GitHub Quant", "quant@github.com", "github.com");
+    throw new Error("Authentication service is currently unavailable. Please verify your connection.");
   }
 
   const { GithubAuthProvider, signInWithPopup, signInWithRedirect } = await import(FIREBASE_AUTH_CDN);
@@ -208,8 +241,7 @@ export async function sendPhoneOtp(phoneNumber, containerId = "recaptcha-contain
 
   const auth = await initFirebase();
   if (!auth) {
-    // Mock simulation
-    return { mock: true, verificationId: "mock-123456" };
+    throw new Error("Authentication service is currently unavailable. Please verify your connection.");
   }
 
   // Ensure reCAPTCHA container element exists in DOM
@@ -253,28 +285,7 @@ export async function verifyPhoneOtp(code) {
     return result.user;
   }
 
-  // Fallback Mock verification
-  return mockSignIn("SMS Verified Trader", "+1 (555) 019-2834", "phone");
-}
-
-/**
- * Mock sign-in for development & local environment
- */
-export function mockSignIn(name, contact, provider = "local") {
-  const user = {
-    uid: "mock-" + Date.now(),
-    email: contact.includes("@") ? contact : null,
-    phoneNumber: contact.startsWith("+") ? contact : null,
-    displayName: name,
-    photoURL: null,
-    provider,
-    isNewUser: !localStorage.getItem("tavoryn:has_logged_in"),
-  };
-  localStorage.setItem("tavoryn:has_logged_in", "1");
-  currentUser = user;
-  saveStoredUser(user);
-  notifyAuthListeners(user);
-  return user;
+  throw new Error("No active phone verification session found. Please request a new verification code.");
 }
 
 /**

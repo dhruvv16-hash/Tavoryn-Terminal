@@ -4,6 +4,8 @@
 import {
   signInWithGoogle,
   signInWithGitHub,
+  signInWithCorporateEmail,
+  signUpWithCorporateEmail,
   sendPhoneOtp,
   verifyPhoneOtp,
   signOutUser,
@@ -976,19 +978,6 @@ export class LoginPage {
                         <strong>Authentication Notice</strong>
                       </div>
                       <div class="error-msg">${this.errorMsg}</div>
-                      ${
-                        this.errorMsg.includes("awaiting authorization") || this.errorMsg.includes("unauthorized-domain")
-                          ? `
-                          <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
-                            <button type="button" class="auth-btn" style="background:#f59e0b;color:#000;font-weight:700;font-size:12px;padding:8px 12px;border:none;border-radius:6px;cursor:pointer;width:100%;" data-action="instant-guest">
-                              ⚡ Instant Access (Continue to Terminal)
-                            </button>
-                            <span style="font-size:11px;color:#94a3b8;text-align:center;">
-                              Or switch to the <strong>Corporate Email</strong> tab above to sign in.
-                            </span>
-                          </div>`
-                          : ""
-                      }
                     </div>
                   `
                     : ""
@@ -1506,25 +1495,6 @@ export class LoginPage {
       });
     }
 
-    // Instant Guest / Direct Bypass
-    const instantGuestBtn = this.container.querySelector('[data-action="instant-guest"]');
-    if (instantGuestBtn) {
-      instantGuestBtn.addEventListener("click", () => {
-        const user = {
-          uid: "usr_guest_" + Math.random().toString(36).substring(2, 9),
-          email: "analyst@tavoryn.terminal",
-          displayName: "INSTITUTIONAL ANALYST",
-          provider: "guest",
-        };
-        try {
-          localStorage.setItem("tavoryn:auth_user", JSON.stringify(user));
-        } catch {}
-        this.closeModal();
-        window.location.hash = "#workspace";
-        window.location.reload();
-      });
-    }
-
     // Send OTP
     const sendOtpBtn = this.container.querySelector('[data-action="send-otp"]');
     if (sendOtpBtn) {
@@ -1582,10 +1552,10 @@ export class LoginPage {
       });
     }
 
-    // Email Login Submission
+    // Real Firebase Email Login Submission
     const emailLoginForm = this.container.querySelector("#emailLoginForm");
     if (emailLoginForm) {
-      emailLoginForm.addEventListener("submit", (e) => {
+      emailLoginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const email = this.container.querySelector("#emailInput")?.value.trim();
         const pwd = this.container.querySelector("#passwordInput")?.value;
@@ -1593,47 +1563,81 @@ export class LoginPage {
           this.setError("Please enter your corporate email and password.");
           return;
         }
-        // Save authorized user session
-        const user = {
-          uid: "usr_" + Math.random().toString(36).substring(2, 9),
-          email,
-          displayName: email.split("@")[0].toUpperCase(),
-          provider: "password",
-        };
+        this.setLoading(true);
+        this.errorMsg = "";
         try {
-          localStorage.setItem("tavoryn:auth_user", JSON.stringify(user));
-        } catch {}
-        document.documentElement.classList.add("authenticated");
-        document.body.classList.add("authenticated");
-        this.hide();
+          const user = await signInWithCorporateEmail(email, pwd);
+          if (user) {
+            document.documentElement.classList.add("authenticated");
+            document.body.classList.add("authenticated");
+            this.hide();
+          }
+        } catch (err) {
+          console.warn("[Auth] Corporate Email sign-in error:", err);
+          let msg = "Invalid institutional email or password.";
+          if (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password" || err.code === "auth/user-not-found") {
+            msg = "Invalid email or password. If you do not have an account yet, switch to 'Sign Up' above.";
+          } else if (err.code === "auth/invalid-email") {
+            msg = "Please enter a valid work email address.";
+          } else if (err.code === "auth/user-disabled") {
+            msg = "This institutional account has been disabled. Please contact your system administrator.";
+          } else if (err.code === "auth/too-many-requests") {
+            msg = "Access temporarily blocked due to multiple failed login attempts. Please try again later or reset your password.";
+          } else if (err.code === "auth/operation-not-allowed") {
+            msg = "Email/Password sign-in is not enabled in Firebase Console. Please enable Email/Password in Authentication > Sign-in method.";
+          } else if (err.message) {
+            msg = err.message;
+          }
+          this.setError(msg);
+        } finally {
+          this.setLoading(false);
+        }
       });
     }
 
-    // Email Signup Submission
+    // Real Firebase Email Signup Submission
     const emailSignupForm = this.container.querySelector("#emailSignupForm");
     if (emailSignupForm) {
-      emailSignupForm.addEventListener("submit", (e) => {
+      emailSignupForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const name = this.container.querySelector("#signupName")?.value.trim();
         const email = this.container.querySelector("#signupEmail")?.value.trim();
         const pwd = this.container.querySelector("#signupPassword")?.value;
-        if (!name || !email || !pwd || pwd.length < 8) {
-          this.setError("Please provide your full name, work email, and a password of at least 8 characters.");
+        if (!name || !email || !pwd) {
+          this.setError("Please provide your full name, work email, and a secure password.");
           return;
         }
-        const user = {
-          uid: "usr_" + Math.random().toString(36).substring(2, 9),
-          email,
-          displayName: name,
-          provider: "password",
-          isNewUser: true,
-        };
+        if (pwd.length < 8) {
+          this.setError("For security compliance, passwords must be at least 8 characters.");
+          return;
+        }
+        this.setLoading(true);
+        this.errorMsg = "";
         try {
-          localStorage.setItem("tavoryn:auth_user", JSON.stringify(user));
-        } catch {}
-        document.documentElement.classList.add("authenticated");
-        document.body.classList.add("authenticated");
-        this.hide();
+          const user = await signUpWithCorporateEmail(name, email, pwd);
+          if (user) {
+            document.documentElement.classList.add("authenticated");
+            document.body.classList.add("authenticated");
+            this.hide();
+          }
+        } catch (err) {
+          console.warn("[Auth] Registration error:", err);
+          let msg = "Unable to create profile. Please check your credentials.";
+          if (err.code === "auth/email-already-in-use") {
+            msg = "An institutional profile with this email address already exists. Please switch to 'Log In'.";
+          } else if (err.code === "auth/weak-password") {
+            msg = "Password is too weak. Please use at least 8 characters with letters and numbers.";
+          } else if (err.code === "auth/invalid-email") {
+            msg = "Please enter a valid corporate email address.";
+          } else if (err.code === "auth/operation-not-allowed") {
+            msg = "Email/Password sign-in is not enabled in Firebase Console. Please enable Email/Password in Authentication > Sign-in method.";
+          } else if (err.message) {
+            msg = err.message;
+          }
+          this.setError(msg);
+        } finally {
+          this.setLoading(false);
+        }
       });
     }
   }

@@ -9,7 +9,6 @@ import {
   signOutUser,
   onAuthChanged,
   getCurrentUser,
-  mockSignIn,
   getStoredFirebaseConfig,
   saveStoredFirebaseConfig,
   initFirebase,

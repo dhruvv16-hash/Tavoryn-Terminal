@@ -89,7 +89,7 @@ async function run() {
     const str = d.toString();
     process.stdout.write(`[APP STDOUT] ${str}`);
 
-    const portMatch = str.match(/127\.0\.0\.1:(\d+)/);
+    const portMatch = str.match(/(?:127\.0\.0\.1|localhost):(\d+)/);
     if (portMatch && !detectedPort) {
       detectedPort = parseInt(portMatch[1], 10);
     }
@@ -119,6 +119,23 @@ async function run() {
           const body = await res.json();
           if (body.ok && body.app === 'tavoryn-terminal' && body.processReadiness === 'ready') {
             console.log(`\n✔ Successfully verified live HTTP handshake on port ${detectedPort}!`);
+            console.log(`  - app:              ${body.app}`);
+            console.log(`  - processReadiness: ${body.processReadiness}`);
+            console.log(`  - runtimeStatus:    ${body.runtimeStatus}`);
+            console.log(`  - version:          ${body.version}`);
+            healthOk = true;
+            break;
+          }
+        }
+      } catch {}
+    } else {
+      // Check default fallback port if single-instance redirected
+      try {
+        const res = await fetch(`http://localhost:3787/health`);
+        if (res.ok) {
+          const body = await res.json();
+          if (body.ok && body.app === 'tavoryn-terminal' && body.processReadiness === 'ready') {
+            console.log(`\n✔ Successfully verified active instance HTTP handshake on port 3787!`);
             console.log(`  - app:              ${body.app}`);
             console.log(`  - processReadiness: ${body.processReadiness}`);
             console.log(`  - runtimeStatus:    ${body.runtimeStatus}`);
