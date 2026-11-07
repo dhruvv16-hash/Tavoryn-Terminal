@@ -67,7 +67,7 @@ async fn restart_backend(
         Ok(_) => {
             *sidecar.is_ready.write().await = true;
             if let Some(window) = app.get_webview_window("main") {
-                let target_url = format!("http://127.0.0.1:{allocated_port}");
+                let target_url = format!("http://localhost:{allocated_port}");
                 let _ = window.navigate(target_url.parse().unwrap());
             }
             Ok(allocated_port)
@@ -195,7 +195,7 @@ pub fn run() {
                                 if let Ok(_) = health::poll_health(p, Duration::from_secs(20)).await {
                                     *sidecar_c.is_ready.write().await = true;
                                     if let Some(w) = app_c.get_webview_window("main") {
-                                        let _ = w.navigate(format!("http://127.0.0.1:{p}").parse().unwrap());
+                                        let _ = w.navigate(format!("http://localhost:{p}").parse().unwrap());
                                     }
                                 }
                             }
@@ -277,7 +277,7 @@ pub fn run() {
                                 if let Ok(_) = health::poll_health(p, Duration::from_secs(20)).await {
                                     *sidecar_c.is_ready.write().await = true;
                                     if let Some(w) = app_c.get_webview_window("main") {
-                                        let _ = w.navigate(format!("http://127.0.0.1:{p}").parse().unwrap());
+                                        let _ = w.navigate(format!("http://localhost:{p}").parse().unwrap());
                                     }
                                 }
                             }
@@ -366,7 +366,7 @@ pub fn run() {
                         *sidecar_launch.is_ready.write().await = true;
 
                         if let Some(w) = app_handle_launch.get_webview_window("main") {
-                            let target_url = format!("http://127.0.0.1:{port}");
+                            let target_url = format!("http://localhost:{port}");
                             println!("[Desktop] Navigating webview to {target_url}...");
                             log_desktop(&sidecar_launch.app_data_dir, &format!("[Desktop] Navigating webview to {target_url}..."));
                             let _ = w.navigate(target_url.parse().unwrap());
