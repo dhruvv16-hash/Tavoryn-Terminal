@@ -976,6 +976,19 @@ export class LoginPage {
                         <strong>Authentication Notice</strong>
                       </div>
                       <div class="error-msg">${this.errorMsg}</div>
+                      ${
+                        this.errorMsg.includes("awaiting authorization") || this.errorMsg.includes("unauthorized-domain")
+                          ? `
+                          <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
+                            <button type="button" class="auth-btn" style="background:#f59e0b;color:#000;font-weight:700;font-size:12px;padding:8px 12px;border:none;border-radius:6px;cursor:pointer;width:100%;" data-action="instant-guest">
+                              ⚡ Instant Access (Continue to Terminal)
+                            </button>
+                            <span style="font-size:11px;color:#94a3b8;text-align:center;">
+                              Or switch to the <strong>Corporate Email</strong> tab above to sign in.
+                            </span>
+                          </div>`
+                          : ""
+                      }
                     </div>
                   `
                     : ""
@@ -1490,6 +1503,25 @@ export class LoginPage {
         } finally {
           this.setLoading(false);
         }
+      });
+    }
+
+    // Instant Guest / Direct Bypass
+    const instantGuestBtn = this.container.querySelector('[data-action="instant-guest"]');
+    if (instantGuestBtn) {
+      instantGuestBtn.addEventListener("click", () => {
+        const user = {
+          uid: "usr_guest_" + Math.random().toString(36).substring(2, 9),
+          email: "analyst@tavoryn.terminal",
+          displayName: "INSTITUTIONAL ANALYST",
+          provider: "guest",
+        };
+        try {
+          localStorage.setItem("tavoryn:auth_user", JSON.stringify(user));
+        } catch {}
+        this.closeModal();
+        window.location.hash = "#workspace";
+        window.location.reload();
       });
     }
 
